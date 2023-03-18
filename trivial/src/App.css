@@ -1,0 +1,64 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-image: url('Imagenes/fondo.PNG');
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.App-titulo {
+  font-family: "Parisienne", cursive;
+  font-size: 103px;
+  color: rgb(172, 184, 16);
+  margin-top: 10px;
+}
+
+
+.App-marco1 {
+  width: 96%;
+  height: 96%;
+  border: 5px solid rgba(255, 255, 0, 0.61);
+  background-color: transparent;
+  position: relative;
+}
+
+.App-marco2 {
+  width: 94%;
+  height: 94%;
+  border: 5px solid rgba(255, 255, 0, 0.61);
+  background-color: transparent;
+  position: relative;
+}
