@@ -40,25 +40,11 @@
 }
 
 .App-titulo {
-  font-family: "Parisienne", cursive;
+  font-family: "Parisienne";
   font-size: 103px;
-  color: rgb(172, 184, 16);
-  margin-top: 10px;
-}
-
-
-.App-marco1 {
-  width: 96%;
-  height: 96%;
-  border: 5px solid rgba(255, 255, 0, 0.61);
-  background-color: transparent;
-  position: relative;
-}
-
-.App-marco2 {
-  width: 94%;
-  height: 94%;
-  border: 5px solid rgba(255, 255, 0, 0.61);
-  background-color: transparent;
-  position: relative;
+  color: rgb(255, 238, 0);
+  position: fixed;
+  text-align: center;
+  top: 10%;
+  font-style: italic;
 }
