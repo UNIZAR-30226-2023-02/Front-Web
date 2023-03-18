@@ -1,16 +1,8 @@
-import logo from './logo.svg';
+//import colores from './Imagenes/Colores.PNG';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-          <div className="App-titulo" > Trivial</div>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
+//<img src={colores} className="App-colores" alt="colores" />
+/*          <a
             className="App-link"
             href="https://reactjs.org"
             target="_blank"
@@ -18,6 +10,35 @@ function App() {
           >
             Learn React
         </a>     
+*/
+
+function colores() {
+  return (
+    <div className="quesitos">
+      <div className="quesito quesito-verde"></div>
+      <div className="quesito quesito-amarillo"></div>
+      <div className="quesito quesito-naranja"></div>
+      <div className="quesito quesito-rojo"></div>
+      <div className="quesito quesito-azul"></div>
+      <div className="quesito quesito-rosa"></div>
+    </div>
+  );
+}
+
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+          <div className="App-titulo" > Trivial B2B  
+          <div>{colores()}</div>
+          <button className="App-boton" style= {{top: "50%", left: "43%"}} onClcik={() => console.log("El botón Inicio de sesión ha sido presionado")}>
+            Inicio Sesión
+          </button>
+          <button className="App-boton" style= {{top: "70%", left: "44%"}} onClcik={() => console.log("El botón Registrarse ha sido presionado")}>
+            Registrarse
+          </button>
+          </div>
       </header>
     </div>
   );
