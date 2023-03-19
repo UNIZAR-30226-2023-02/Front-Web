@@ -1,16 +1,5 @@
-//import colores from './Imagenes/Colores.PNG';
-import './App.css';
-
-//<img src={colores} className="App-colores" alt="colores" />
-/*          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a>     
-*/
+import './Estilos/App.css';
+import React from 'react';
 
 function colores() {
   return (
@@ -33,7 +22,7 @@ function App() {
           <div className="App-titulo" > Trivial B2B  
           <div>{colores()}</div>
           <button className="App-boton" style= {{top: "50%", left: "43%"}} onClcik={() => console.log("El botón Inicio de sesión ha sido presionado")}>
-            Inicio Sesión
+           Inicio Sesión
           </button>
           <button className="App-boton" style= {{top: "70%", left: "44%"}} onClcik={() => console.log("El botón Registrarse ha sido presionado")}>
             Registrarse
@@ -43,5 +32,7 @@ function App() {
     </div>
   );
 }
-
 export default App;
+
+
+

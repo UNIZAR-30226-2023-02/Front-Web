@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-image: url('Imagenes/fondo.PNG');
+  background-image: url('../Imagenes/fondo.PNG');
   min-height: 100vh;
   display: flex;
   flex-direction: column;
