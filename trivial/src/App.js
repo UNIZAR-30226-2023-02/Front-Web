@@ -1,6 +1,6 @@
 import './Estilos/App.css';
 import React from 'react';
-
+//pepe
 function colores() {
   return (
     <div className="quesitos">
