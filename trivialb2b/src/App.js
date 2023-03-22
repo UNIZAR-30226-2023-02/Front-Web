@@ -11,6 +11,8 @@ class Componente extends React.Component {
         <input type="text" placeholder='Correo'/>
         <button>Enviar</button>
       </form>
+
+      hola
     )
   }
 }*/
