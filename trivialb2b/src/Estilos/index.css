@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/**
+ * Tutorial Elementos
+.container {
+  background-color: black;
+  height: 120px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.style-parrafo {
+  color: white;
+}
+*/
+
+.padre {
+  text-align: center;
+  border: 1px solid black;
+  padding: 5%;
+}
+
+.componentes {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.componente {
+  border: 1px solid black;
+  width: 25%;
+}
+
+.controles {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.control {
+  border: 1px solid black;
+  padding: 10 px;
+}
+
+.control:hover {
+  cursor: pointer;
+}
