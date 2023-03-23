@@ -25,12 +25,17 @@ const InicioSesion = () => {
       .then((response) => response.json())
       .then((data) => console.log(data))
       .catch((error) => console.error(error));
+
+      if (!body.username || !body.password) {
+        setMensajeError("Por favor, complete todos los campos");
+        return;
+      }
   };
 
   return (
     <div className="App">
       <header className="App-header">
-          <div className="App-titulo" > Trivial B2B  
+          <div className="App-titulo" > Inicio Sesión 
           <div className="App-Quesitos"> </div> 
           </div>
           <form className="App-Botones">

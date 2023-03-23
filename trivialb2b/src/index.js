@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import ReactDOM from 'react-dom/client';
 import './Estilos/index.css';
 import App from './App';
+import Registrarse from './Registrarse';
 import InicioSesion from './InicioSesion';
 import reportWebVitals from './reportWebVitals';
 
@@ -254,7 +255,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
   <React.StrictMode>
-    <InicioSesion />
+    <Registrarse />
   </React.StrictMode>
 
   //Para renderear un elementos: div,
