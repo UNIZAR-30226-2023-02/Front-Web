@@ -25,11 +25,6 @@ const InicioSesion = () => {
       .then((response) => response.json())
       .then((data) => console.log(data))
       .catch((error) => console.error(error));
-
-      if (!body.username || !body.password) {
-        setMensajeError("Por favor, complete todos los campos");
-        return;
-      }
   };
 
   return (

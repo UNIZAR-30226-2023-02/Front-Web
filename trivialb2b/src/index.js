@@ -4,6 +4,7 @@ import './Estilos/index.css';
 import App from './App';
 import Registrarse from './Registrarse';
 import InicioSesion from './InicioSesion';
+import InicioSesion2 from './InicioSesion2';
 import reportWebVitals from './reportWebVitals';
 
 /*
@@ -255,7 +256,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
   <React.StrictMode>
-    <Registrarse />
+    <InicioSesion2 />
   </React.StrictMode>
 
   //Para renderear un elementos: div,
