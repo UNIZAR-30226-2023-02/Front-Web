@@ -5,6 +5,7 @@ import App from './App';
 import Registrarse from './Registrarse';
 import InicioSesion from './InicioSesion';
 import InicioSesion2 from './InicioSesion2';
+import DatosRegistro from './DatosRegistro';
 import reportWebVitals from './reportWebVitals';
 
 /*
@@ -184,7 +185,6 @@ function Padre(props) {
 
 //Hook useState
 function Hijo2 (props) {
-  
   return (
     <div className='componente'>
       <h2> {props.titulo} </h2>
@@ -256,7 +256,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
   <React.StrictMode>
-    <InicioSesion2 />
+    <App />
   </React.StrictMode>
 
   //Para renderear un elementos: div,
