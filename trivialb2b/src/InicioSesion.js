@@ -43,19 +43,23 @@ const InicioSesion = () => {
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
-      /*.then((data) => {console.log(data)
-        if (data.OK == "True"){
+      .then((data) => {console.log(data)
+        if ((body.username="") && (body.password="")) {
           navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
         }
+        /*if (data.OK == "True"){
+          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
+        }*/
         else {
+          navigate(process.env.PUBLIC_URL+'/Registrarse');/*
           if (data.error_username != "") {
             setErorres({er:"error_name"});
           }
           else if (data.error_password != ""){
             setErorres({er:"error_password"});
-          }
+          }*/
         }
-      })*/
+      })
       .catch((error) => console.error(error));
   };
 
