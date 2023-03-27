@@ -1,7 +1,7 @@
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 
-const App = () => {
+const MenuPrincipal = () => {
 
   const navigate = useNavigate();
 
@@ -9,7 +9,7 @@ const App = () => {
       navigate(process.env.PUBLIC_URL+ '/InicioSesion');
   };
   const onSubmit2 = async (event) => {
-    navigate(process.env.PUBLIC_URL+ '/Registrarse');
+    navigate(process.env.PUBLIC_URL+ '/DatosRegistro');
   };
 
   return (
@@ -29,7 +29,7 @@ const App = () => {
   );
 };
 
-export default App;
+export default MenuPrincipal;
 
 
 

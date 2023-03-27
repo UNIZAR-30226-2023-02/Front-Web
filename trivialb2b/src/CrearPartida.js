@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
 
-const InicioSesion = () => {
+const CrearPartida = () => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState({ er: "sin_error"});
 
@@ -57,4 +57,4 @@ const InicioSesion = () => {
   );
 };
 
-export default InicioSesion;
+export default CrearPartida;

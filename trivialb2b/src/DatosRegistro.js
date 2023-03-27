@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "https://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/usuarios/register/";
+
 
 //  background-image: url('../Imagenes/DatosUsuario.png');
 
@@ -26,8 +27,9 @@ function CuadroTexto(props,handleChange) {
 }
 
 
-const InicioSesion = () => {
-  const [body, setBody] = useState({ nombre: "", nacimiento: "", correo: "", telefono:"" });
+const DatosRegistro = () => {
+  const [body, setBody] = useState({ username: "Acher", password: "12345678", confirm_password: "12345678", fecha_nac: "22-01-2200", correo: "pepe"});
+  const [errores, setErorres] = useState("");
 
   const navigate = useNavigate();
   
@@ -37,10 +39,11 @@ const InicioSesion = () => {
       [e.target.name]: e.target.value,
     });
   };
-  
 
   const onSubmit = () => {
     console.log(body);
+    //navigate(process.env.PUBLIC_URL + '/MenuJuego');
+    
     fetch(URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,6 +51,31 @@ const InicioSesion = () => {
     })
       .then((response) => response.json())
       .then((data) => console.log(data))
+      /*
+      .then((data) => { 
+        console.log(data)
+        if (data.OK == "True"){
+          setErorres("")
+          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
+        }
+        else {
+          if (data.error_username !== "") {
+            setErorres("Error name");
+          }
+          else if (data.error_password !== ""){
+            setErorres("Error password");
+          }
+          else if (data.error_confirm_password !== ""){
+            setErorres("Error confirm password");
+          }
+          else if (data.error_fecha_nac !== ""){
+            setErorres("Error fecha nac");
+          }
+          else if (data.error_correo !== ""){
+            setErorres("Error correo");
+          }
+        }
+      })*/
       .catch((error) => console.error(error));
   };
 
@@ -61,12 +89,13 @@ const InicioSesion = () => {
 
           <form className="App-CuadrosTexto">
             <div className="App-CuadrosTextoIzq" > 
-            <CuadroTexto texto="Nombre de suario" label="nombre" nombre="nombre" valor={body.nombre} funcion={handleChange} />
-            <CuadroTexto texto="Fecha de nacimiento" label="nacimiento" nombre="nacimiento"  valor={body.nacimiento} funcion={handleChange} /> 
+            <CuadroTexto texto="Usuario" label="username" nombre="username" valor={body.username} funcion={handleChange} />
+            <CuadroTexto texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} funcion={handleChange} />
+            <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac"  valor={body.fecha_nac} funcion={handleChange} /> 
             </div>
             <div className="App-CuadrosTextoDer" > 
+            <CuadroTexto texto="Confirmar" type="password" label="confpassword" nombre="confirm_password"  valor={body.confirm_password} funcion={handleChange} />
             <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
-            <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono"  valor={body.telefono} funcion={handleChange} />
             </div>
           </form>
 
@@ -85,4 +114,4 @@ const InicioSesion = () => {
   );
 };
 
-export default InicioSesion;
+export default DatosRegistro;

@@ -7,7 +7,6 @@ import Registrarse from './Registrarse';
 import InicioSesion from './InicioSesion';
 import DatosRegistro from './DatosRegistro';
 import MenuJuego from './MenuJuego';
-import CrearPartida from './MenuDesplegable';
 import BuscarPartida from './BuscarPartida';
 import Amigos from './Amigos';
 import Tienda from './Tienda';
@@ -17,7 +16,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
   <React.StrictMode>
-    <MenuJuego />
+    <App />
   </React.StrictMode>
 
   //Para renderear un elementos: div,
