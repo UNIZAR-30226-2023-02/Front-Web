@@ -58,7 +58,6 @@
   align-items: center;
   left: 38%;
   border-image: 50;
-
 }
 
 .App-CuadrosTexto {
@@ -110,9 +109,7 @@
   justify-Content: "center";
   align-Items: "center";
   overflow: "hidden";
-  background-image: url('../Imagenes/DatosUsuario.png');
   background-size: 80%;
   background-repeat: no-repeat;
   background-position: center;
-
 }

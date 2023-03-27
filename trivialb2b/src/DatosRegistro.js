@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
+import icono from './Imagenes/DatosUsuario.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
-function Boton(props,handleChange) {
+//  background-image: url('../Imagenes/DatosUsuario.png');
+
+function CuadroTexto(props,handleChange) {
   return (
     <div>
       <a className="App-CuadroTexto" > {props.texto}: </a>
@@ -52,15 +55,15 @@ const InicioSesion = () => {
           <div className="App-titulo" style= {{top: "7%"}} > DatosRegistro 
           <div className="App-Quesitos"> </div> 
           </div>
-          <div className="App-icono" > </div>
+          <div className="App-icono" style={{ backgroundImage: "url(" + {icono} + ")" }}> </div>
           <form className="App-CuadrosTexto">
             <div className="App-CuadrosTextoIzq" > 
-            <Boton texto="Nombre de suario" label="nombre" nombre="nombre" valor={body.nombre} funcion={handleChange} />
-            <Boton texto="Fecha de nacimiento" label="nacimiento" nombre="nacimiento"  valor={body.nacimiento} funcion={handleChange} /> 
+            <CuadroTexto texto="Nombre de suario" label="nombre" nombre="nombre" valor={body.nombre} funcion={handleChange} />
+            <CuadroTexto texto="Fecha de nacimiento" label="nacimiento" nombre="nacimiento"  valor={body.nacimiento} funcion={handleChange} /> 
             </div>
             <div className="App-CuadrosTextoDer" > 
-            <Boton texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
-            <Boton texto="Teléfono móvil" type="number" label="telefono" nombre="telefono"  valor={body.telefono} funcion={handleChange} />
+            <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
+            <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono"  valor={body.telefono} funcion={handleChange} />
             </div>
           </form>
 
