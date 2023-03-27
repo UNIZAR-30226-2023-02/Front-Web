@@ -61,10 +61,22 @@
 
 }
 
-.App-Botones {
-  display: flex;
-  flex-direction: column;
+.App-CuadrosTexto {
   padding: 20px;
+  text-align: center;
+}
+
+.App-CuadrosTextoIzq {
+  float: left;
+}
+
+.App-CuadrosTextoDer {
+  float: right;
+}
+
+.App-CuadroTexto {
+  display: inline-block;
+  flex-direction: column;
 }
 
 .App-boton {
@@ -74,10 +86,10 @@
   padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
-  position: fixed;
   background-color: #c7c3c3;
   box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  display: inline-block;
 }
 
 .App-texto {
@@ -89,13 +101,18 @@
 }
 
 .App-icono {
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   border-Radius: 50%;
+  background-color: white;
   border: 2px solid black;
-  background-Color: "white";
   display: "flex";
   justify-Content: "center";
   align-Items: "center";
   overflow: "hidden";
+  background-image: url('../Imagenes/DatosUsuario.png');
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+
 }
