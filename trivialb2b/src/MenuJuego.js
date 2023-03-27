@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import crearPartida from './Imagenes/CrearPartida.png';
+import amigos from'./Imagenes/Amigos.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
@@ -15,18 +15,14 @@ const InicioSesion = () => {
       [e.target.name]: e.target.value,
     });
   };
-  
 
-  const onSubmit = () => {
-    console.log(body);
-    fetch(URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
+  const navigate = useNavigate();
+
+  const onSubmit1 = async (event) => {
+      navigate(process.env.PUBLIC_URL+ '/InicioSesion');
+  };
+  const onSubmit2 = async (event) => {
+    navigate(process.env.PUBLIC_URL+ '/Registrarse');
   };
 
   return (
@@ -35,7 +31,24 @@ const InicioSesion = () => {
           <div className="App-titulo" style= {{top: "7%"}} > TrivialB2B 
           <div className="App-Quesitos"> </div> </div>
 
-
+          <div className="App-Imagenes">   
+              <div className="App-ImagenBoton"> 
+                  <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <button className="App-boton" type="submit" onClick={() => onSubmit1()} > Buscar Partida </button>
+              </div>  
+              <div className="App-ImagenBoton"> 
+                  <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <button className="App-boton" type="submit" onClick={() => onSubmit1()}> Crear Partida </button>
+              </div>  
+              <div className="App-ImagenBoton"> 
+                  <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <button className="App-boton" type="submit" onClick={() => onSubmit1()}> Amigos </button>
+              </div>  
+              <div className="App-ImagenBoton"> 
+                  <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <button className="App-boton" type="submit" onClick={() => onSubmit1()}> Tienda</button>
+              </div>  
+          </div>
         </header>
     </div>
   );

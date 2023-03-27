@@ -45,7 +45,7 @@ const InicioSesion = () => {
       .then((response) => response.json())
       .then((data) => {console.log(data)
         if ((body.username="") && (body.password="")) {
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
+          navigate(process.env.PUBLIC_URL+'/MenuJuego');
         }
         /*if (data.OK == "True"){
           navigate(process.env.PUBLIC_URL+'/MenuPrincipal');

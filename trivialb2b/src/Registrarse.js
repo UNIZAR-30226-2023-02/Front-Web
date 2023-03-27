@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
-import { InputLabel } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
@@ -8,6 +8,8 @@ const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 const InicioSesion = () => {
   const [body, setBody] = useState({ username: "", password: "" });
 
+  const navigate = useNavigate();
+  
   const handleChange = (e) => {
     setBody({
       ...body,

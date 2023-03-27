@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import icono from './Imagenes/DatosUsuario.png';
+
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
@@ -29,6 +29,8 @@ function CuadroTexto(props,handleChange) {
 const InicioSesion = () => {
   const [body, setBody] = useState({ nombre: "", nacimiento: "", correo: "", telefono:"" });
 
+  const navigate = useNavigate();
+  
   const handleChange = (e) => {
     setBody({
       ...body,
@@ -55,7 +57,8 @@ const InicioSesion = () => {
           <div className="App-titulo" style= {{top: "7%"}} > DatosRegistro 
           <div className="App-Quesitos"> </div> 
           </div>
-          <div className="App-icono" style={{ backgroundImage: "url(" + {icono} + ")" }}> </div>
+          <div className="App-iconoRegistro"> </div>
+
           <form className="App-CuadrosTexto">
             <div className="App-CuadrosTextoIzq" > 
             <CuadroTexto texto="Nombre de suario" label="nombre" nombre="nombre" valor={body.nombre} funcion={handleChange} />

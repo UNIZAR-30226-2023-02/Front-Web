@@ -1,20 +1,23 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom/client';
+import reportWebVitals from './reportWebVitals';
 import './Estilos/index.css';
 import App from './App';
 import Registrarse from './Registrarse';
 import InicioSesion from './InicioSesion';
-import InicioSesion2 from './InicioSesion2';
 import DatosRegistro from './DatosRegistro';
-import reportWebVitals from './reportWebVitals';
 import MenuJuego from './MenuJuego';
+import CrearPartida from './MenuDesplegable';
+import BuscarPartida from './BuscarPartida';
+import Amigos from './Amigos';
+import Tienda from './Tienda';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
   <React.StrictMode>
-    <DatosRegistro />
+    <MenuJuego />
   </React.StrictMode>
 
   //Para renderear un elementos: div,

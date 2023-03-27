@@ -87,8 +87,6 @@
   cursor: pointer;
   background-color: #c7c3c3;
   box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
-  margin-bottom: 10px;
-  display: inline-block;
 }
 
 .App-texto {
@@ -99,7 +97,8 @@
   margin-bottom: 20px;
 }
 
-.App-icono {
+.App-iconoRegistro {
+  background: url("../Imagenes/DatosUsuario.png");
   width: 160px;
   height: 160px;
   border-Radius: 50%;
@@ -112,4 +111,63 @@
   background-size: 80%;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.App-icono {
+  width: 160px;
+  height: 160px;
+  border-Radius: 50%;
+  background-color: white;
+  border: 2px solid black;
+  display: "flex";
+  justify-Content: "center";
+  align-Items: "center";
+  overflow: "hidden";
+}
+
+.App-Imagenes{
+  display: flex;
+  align-items: center;
+}
+
+.App-ImagenBoton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(25% - 10px);
+  margin: 20px;
+  text-align: center;
+}
+
+.App-dropdown-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.App-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  z-index: 1;
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.App-dropdown-content a {
+  color: black;
+  padding: 6px 8px;
+  text-decoration: none;
+  display: block;
+}
+
+.App-dropdown-content a:hover {
+  background-color: #f1f1f1;
 }
