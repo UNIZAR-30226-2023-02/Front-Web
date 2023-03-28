@@ -81,7 +81,7 @@ const ModoClasico = () => {
       <div className = "App-header" > 
       <div className="App-titulo"  style= {{top: "7%"}}> Modo Clasico
         <div className="App-Quesitos" style= {{left: "36%"}}> </div> </div>
-        <div className="App-Cuadrado">
+        <div className="App-CuadradoAmarillo">
             <div style={{marginTop:"10px"}}>
             <a  style= {{ color: "#174a67", fontSize: "60px", fontStyle: "italic" }}>
                 Creación de Sala de modo Clásico:   
@@ -100,13 +100,13 @@ const ModoClasico = () => {
            </div>
 
             <div className="App-CuadrosTextoDer" style={{paddingLeft: "2px"}} > 
-
-            <label for="dog-names">Choose a dog name:</label>
-            <select name="dog-names" id="dog-names">
-                <option value="rigatoni">Rigatoni</option>
-                <option value="dave">Dave</option>
-                <option value="pumpernickel">Pumpernickel</option>
-                <option value="reeses">Reeses</option>
+            
+            <label for="numeroJugadores"  style={{marginRight:"17px", color:"#174a67"}}> Nº de jugadores: </label>
+            <select name="numeroJugadores" id="numeroJugadores" className="App-texto" style={{width:"460px"}}>
+                <option value="nulo"></option>
+                <option value="dos">2</option>
+                <option value="cuatro">4</option>
+                <option value="seis">6</option>
             </select>
                 
             <div style={{marginTop:"7%"}}>            
