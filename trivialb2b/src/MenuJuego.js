@@ -6,6 +6,7 @@ import BuscarPartida from'./Imagenes/BuscarPartida.png';
 import CrearPartida from'./Imagenes/CrearPartida.png';
 import Tienda from'./Imagenes/Tienda.png';
 import Perfil from'./Imagenes/Perfil.png';
+import Logo from './Imagenes/Logo.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
@@ -13,9 +14,9 @@ const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 function CeldaDesplegable(props) {
   return (
     <button className='App-CeldaDesplegable' >
-        <a >{props.texto}  </a>
+        <a style={{color:"white", fontSize:"30px"}}>{props.texto} </a>
         <br></br>
-        <a color="white">____________________________________________</a>
+        <a style={{color:"white", fontSize:"20px"}}>____________________________________________</a>
     </button>
   )
 }
@@ -52,6 +53,9 @@ const MenuJuego = () => {
   };
   const onSubmit9 = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Tienda');
+  };
+  const onSubmit10 = async (event) => {
+    navigate(process.env.PUBLIC_URL + '/MenuJuego');
   };
   
 
@@ -112,12 +116,16 @@ const MenuJuego = () => {
               </div>
               </div>
               <div className="App-Desplegable">
-                <img src={Perfil} style={{width:"100px", height:"100px", left:"10%", marginTop:"20px", marginLeft:"20px", marginBottom:"150px"}} /> 
+                <div>
+                <img src={Perfil} style={{width:"100px", height:"100px", left:"10%", marginTop:"20px", marginRight:"400px", marginLeft:"20px", marginBottom:"150px", cursor: "pointer"}} onClick={() => setShow(!show)}/>
+                <img src={Logo} style={{width:"100px", height:"100px", marginTop:"20px", marginLeft:"20px", marginBottom:"150px"}} />  
+                </div>
                 <CeldaDesplegable texto="Perfil" />
                 <CeldaDesplegable texto="Historial" />
                 <CeldaDesplegable texto="Contacto" />
                 <CeldaDesplegable texto="Redes Sociales" />
                 <CeldaDesplegable texto="Estadísticas" />
+                <button className="App-boton" style={{marginLeft:"170px", marginTop:"100px", width:"300px"}} type="submit" onClick={() => onSubmit4()}> Cerrar Sesion</button>
               </div>
             </div>
           )}

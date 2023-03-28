@@ -37,16 +37,15 @@ const InicioSesion = () => {
   };
 
   const onSubmit = () => {
-    console.log(body);
-    
-    fetch(URL, {
+    //console.log(body);
+    navigate(process.env.PUBLIC_URL+'/MenuJuego');
+    /*fetch(URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
-      .then((data) => console.log(data))
-      /*
+      //.then((data) => console.log(data))
       .then((data) => {console.log(data)
         if ((body.username=="") && (body.password=="")) {
           setErorres("Vacio")
@@ -63,8 +62,8 @@ const InicioSesion = () => {
             setErorres("Error password");
           }
         }
-      })*/
-      .catch((error) => console.error(error));
+      })
+      .catch((error) => console.error(error));*/
   };
 
   return (
@@ -77,7 +76,8 @@ const InicioSesion = () => {
         <Boton texto="Usuario" label="username" nombre="username" valor={body.username} onchange={handleChange}/>
         <Boton texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} onchange={handleChange}/>
         </form>
-        <font color="red"> {errores}</font>
+        <font color="red" > {errores}</font>
+        <br></br>
         <button
           variant="contained"
           color="secondary"

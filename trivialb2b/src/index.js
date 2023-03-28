@@ -5,7 +5,6 @@ import './Estilos/index.css';
 import App from './App';
 import Registrarse from './Registrarse';
 import InicioSesion from './InicioSesion';
-import DatosRegistro from './DatosRegistro';
 import MenuJuego from './MenuJuego';
 import BuscarPartida from './BuscarPartida';
 import Amigos from './Amigos';

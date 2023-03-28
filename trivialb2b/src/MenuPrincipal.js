@@ -9,7 +9,7 @@ const MenuPrincipal = () => {
       navigate(process.env.PUBLIC_URL+ '/InicioSesion');
   };
   const onSubmit2 = async (event) => {
-    navigate(process.env.PUBLIC_URL+ '/DatosRegistro');
+    navigate(process.env.PUBLIC_URL+ '/Registrarse');
   };
 
   return (
