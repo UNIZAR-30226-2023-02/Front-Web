@@ -64,7 +64,7 @@ const MenuJuego = () => {
     <div className="App">
       <header className="App-header">
           <div className="App-titulo" style= {{top: "7%"}} > TrivialB2B 
-          <div className="App-Quesitos"> </div>           
+          <div className="App-Quesitos"/>           
           </div>
           <button
             className='App-IconoPerfil'

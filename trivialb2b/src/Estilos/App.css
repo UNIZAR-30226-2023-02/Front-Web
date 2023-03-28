@@ -54,7 +54,7 @@
   background-image: url('../Imagenes/quesito_5_azul.png');
   position: relative;
   background-repeat: no-repeat;
-  min-height: 10vh;
+  min-height: 5vh;
   align-items: center;
   left: 38%;
   border-image: 50;
@@ -89,12 +89,45 @@
   box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
 }
 
+.App-botonAzul {
+  color: #ffffff;
+  border-radius: 50px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 40px;
+  cursor: pointer;
+  background-color: rgb(0, 80, 155);
+  box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
+}
+
+.App-botonCancelar {
+  color: #ffffff;
+  border-radius: 50px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 40px;
+  cursor: pointer;
+  background-color: rgb(134, 9, 9);
+  box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
+}
+.App-botonConfirmar {
+  color: #ffffff;
+  border-radius: 50px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 40px;
+  cursor: pointer;
+  background-color: rgb(7, 83, 17);
+  box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
+}
+
 .App-texto {
   color: black;
   border: none;
   padding: 10px 20px;
   font-size: 40px;
   margin-bottom: 20px;
+  border: 2px solid black;
 }
 
 .App-iconoRegistro {
@@ -185,4 +218,14 @@
   cursor: pointer;
   margin-bottom: 20px;
   border: white;
+}
+
+.App-Cuadrado{
+  background-color: #c9c154;
+  left: 10%;
+  width: 1800px;
+  height: 800px;
+  border-radius: 50px;
+  border: 3px solid black;
+  margin-top: 3%;
 }

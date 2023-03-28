@@ -14,6 +14,9 @@ import CrearPartida from './CrearPartida';
 import BuscarPartida from './BuscarPartida';
 import Amigos from './Amigos';
 import Tienda from './Tienda';
+import ModoClasico from './ModoClasico';
+import ModoEquipos from './ModoEquipos';
+import ModoTematica from './ModoTematica';
 
 const App = () => {
   return (
@@ -27,6 +30,9 @@ const App = () => {
       <Route path= '/BuscarPartida' Component={BuscarPartida} /> 
       <Route path= '/Amigos' Component={Amigos} /> 
       <Route path= '/Tienda' Component={Tienda} /> 
+      <Route path= '/ModoClasico' Component={ModoClasico} /> 
+      <Route path= '/ModoEquipos' Component={ModoEquipos} /> 
+      <Route path= '/ModoTematica' Component={ModoTematica} /> 
     </Routes>
     </BrowserRouter>
   );
