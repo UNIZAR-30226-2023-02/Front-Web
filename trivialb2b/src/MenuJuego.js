@@ -78,41 +78,41 @@ const MenuJuego = () => {
           {show ? (
           <div className="App-Imagenes">   
               <div className="App-ImagenBoton"> 
-                  <img src={CrearPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <img src={CrearPartida} style={{width:"50%", paddingBottom:"10%"}} /> 
                   <button className="App-boton" type="submit" onClick={() => onCrearPartida()} > Crear Partida </button>
               </div>  
               <div className="App-ImagenBoton"> 
-                  <img src={BuscarPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <img src={BuscarPartida} style={{width:"70%", paddingBottom:"20%"}} /> 
                   <button className="App-boton" type="submit" onClick={() => onBuscarPartida()}> Buscar Partida </button>
               </div>  
               <div className="App-ImagenBoton"> 
-                  <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <img src={amigos} style={{width:"50%", paddingBottom:"10%"}} /> 
                   <button className="App-boton" type="submit" onClick={() => onAmigos()}> Amigos </button>
               </div>  
               <div className="App-ImagenBoton"> 
-                  <img src={Tienda} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
+                  <img src={Tienda} style={{width:"50%", paddingBottom:"10%"}} /> 
                   <button className="App-boton" type="submit" onClick={() => onTienda()}> Tienda</button>
               </div>  
           </div>
           ) : (
             <div>
               <div className="App-Imagenes">   
-              <div className="App-ImagenBoton"> 
-                  <img src={CrearPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onCrearPartida()} > Crear Partida </button>
-              </div>  
-              <div className="App-ImagenBoton"> 
-                  <img src={BuscarPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onBuscarPartida()}> Buscar Partida </button>
-              </div>  
-              <div className="App-ImagenBoton"> 
-                  <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onAmigos()}> Amigos </button>
-              </div>  
-              <div className="App-ImagenBoton"> 
-                  <img src={Tienda} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onTienda()}> Tienda</button>
-              </div>
+                <div className="App-ImagenBoton"> 
+                    <img src={CrearPartida} style={{width:"50%", paddingBottom:"10%"}} /> 
+                    <button className="App-boton" type="submit" onClick={() => onCrearPartida()} > Crear Partida </button>
+                </div>  
+                <div className="App-ImagenBoton"> 
+                    <img src={BuscarPartida} style={{width:"70%", paddingBottom:"20%"}} /> 
+                    <button className="App-boton" type="submit" onClick={() => onBuscarPartida()}> Buscar Partida </button>
+                </div>  
+                <div className="App-ImagenBoton"> 
+                    <img src={amigos} style={{width:"50%", paddingBottom:"10%"}} /> 
+                    <button className="App-boton" type="submit" onClick={() => onAmigos()}> Amigos </button>
+                </div>  
+                <div className="App-ImagenBoton"> 
+                    <img src={Tienda} style={{width:"50%", paddingBottom:"10%"}} /> 
+                    <button className="App-boton" type="submit" onClick={() => onTienda()}> Tienda</button>
+                </div>   
               </div>
               <div className="App-Desplegable">
                 <div style={{marginTop: "3%"}}>
