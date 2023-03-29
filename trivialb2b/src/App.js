@@ -28,6 +28,8 @@ import PerfilConfirmacion from './PerfilConfirmacion';
 import EsperandoJugadores from './EsperandoJugadores';
 
 
+
+
 const App = () => {
   return (
     <BrowserRouter>
