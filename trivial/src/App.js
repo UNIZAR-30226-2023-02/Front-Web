@@ -15,6 +15,8 @@ function colores() {
 }
 
 
+
+
 function App() {
   return (
     <div className="App">
