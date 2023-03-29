@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
+import Atras from "./Imagenes/Atras.png";
 
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
@@ -9,15 +10,12 @@ const URL = "http://51.142.118.71:8000/api/usuarios/register/";
 function CuadroTexto(props) {
   return (
     <div>
-      <a className="App-CuadroTexto" style={{marginRight:"17px"}}> {props.texto}:  </a>
-      <input className="App-texto"
-      color="black"
-      margin="normal"
-      variant="outlined"
-      label={props.label}
-      name={props.nombre}
-      value={props.valor}
-      onChange={props.funcion}
+      <a> {props.texto}:  </a>
+      <input className="App-textoNegro"
+        label={props.label}
+        name={props.nombre}
+        value={props.valor}
+        onChange={props.funcion}
       />
     </div>
   )
@@ -37,7 +35,12 @@ const Registrarse = () => {
     });
   };
 
-  const onSubmit = () => {
+  const flechaAtras = async (event) => {
+    navigate(process.env.PUBLIC_URL+ '/');
+  };
+
+
+  const Registrarse = () => {
     console.log(body);
     //navigate(process.env.PUBLIC_URL + '/MenuJuego');
     
@@ -83,29 +86,27 @@ const Registrarse = () => {
           </div>
           <div className="App-iconoRegistro"> </div>
 
-          <form className="App-CuadrosTexto">
+          <form className="App-Input" style={{left: "10%", top:"45%", height:"30%", width: "80%", position: "absolute"}}>
             <div className="App-CuadrosTextoIzq" > 
-            <CuadroTexto texto="Usuario" label="username" nombre="username" valor={body.username} funcion={handleChange} />
-            <CuadroTexto texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} funcion={handleChange} />
-            <CuadroTexto texto="Confirmar" type="password" label="confpassword" nombre="confirm_password"  valor={body.confirm_password} funcion={handleChange} />
-
+              <div style={{marginLeft:"8%"}}>
+                <CuadroTexto texto="Usuario" label="username" nombre="username" valor={body.username} funcion={handleChange} />
+              </div>
+              <CuadroTexto texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} funcion={handleChange} />
+              <div style={{marginLeft:"3%"}}>
+                <CuadroTexto texto="Confirmar" type="password" label="confpassword" nombre="confirm_password"  valor={body.confirm_password} funcion={handleChange} />
+              </div>
             </div>
             <div className="App-CuadrosTextoDer" > 
-            <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac"  valor={body.fecha_nac} funcion={handleChange} /> 
-            <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
+              <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac"  valor={body.fecha_nac} funcion={handleChange} /> 
+              <div style={{marginLeft:"4%"}}>
+                <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
+              </div>
             </div>
           </form>
-
-          <button
-            variant="contained"
-
-            color="secondary"
-            className="App-boton"
-            style= {{top: "80%", left: "44%"}}
-            onClick={() => onSubmit()}
-          >
-            Sign In
+          <button className="App-boton" style= {{top: "80%", left: "auto", position:"absolute"}} onClick={() => Registrarse()} >
+            Registrarse
           </button>
+          <img src={Atras} style={{width:"170px", height:"170px", top:"75%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
         </header>
     </div>
   );

@@ -12,9 +12,6 @@ import Estadisticas from './Estadisticas';
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
-
-
-
 function CeldaDesplegable( props ) {
  return (
     <div>
@@ -60,8 +57,6 @@ const MenuJuego = () => {
   const onCerrarSesion = async (event) => {
     navigate(process.env.PUBLIC_URL + '/CerrarSesion');
   };
-  
-
 
   return (
     <div className="App">
