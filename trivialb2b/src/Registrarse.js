@@ -86,19 +86,19 @@ const Registrarse = () => {
           </div>
           <div className="App-iconoRegistro"> </div>
 
-          <form className="App-Input" style={{left: "10%", top:"45%", height:"30%", width: "80%", position: "absolute"}}>
+          <form className="App-Input" style={{left: "10%", top:"45%", height:"30%", width: "83%", position: "absolute"}}>
             <div className="App-CuadrosTextoIzq" > 
-              <div style={{marginLeft:"8%"}}>
+              <div style={{marginLeft:"6.9%"}}>
                 <CuadroTexto texto="Usuario" label="username" nombre="username" valor={body.username} funcion={handleChange} />
               </div>
               <CuadroTexto texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} funcion={handleChange} />
-              <div style={{marginLeft:"3%"}}>
+              <div style={{marginLeft:"2.8%"}}>
                 <CuadroTexto texto="Confirmar" type="password" label="confpassword" nombre="confirm_password"  valor={body.confirm_password} funcion={handleChange} />
               </div>
             </div>
             <div className="App-CuadrosTextoDer" > 
               <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac"  valor={body.fecha_nac} funcion={handleChange} /> 
-              <div style={{marginLeft:"4%"}}>
+              <div style={{marginLeft:"3%"}}>
                 <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
               </div>
             </div>
