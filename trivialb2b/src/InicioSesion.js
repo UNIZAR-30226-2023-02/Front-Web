@@ -8,17 +8,14 @@ const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 function Boton(props) {
   return (
-    <div>
-      <a margin= "40px" > {props.texto}: </a>
-      <input className="App-texto"
-      type={props.type}
-      color="black"
-      margin="normal"
-      variant="outlined"
-      label={props.label}
-      name={props.nombre}
-      value={props.valor}
-      onChange={props.onchange}
+    <div style={{marginLeft: "2%"}}>
+      <a> {props.texto}: </a>
+      <input className="App-textoNegro"
+        type={props.type}
+        label={props.label}
+        name={props.nombre}
+        value={props.valor}
+        onChange={props.onchange}
       />
     </div>
   )
@@ -72,20 +69,21 @@ const InicioSesion = () => {
   return (
     <div className="App">
       <div className = "App-header" > 
-      <div className="App-titulo" > Inicio Sesión 
+      <div className="App-titulo" style={{top:"10%"}} > Inicio Sesión 
         <div className="App-Quesitos"> </div> 
       </div>
-        <form className="App-Botones">
-        <Boton texto="Usuario" label="username" nombre="username" valor={body.username} onchange={handleChange}/>
-        <Boton texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} onchange={handleChange}/>
-        </form>
+        <form className="App-Input" style={{left: "10%", top:"40%", height:"30%", width: "70%", position:"absolute"}}>
+          <div style={{marginLeft:"4%", marginBottom:"2%"}}>
+            <Boton texto="Usuario" label="username" nombre="username" valor={body.username} onchange={handleChange} />
+          </div>
+          
+          <Boton texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} onchange={handleChange}/>
+          </form>
         <font color="red" > {errores}</font>
         <br></br>
         <button
-          variant="contained"
-          color="secondary"
           className="App-boton"
-          style= {{top: "70%", left: "44%"}}
+          style= {{top: "70%", left: "46%", position:"absolute"}}
           onClick={() => onSubmit()}
         >
           Sign In

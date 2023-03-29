@@ -88,11 +88,19 @@
   flex-direction: column;
 }
 
+.App-Input {
+  color: #ffffff;
+  border: none;
+  font-size: 35px;
+  background-color: none;
+  border-radius: 50px;
+}
+
 .App-boton {
   color: #232323;
   border-radius: 50px;
   border: none;
-  padding: 0.5% 0.5%;
+  padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
   background-color: #c7c3c3;
@@ -131,7 +139,16 @@
   box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
 }
 
-.App-texto {
+.App-textoBlanco {
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 20px;
+  font-size: 40px;
+  margin-bottom: 20px;
+  border: 2px solid black;
+}
+
+.App-textoNegro {
   color: black;
   border: none;
   padding: 10px 20px;
