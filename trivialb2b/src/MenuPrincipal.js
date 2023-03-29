@@ -5,24 +5,24 @@ const MenuPrincipal = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit1 = async (event) => {
-      navigate(process.env.PUBLIC_URL+ '/InicioSesion');
+  const IniciarSesion = async (event) => {
+      navigate(process.env.PUBLIC_URL + '/InicioSesion');
   };
-  const onSubmit2 = async (event) => {
-    navigate(process.env.PUBLIC_URL+ '/Registrarse');
+  const Registrarse = async (event) => {
+    navigate(process.env.PUBLIC_URL + '/Registrarse');
   };
 
   return (
     <div className="App">
       <header className="App-header">
-          <div className="App-titulo" > Trivial B2B  
-          <div className="App-Quesitos"> </div> 
+          <div className="App-titulo" style={{ top: "20%" }} > Trivial B2B  
+            <div className="App-Quesitos"/> 
           </div>
-          <button className="App-boton" style= {{top: "50%", left: "43%", marginBottom:"2%" }} type="submit" onClick={() => onSubmit1()}>
-          Inicio Sesión
+          <button className="App-boton" style= {{ marginBottom:"5%", marginTop:"5%" }} type="submit" onClick={() => IniciarSesion()}>
+            Inicio Sesión
           </button>
-          <button className="App-boton" style= {{top: "70%", left: "44%"}} type="submit"  onClick={() => onSubmit2()}>
-          Registrarse
+          <button className="App-boton" type="submit"  onClick={() => Registrarse()}>
+            Registrarse
           </button>
       </header>
     </div>
