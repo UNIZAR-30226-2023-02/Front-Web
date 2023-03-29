@@ -9,6 +9,7 @@ import Perfil from'./Imagenes/Perfil.png';
 import Logo from './Imagenes/Logo.png';
 import Estadisticas from './Estadisticas';
 
+
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
@@ -17,7 +18,7 @@ function CeldaDesplegable( props ) {
     <div>
       <a style={{color:"white", fontSize:"30px"}}>{props.texto} </a>
       <br></br>
-      <a style={{color:"white", fontSize:"20px"}}>____________________________________________</a>
+      <a style={{color:"white", fontSize:"15px"}}>____________________________________________</a>
     </div>
  )
 }
@@ -28,7 +29,7 @@ const MenuJuego = () => {
   const [show, setShow] = useState(true);
 
   const onCrearPartida = async (event) => {
-      navigate(process.env.PUBLIC_URL + '/CrearPartida');
+    navigate(process.env.PUBLIC_URL + '/CrearPartida');
   };
   const onBuscarPartida = async (event) => {
     navigate(process.env.PUBLIC_URL + '/BuscarPartida');
@@ -114,9 +115,9 @@ const MenuJuego = () => {
               </div>
               </div>
               <div className="App-Desplegable">
-                <div>
-                <img src={Perfil} style={{width:"100px", height:"100px", left:"10%", marginTop:"20px", marginRight:"400px", marginLeft:"20px", marginBottom:"150px", cursor: "pointer"}} onClick={() => setShow(!show)}/>
-                <img src={Logo} style={{width:"100px", height:"100px", marginTop:"20px", marginLeft:"20px", marginBottom:"150px"}} />  
+                <div style={{marginTop: "3%"}}>
+                <img src={Perfil} style={{width:"100px", height:"100px", left:"10%", marginRight:"5%", marginLeft:"5%", cursor: "pointer"}} onClick={() => setShow(!show)}/>
+                <img src={Logo} style={{width:"100px", height:"100px", marginLeft:"45%"}} />  
                 </div>
                 <button className='App-CeldaDesplegable' type="submit" onClick={() => onPerfil()} > <CeldaDesplegable texto="Perfil" /> </button>
                 <button className='App-CeldaDesplegable' type="submit" onClick={() => onHistorial()} > <CeldaDesplegable texto="Historial"  /> </button>
@@ -124,8 +125,7 @@ const MenuJuego = () => {
                 <button className='App-CeldaDesplegable' type="submit" onClick={() => onRedesSociales()} > <CeldaDesplegable texto="Redes Sociales"  /> </button>
                 <button className='App-CeldaDesplegable' type="submit" onClick={() => onEstadisticas()} > <CeldaDesplegable texto="Estadísticas" /> </button>
 
-                <button className="App-boton" style={{marginLeft:"170px", marginTop:"100px", width:"300px"}} type="submit" onClick={() => onCerrarSesion()}> Cerrar Sesion</button>
-
+                <button className="App-boton" style={{marginLeft:"20%", width:"60%", marginTop:"10%"}} type="submit" onClick={() => onCerrarSesion()}> Cerrar Sesion</button>
                 </div>
             </div>
           )}
