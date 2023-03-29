@@ -49,7 +49,7 @@ const BuscarPartida = () => {
   return (
     <div className="App">
       <div className = "App-header" > 
-      <div className="App-titulo" > BuscarPartida.js
+      <div className="App-titulo" > BuscarPartida
         <div className="App-Quesitos"> </div> 
         </div>
       </div>

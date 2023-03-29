@@ -7,18 +7,21 @@ import CrearPartida from'./Imagenes/CrearPartida.png';
 import Tienda from'./Imagenes/Tienda.png';
 import Perfil from'./Imagenes/Perfil.png';
 import Logo from './Imagenes/Logo.png';
+import Estadisticas from './Estadisticas';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
 
-function CeldaDesplegable(props) {
+
+
+function CeldaDesplegable( props ) {
  return (
-   <button className='App-CeldaDesplegable' type="submit" onClick={() => props.accion} >
-       <a style={{color:"white", fontSize:"30px"}}>{props.texto} </a>
-       <br></br>
-       <a style={{color:"white", fontSize:"20px"}}>____________________________________________</a>
-   </button>
+    <div>
+      <a style={{color:"white", fontSize:"30px"}}>{props.texto} </a>
+      <br></br>
+      <a style={{color:"white", fontSize:"20px"}}>____________________________________________</a>
+    </div>
  )
 }
 
@@ -27,34 +30,34 @@ const MenuJuego = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
 
-  const onSubmit1 = async (event) => {
+  const onCrearPartida = async (event) => {
       navigate(process.env.PUBLIC_URL + '/CrearPartida');
   };
-  const onSubmit2 = async (event) => {
+  const onBuscarPartida = async (event) => {
     navigate(process.env.PUBLIC_URL + '/BuscarPartida');
   };
-  const onSubmit3 = async (event) => {
+  const onAmigos = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Amigos');
   };
-  const onSubmit4 = async (event) => {
+  const onTienda = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Tienda');
   };
-  const onSubmit5 = async (event) => {
+  const onPerfil = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Perfil');
   };
-  const onSubmit6 = async (event) => {
+  const onHistorial = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Historial');
   };
-  const onSubmit7 = async (event) => {
+  const onContacto = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Contacto');
   };
-  const onSubmit8 = async (event) => {
+  const onRedesSociales = async (event) => {
     navigate(process.env.PUBLIC_URL + '/RedesSociales');
   };
-  const onSubmit9 = async (event) => {
+  const onEstadisticas = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Estadisticas');
   };
-  const onSubmit10 = async (event) => {
+  const onCerrarSesion = async (event) => {
     navigate(process.env.PUBLIC_URL + '/CerrarSesion');
   };
   
@@ -80,19 +83,19 @@ const MenuJuego = () => {
           <div className="App-Imagenes">   
               <div className="App-ImagenBoton"> 
                   <img src={CrearPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit1()} > Crear Partida </button>
+                  <button className="App-boton" type="submit" onClick={() => onCrearPartida()} > Crear Partida </button>
               </div>  
               <div className="App-ImagenBoton"> 
                   <img src={BuscarPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit2()}> Buscar Partida </button>
+                  <button className="App-boton" type="submit" onClick={() => onBuscarPartida()}> Buscar Partida </button>
               </div>  
               <div className="App-ImagenBoton"> 
                   <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit3()}> Amigos </button>
+                  <button className="App-boton" type="submit" onClick={() => onAmigos()}> Amigos </button>
               </div>  
               <div className="App-ImagenBoton"> 
                   <img src={Tienda} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit4()}> Tienda</button>
+                  <button className="App-boton" type="submit" onClick={() => onTienda()}> Tienda</button>
               </div>  
           </div>
           ) : (
@@ -100,19 +103,19 @@ const MenuJuego = () => {
               <div className="App-Imagenes">   
               <div className="App-ImagenBoton"> 
                   <img src={CrearPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit5()} > Crear Partida </button>
+                  <button className="App-boton" type="submit" onClick={() => onCrearPartida()} > Crear Partida </button>
               </div>  
               <div className="App-ImagenBoton"> 
                   <img src={BuscarPartida} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit6()}> Buscar Partida </button>
+                  <button className="App-boton" type="submit" onClick={() => onBuscarPartida()}> Buscar Partida </button>
               </div>  
               <div className="App-ImagenBoton"> 
                   <img src={amigos} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit3()}> Amigos </button>
+                  <button className="App-boton" type="submit" onClick={() => onAmigos()}> Amigos </button>
               </div>  
               <div className="App-ImagenBoton"> 
                   <img src={Tienda} style={{width:"50%", height:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onSubmit4()}> Tienda</button>
+                  <button className="App-boton" type="submit" onClick={() => onTienda()}> Tienda</button>
               </div>
               </div>
               <div className="App-Desplegable">
@@ -120,13 +123,15 @@ const MenuJuego = () => {
                 <img src={Perfil} style={{width:"100px", height:"100px", left:"10%", marginTop:"20px", marginRight:"400px", marginLeft:"20px", marginBottom:"150px", cursor: "pointer"}} onClick={() => setShow(!show)}/>
                 <img src={Logo} style={{width:"100px", height:"100px", marginTop:"20px", marginLeft:"20px", marginBottom:"150px"}} />  
                 </div>
-                <CeldaDesplegable texto="Perfil" accion= "onSubmit5()"/>
-                <CeldaDesplegable texto="Historial"  />
-                <CeldaDesplegable texto="Contacto" />
-                <CeldaDesplegable texto="Redes Sociales"  />
-                <CeldaDesplegable texto="Estadísticas" />
-                <button className="App-boton" style={{marginLeft:"170px", marginTop:"100px", width:"300px"}} type="submit" onClick={() => onSubmit10()}> Cerrar Sesion</button>
-              </div>
+                <button className='App-CeldaDesplegable' type="submit" onClick={() => onPerfil()} > <CeldaDesplegable texto="Perfil" /> </button>
+                <button className='App-CeldaDesplegable' type="submit" onClick={() => onHistorial()} > <CeldaDesplegable texto="Historial"  /> </button>
+                <button className='App-CeldaDesplegable' type="submit" onClick={() => onContacto()} > <CeldaDesplegable texto="Contacto" /> </button>
+                <button className='App-CeldaDesplegable' type="submit" onClick={() => onRedesSociales()} > <CeldaDesplegable texto="Redes Sociales"  /> </button>
+                <button className='App-CeldaDesplegable' type="submit" onClick={() => onEstadisticas()} > <CeldaDesplegable texto="Estadísticas" /> </button>
+
+                <button className="App-boton" style={{marginLeft:"170px", marginTop:"100px", width:"300px"}} type="submit" onClick={() => onCerrarSesion()}> Cerrar Sesion</button>
+
+                </div>
             </div>
           )}
         </header>

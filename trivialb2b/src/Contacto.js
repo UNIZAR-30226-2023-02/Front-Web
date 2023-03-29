@@ -8,55 +8,33 @@ const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 
 const Contacto = () => {
-  const [body, setBody] = useState({ username: "", password: "" });
-  const [errores, setErorres] = useState("");
-
+  const [body, setBody] = useState({ username: "", fecha_nac: "dd-mm-aaaa", correo: " ", telefono: ""});
   const navigate = useNavigate();
-  const handleChange = (e) => {
-    setBody({
-      ...body,
-      [e.target.name]: e.target.value,
-    });
-  };
 
-  const onSubmit = () => {
-    //console.log(body);
-    navigate(process.env.PUBLIC_URL+'/MenuJuego');
-    fetch(URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      //.then((data) => console.log(data))
-      .then((data) => {console.log(data)
-        if ((body.username=="") && (body.password=="")) {
-          setErorres("Vacio")
-        }
-        if (data.OK == "True"){
-          setErorres("");
-          const usuario = { nombre: body.username, contraseña: body.password};
-          setSession({usuario});
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
-        }
-        else {
-          if (data.error_username !== "") {
-            setErorres("Error name");
-          }
-          else if (data.error_password !== ""){
-            setErorres("Error password");
-          }
-        }
-      })
-      .catch((error) => console.error(error));
+  const continuar = async (event) => {
+    navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
-
   return (
     <div className="App">
-      <div className = "App-header" > 
-      <div className="App-titulo" > Contacto
-        <div className="App-Quesitos"> </div> 
-        </div>
+              <div className="App-CuadradoNegro" style={{ width: "1200px", height: "750px", position: "absolute", zIndex: "1", top: "25%", left: "6%"}}>
+                <div style={{marginTop: "3%"}}>                
+                  <a style={{color:"white", fontSize:"50px"}}>Contactanos: </a>
+                  <div style={{marginTop:"30px", color: "white"}}>
+                    <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
+                  </div>
+                  <div style={{marginTop: "7%"}}>    
+                    <a style={{color:"white", fontSize:"50px", textDecoration: "underline"}}> Correo electrónico: </a> <a style={{color:"white", fontSize:"50px"}}>  nano@gmail.com </a>
+                  </div>
+                  <div style={{marginTop: "7%"}}>    
+                    <a style={{color:"white", fontSize:"50px", textDecoration: "underline"}}> Telefono: </a> <a style={{color:"white", fontSize:"50px"}}>  696969696 </a>
+                  </div>
+                  <div> <button className="App-boton" style= {{marginTop:"130px", left: "44%"}} onClick={() => continuar() } > Continuar </button></div>
+                </div>
+              </div>
+        <div className = "App-header" style={{ filter: 'blur(5px)'}} > 
+            <div className="App-titulo" style= {{top: "7%"}} > Contacto
+                <div className="App-Quesitos" style= {{left: "40%"}}> </div> 
+            </div>
         </div>
     </div>
   );

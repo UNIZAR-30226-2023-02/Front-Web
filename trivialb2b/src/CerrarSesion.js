@@ -19,44 +19,35 @@ const CerrarSesion = () => {
     });
   };
 
-  const onSubmit = () => {
-    //console.log(body);
-    navigate(process.env.PUBLIC_URL+'/MenuJuego');
-    fetch(URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      //.then((data) => console.log(data))
-      .then((data) => {console.log(data)
-        if ((body.username=="") && (body.password=="")) {
-          setErorres("Vacio")
-        }
-        if (data.OK == "True"){
-          setErorres("");
-          const usuario = { nombre: body.username, contraseña: body.password};
-          setSession({usuario});
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
-        }
-        else {
-          if (data.error_username !== "") {
-            setErorres("Error name");
-          }
-          else if (data.error_password !== ""){
-            setErorres("Error password");
-          }
-        }
-      })
-      .catch((error) => console.error(error));
+  const cancelar = async (event) => {
+    navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
+  const confirmar = async (event) => {
+    navigate(process.env.PUBLIC_URL+ '/InicioSesion');
+  };
+
 
   return (
     <div className="App">
-      <div className = "App-header" > 
-      <div className="App-titulo" > Cerrar Sesion
-        <div className="App-Quesitos"> </div> 
-        </div>
+              <div className="App-CuadradoNegro" style={{ width: "1200px", height: "750px", position: "absolute", zIndex: "1", top: "25%", left: "26%"}}>
+                <div style={{marginTop: "3%"}}>                
+                  <a style={{color:"white", fontSize:"50px"}}>Cerrar Sesion </a>
+                  <div style={{marginTop:"30px", color: "white"}}>
+                    <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
+                  </div>
+                  <div style={{marginTop: "10%"}}>    
+                    <a style={{color:"white", fontSize:"30px"}}> ¿Estás seguro de que quieres cerrar sesión? </a>
+                  </div>
+                  <div> 
+                    <button className="App-botonCancelar" style= {{marginTop:"180px", marginRight:"50px"}} onClick={() => cancelar() } > Cancelar </button>
+                    <button className="App-botonConfirmar" style= {{marginTop:"180px", marginLeft:"50px"}} onClick={() => confirmar() } > Confirmar </button>
+                  </div>
+                </div>
+              </div>
+        <div className = "App-header" style={{ filter: 'blur(5px)'}} > 
+            <div className="App-titulo" style= {{top: "7%"}} > Cerrar Sesion
+                <div className="App-Quesitos" style= {{left: "40%"}}> </div> 
+            </div>
         </div>
     </div>
   );

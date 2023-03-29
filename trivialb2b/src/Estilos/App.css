@@ -21,6 +21,18 @@
   align-items: center;
   justify-content: center; 
   font-size: calc(10px + 2vmin);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.App-tablero {
+  background-image: url('../Imagenes/Tablero1.png');
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  font-size: calc(10px + 2vmin);
   color: white;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -162,7 +174,6 @@
   top: 7%;
   cursor: pointer;
   border-Radius: 50%;
-
 }
 
 .App-icono {
@@ -233,4 +244,30 @@
   background-color: black;
   left: 10%;
   border-radius: 50px;
+}
+
+.App-ImagenesRedes {
+  align-items: center;
+  display: relative;
+  
+}
+
+.App-EsJugador {
+  position: relative;
+  display: "flex";
+  align-items: center;
+  background-repeat: no-repeat;
+  width: 20%;
+  height: 20%;
+  border-image: 50;
+}
+
+.App-imagenJugador {
+  width: 80%;
+  height: 500px;
+  border-Radius: 5%;
+  background-color: white;
+  border: 2px solid rgb(255, 255, 255);
+  position: "absolute";
+  margin-left: 9%;
 }

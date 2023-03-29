@@ -39,8 +39,8 @@ const ModoClasico = () => {
 
   const onSubmit = () => {
     console.log(body);
-    //navigate(process.env.PUBLIC_URL + '/MenuJuego');
-    
+    navigate(process.env.PUBLIC_URL + '/EsperandoJugadores');
+    /*
     fetch(URL, {
       method: "POST",
       body: JSON.stringify(body),
@@ -72,7 +72,7 @@ const ModoClasico = () => {
           }
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error));*/
   };
 
 //<CuadroTexto texto="Nº Jugadores" label="numJugadores" nombre="numJugadores"  valor={body.numJugadores} funcion={handleChange} /> 
