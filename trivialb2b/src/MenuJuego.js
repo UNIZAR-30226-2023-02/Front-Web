@@ -27,7 +27,7 @@ function Modo( props ) {
   return (
     <div className="App-ImagenBoton"> 
       <img src={props.img} style={{width:props.tam, paddingBottom:props.pad}} /> 
-      <button className="App-boton" type="submit" onClick={props.function}> Crear Partida </button>
+      <button className="App-boton" type="submit" onClick={props.function}> {props.texto} </button>
     </div>  
   )
  }
@@ -100,18 +100,18 @@ const MenuJuego = () => {
 
           {show ? (
           <div className="App-Imagenes">   
-              <Modo function={onCrearPartida} img={CrearPartida} tam="50%" pad="10%"/>
-              <Modo function={onBuscarPartida} img={BuscarPartida}tam="70%" pad="20%"/> 
-              <Modo function={onAmigos} img={Amigos}tam="50%" pad="10%"/>
-              <Modo function={onTienda} img={Tienda}tam="50%" pad="10%"/>
+              <Modo texto="Crear Partida"function={onCrearPartida} img={CrearPartida} tam="50%" pad="10%"/>
+              <Modo texto="Buscar Partida" function={onBuscarPartida} img={BuscarPartida}tam="70%" pad="20%"/> 
+              <Modo texto="Amigos"function={onAmigos} img={Amigos}tam="50%" pad="10%"/>
+              <Modo texto="Tienda" function={onTienda} img={Tienda}tam="50%" pad="10%"/>  
           </div>
           ) : (
             <div>
               <div className="App-Imagenes">   
-              <Modo function={onCrearPartida} img={CrearPartida} tam="50%" pad="10%"/>
-              <Modo function={onBuscarPartida} img={BuscarPartida}tam="70%" pad="20%"/> 
-              <Modo function={onAmigos} img={Amigos}tam="50%" pad="10%"/>
-              <Modo function={onTienda} img={Tienda}tam="50%" pad="10%"/>  
+              <Modo texto="Crear Partida"function={onCrearPartida} img={CrearPartida} tam="50%" pad="10%"/>
+              <Modo texto="Buscar Partida" function={onBuscarPartida} img={BuscarPartida}tam="70%" pad="20%"/> 
+              <Modo texto="Amigos"function={onAmigos} img={Amigos}tam="50%" pad="10%"/>
+              <Modo texto="Tienda" function={onTienda} img={Tienda}tam="50%" pad="10%"/>  
               </div>
               <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onHistorial} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
             </div>

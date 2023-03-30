@@ -9,6 +9,18 @@ import { useSession, setSession } from 'react-session';
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
+
+function Imagen (props) {
+  return (
+    <div style={{ marginRight: props.marg, width:"200px", height:"200px" }}>
+      <Link to={props.url} target="_blank">
+        <img src={props.img} style={{ width:"100%", height:"100%", cursor: "pointer" }} />
+      </Link>
+      <a style={{ color: "white", fontSize:"20px", textAlign:"center" }}>{props.texto}</a>
+    </div>
+  )
+}
+
 const RedesSociales = () => {
   
   const navigate = useNavigate();
@@ -26,24 +38,9 @@ const RedesSociales = () => {
             <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
           </div>
           <div style={{ display:"flex", marginTop:"50px", marginLeft: "80px" }}>
-            <div style={{ marginRight: "20%", width:"200px", height:"200px" }}>
-              <Link to="https://www.instagram.com/trivialb2b/" target="_blank">
-                <img src={Instagram} style={{ width:"100%", height:"100%", cursor: "pointer" }} />
-              </Link>
-              <a style={{ color: "white", fontSize:"20px", textAlign:"center" }}>Instagram</a>
-            </div>
-            <div style={{ marginRight: "20%", width:"200px", height:"200px" }}>
-              <Link to="https://www.facebook.com/profile.php?id=100089906757742" target="_blank">
-              <img src={Facebook} style={{ width:"100%", height:"100%", cursor: "pointer", marginLeft:"9%"}} />
-              </Link>
-              <a style={{ color: "white", fontSize:"20px", textAlign:"center" }}>Facebook</a>
-            </div>
-            <div style={{ width:"200px", height:"200px" }}>
-              <Link to="https://twitter.com/TrivialB2B" target="_blank">
-                <img src={Twitter} style={{ width:"100%", height:"100%", cursor: "pointer" }} />
-              </Link>
-              <a style={{ color: "white", fontSize:"20px", textAlign:"center" }}>Twitter</a>
-            </div>
+            <Imagen texto="Instagram" marg="20%" url="https://www.instagram.com/trivialb2b/" img={Instagram}/>
+            <Imagen texto="Facebook" marg="20%" url="https://www.facebook.com/profile.php?id=100089906757742" img={Facebook}/>
+            <Imagen texto="Twitter" marg="0%" url="https://twitter.com/TrivialB2B" img={Twitter}/>
           </div>
           <button className="App-boton" style= {{top:"82%", left: "45%", position:"absolute"}} onClick={() => continuar() } > Volver </button>
         </div>
