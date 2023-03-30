@@ -1,7 +1,7 @@
 import './Estilos/App.css';
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import amigos from'./Imagenes/Amigos.png';
+import Amigos from'./Imagenes/Amigos.png';
 import BuscarPartida from'./Imagenes/BuscarPartida.png';
 import CrearPartida from'./Imagenes/CrearPartida.png';
 import Tienda from'./Imagenes/Tienda.png';
@@ -15,13 +15,42 @@ const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
 function CeldaDesplegable( props ) {
  return (
-    <div>
+    <button className='App-CeldaDesplegable' type="submit" onClick={props.function} > 
       <a style={{color:"white", fontSize:"30px"}}>{props.texto} </a>
       <br></br>
       <a style={{color:"white", fontSize:"15px"}}>____________________________________________</a>
-    </div>
+    </button>
  )
 }
+
+function Modo( props ) {
+  return (
+    <div className="App-ImagenBoton"> 
+      <img src={props.img} style={{width:props.tam, paddingBottom:props.pad}} /> 
+      <button className="App-boton" type="submit" onClick={props.function}> Crear Partida </button>
+    </div>  
+  )
+ }
+
+ function Desplegable( props ) {
+  return (
+    <div className="App-Desplegable">
+      <div style={{marginTop: "3%"}}>
+      <img src={props.img1} style={{width:"100px", height:"100px", left:"10%", marginRight:"5%", marginLeft:"5%", cursor: "pointer"}} onClick={props.funcionShow}/>
+      <img src={props.img2} style={{width:"100px", height:"100px", marginLeft:"45%"}} />  
+      </div>
+
+      <CeldaDesplegable texto="Perfil" function={props.functionP}/> 
+      <CeldaDesplegable texto="Historial" function={props.functionH} /> 
+      <CeldaDesplegable texto="Contacto" function={props.functionC}/> 
+      <CeldaDesplegable texto="Redes Sociales" function={props.functionR}/> 
+      <CeldaDesplegable texto="Estadísticas" function={props.functionE}/> 
+
+      <button className="App-boton" style={{marginLeft:"20%", width:"60%", marginTop:"10%"}} type="submit" onClick={props.funcionCerrarS}> Cerrar Sesion</button>
+    </div>
+  )
+ }
+
 
 const MenuJuego = () => {
   
@@ -65,68 +94,26 @@ const MenuJuego = () => {
           <div className="App-titulo" style= {{top: "7%"}} > TrivialB2B 
           <div className="App-Quesitos"/>           
           </div>
-          <button
-            className='App-IconoPerfil'
-            type="button"             
-            onClick={() => {
-              setShow(!show);
-            }}>
-            {show ? '' : ''}
+          <button className='App-IconoPerfil' type="button" onClick={() => { setShow(!show) }}>
             <img src={Perfil} style={{width:"100%", height:"100%"}} /> 
           </button> 
 
           {show ? (
           <div className="App-Imagenes">   
-              <div className="App-ImagenBoton"> 
-                  <img src={CrearPartida} style={{width:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onCrearPartida()} > Crear Partida </button>
-              </div>  
-              <div className="App-ImagenBoton"> 
-                  <img src={BuscarPartida} style={{width:"70%", paddingBottom:"20%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onBuscarPartida()}> Buscar Partida </button>
-              </div>  
-              <div className="App-ImagenBoton"> 
-                  <img src={amigos} style={{width:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onAmigos()}> Amigos </button>
-              </div>  
-              <div className="App-ImagenBoton"> 
-                  <img src={Tienda} style={{width:"50%", paddingBottom:"10%"}} /> 
-                  <button className="App-boton" type="submit" onClick={() => onTienda()}> Tienda</button>
-              </div>  
+              <Modo function={onCrearPartida} img={CrearPartida} tam="50%" pad="10%"/>
+              <Modo function={onBuscarPartida} img={BuscarPartida}tam="70%" pad="20%"/> 
+              <Modo function={onAmigos} img={Amigos}tam="50%" pad="10%"/>
+              <Modo function={onTienda} img={Tienda}tam="50%" pad="10%"/>
           </div>
           ) : (
             <div>
               <div className="App-Imagenes">   
-                <div className="App-ImagenBoton"> 
-                    <img src={CrearPartida} style={{width:"50%", paddingBottom:"10%"}} /> 
-                    <button className="App-boton" type="submit" onClick={() => onCrearPartida()} > Crear Partida </button>
-                </div>  
-                <div className="App-ImagenBoton"> 
-                    <img src={BuscarPartida} style={{width:"70%", paddingBottom:"20%"}} /> 
-                    <button className="App-boton" type="submit" onClick={() => onBuscarPartida()}> Buscar Partida </button>
-                </div>  
-                <div className="App-ImagenBoton"> 
-                    <img src={amigos} style={{width:"50%", paddingBottom:"10%"}} /> 
-                    <button className="App-boton" type="submit" onClick={() => onAmigos()}> Amigos </button>
-                </div>  
-                <div className="App-ImagenBoton"> 
-                    <img src={Tienda} style={{width:"50%", paddingBottom:"10%"}} /> 
-                    <button className="App-boton" type="submit" onClick={() => onTienda()}> Tienda</button>
-                </div>   
+              <Modo function={onCrearPartida} img={CrearPartida} tam="50%" pad="10%"/>
+              <Modo function={onBuscarPartida} img={BuscarPartida}tam="70%" pad="20%"/> 
+              <Modo function={onAmigos} img={Amigos}tam="50%" pad="10%"/>
+              <Modo function={onTienda} img={Tienda}tam="50%" pad="10%"/>  
               </div>
-              <div className="App-Desplegable">
-                <div style={{marginTop: "3%"}}>
-                <img src={Perfil} style={{width:"100px", height:"100px", left:"10%", marginRight:"5%", marginLeft:"5%", cursor: "pointer"}} onClick={() => setShow(!show)}/>
-                <img src={Logo} style={{width:"100px", height:"100px", marginLeft:"45%"}} />  
-                </div>
-                <button className='App-CeldaDesplegable' type="submit" onClick={() => onPerfil()} > <CeldaDesplegable texto="Perfil" /> </button>
-                <button className='App-CeldaDesplegable' type="submit" onClick={() => onHistorial()} > <CeldaDesplegable texto="Historial"  /> </button>
-                <button className='App-CeldaDesplegable' type="submit" onClick={() => onContacto()} > <CeldaDesplegable texto="Contacto" /> </button>
-                <button className='App-CeldaDesplegable' type="submit" onClick={() => onRedesSociales()} > <CeldaDesplegable texto="Redes Sociales"  /> </button>
-                <button className='App-CeldaDesplegable' type="submit" onClick={() => onEstadisticas()} > <CeldaDesplegable texto="Estadísticas" /> </button>
-
-                <button className="App-boton" style={{marginLeft:"20%", width:"60%", marginTop:"10%"}} type="submit" onClick={() => onCerrarSesion()}> Cerrar Sesion</button>
-                </div>
+              <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onHistorial} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
             </div>
           )}
         </header>

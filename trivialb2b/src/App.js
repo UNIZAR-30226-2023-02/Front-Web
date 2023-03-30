@@ -24,7 +24,6 @@ import Estadisticas from './Estadisticas';
 import CerrarSesion from './CerrarSesion';
 import RedesSociales from './RedesSociales';
 import Historial from './Historial';
-import PerfilConfirmacion from './PerfilConfirmacion';
 import EsperandoJugadores from './EsperandoJugadores';
 
 
@@ -52,7 +51,6 @@ const App = () => {
       <Route path= '/Estadisticas' Component={Estadisticas} /> 
       <Route path= '/CerrarSesion' Component={CerrarSesion} /> 
       <Route path= '/Historial' Component={Historial} /> 
-      <Route path= '/PerfilConfirmacion' Component={PerfilConfirmacion} /> 
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
     </Routes>
     </BrowserRouter>

@@ -9,15 +9,12 @@ const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 function CuadroTexto(props) {
 return (
     <div>
-    <a className="App-CuadroTexto" style={{marginRight:"17px", color:"#174a67"}}> {props.texto}:  </a>
-    <input className="App-texto" 
-    color="black"
-    margin="normal"
-    variant="outlined"
-    label={props.label}
-    name={props.nombre}
-    value={props.valor}
-    onChange={props.funcion}
+    <a style={{color:"#174a67"}}> {props.texto}:  </a>
+    <input className="App-textoNegro"
+      label={props.label}
+      name={props.nombre}
+      value={props.valor}
+      onChange={props.funcion}
     />
     </div>
 )
@@ -35,6 +32,10 @@ const ModoClasico = () => {
       ...body,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const cancelar = async (event) => {
+    navigate(process.env.PUBLIC_URL + '/CrearPartida');
   };
 
   const onSubmit = () => {
@@ -75,71 +76,64 @@ const ModoClasico = () => {
       .catch((error) => console.error(error));*/
   };
 
-//<CuadroTexto texto="Nº Jugadores" label="numJugadores" nombre="numJugadores"  valor={body.numJugadores} funcion={handleChange} /> 
   return (
     <div className="App">
       <div className = "App-header" > 
-      <div className="App-titulo"  style= {{top: "7%"}}> Modo Clasico
-        <div className="App-Quesitos" style= {{left: "36%"}}> </div> </div>
-        <div className="App-CuadradoAmarillo">
-            <div style={{marginTop:"10px"}}>
+        <div className="App-titulo"  style= {{top: "7%"}}> Modo Clasico
+          <div className="App-Quesitos" style= {{left: "36%"}}/> 
+        </div>
+
+        <div className="App-CuadradoAmarillo" style={{ width: "1730px", height: "620px", position: "absolute", zIndex: "1", top: "24%", left: "5%"}}>
+          <div style={{marginTop:"10px"}}>
             <a  style= {{ color: "#174a67", fontSize: "60px", fontStyle: "italic" }}>
                 Creación de Sala de modo Clásico:   
             </a>
             <div style={{marginTop:"0px", top:"10%", color: "#174a67"}}>
-                    <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
+              <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
             </div>
-            </div>
-            <form className="App-CuadrosTexto" style={{marginTop:"2%"}}>
-            <div className="App-CuadrosTextoIzq" > 
-                <CuadroTexto texto="Nombre de la sala" label="salaNombre" nombre="salaNombre" valor={body.salaNombre} funcion={handleChange} />
-            <div style={{marginTop:"7%"}}>
-                <CuadroTexto  texto="Tiempo de respuesta" type="number" label="time" nombre="time"  valor={body.time} funcion={handleChange} />
-            </div>
- 
-           </div>
+          </div>
 
-            <div className="App-CuadrosTextoDer" style={{paddingLeft: "2px"}} > 
-            
-            <label for="numeroJugadores"  style={{marginRight:"17px", color:"#174a67"}}> Nº de jugadores: </label>
-            <select name="numeroJugadores" id="numeroJugadores" className="App-texto" style={{width:"460px"}}>
-                <option value="nulo"></option>
-                <option value="dos">2</option>
-                <option value="cuatro">4</option>
-                <option value="seis">6</option>
-            </select>
-                
-            <div style={{marginTop:"7%"}}>            
-                <CuadroTexto texto="*  Contraseña" label="password" nombre="password" valor={body.password} funcion={handleChange} />
+          <form className="App-Input" style={{marginTop:"3%"}}>
+
+            <div className="App-CuadrosTextoIzq" > 
+              <div style={{marginLeft: "4%"}}>
+              <CuadroTexto texto="Nombre de la sala" label="salaNombre" nombre="salaNombre" valor={body.salaNombre} funcion={handleChange} />
+              </div>
+              <div style={{marginTop:"7%"}}>
+                  <CuadroTexto  texto="Tiempo de respuesta" type="number" label="time" nombre="time"  valor={body.time} funcion={handleChange} />
+              </div>
             </div>
+
+            <div className="App-CuadrosTextoDer" style={{marginRight: "1%"}} > 
+              <label for="numeroJugadores" style={{color: "#174a67"}}> Nº de jugadores: </label>
+              <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}>
+                  <option value="nulo"></option>
+                  <option value="dos">2</option>
+                  <option value="cuatro">4</option>
+                  <option value="seis">6</option>
+              </select> 
+              <div style={{marginTop:"7%", marginLeft: "6%"}}>            
+                  <CuadroTexto texto="*  Contraseña" label="password" nombre="password" valor={body.password} funcion={handleChange} />
+              </div>
             </div>
+
           </form>
 
-          <div style={{marginTop:"14%", marginBottom:"3%", textAlign:"center"}}>
-          <font color="red" >{errores}</font>
+          <div style={{fontSize:"23px", color:"red", position:"absolute", left:"45%", top:"65%"}}>
+            <a  >epepepeppepep{errores}</a>
+          </div>
+
+          <div style={{fontSize:"23px", color:"black", position:"absolute", left:"36%", top:"73%"}}> 
+            <a >Los elementos con asterisco (*) son opcionales</a>
           </div>
 
           <div>
-          <div style={{color:"black"}}> <a >Los elementos con asterisco (*) son opcionales</a></div>
-          
-          <div style={{marginTop:"2%"}}>
-                <button
-                    className="App-botonCancelar"
-                    style= {{top: "80%", left: "44%", marginRight:"8%"}}
-                    onClick={() => onSubmit()}
-                    >
+              <button className="App-botonCancelar" style= {{top: "83%", left: "33%", position:"absolute"}} onClick={() => cancelar()} >
                 Cancelar
-                </button>
-                
-                <button
-                    marginLeft= "10%"
-                    className="App-botonConfirmar"
-                    style= {{top: "80%", left: "44%" ,marginLeft:"8%"}}
-                    onClick={() => onSubmit()}
-                >
+              </button>
+              <button className="App-botonConfirmar" style= {{top: "83%", left: "54%" , position:"absolute"}}onClick={() => onSubmit()} >
                 Confirmar
-                </button>
-            </div>
+              </button>
           </div>
 
         </div>
