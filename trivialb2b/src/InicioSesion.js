@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import { useSession, setSession } from 'react-session';
 import Atras from "./Imagenes/Atras.png";
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://e4d3-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
+//const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 function Boton(props) {
   return (
@@ -40,24 +39,24 @@ const InicioSesion = () => {
   };
 
   const IniciarSesion = () => {
-    //console.log(body);
+    console.log(body);
     navigate(process.env.PUBLIC_URL+'/MenuJuego');
+    /*
     fetch(URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
-      //.then((data) => console.log(data))
       .then((data) => {console.log(data)
+       
         if ((body.username=="") && (body.password=="")) {
-          setErorres("Vacio")
+          setErorres("Vacio");
         }
         if (data.OK == "True"){
           setErorres("");
           const usuario = { nombre: body.username, contraseña: body.password};
-          setSession({usuario});
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
+          navigate(process.env.PUBLIC_URL+ '/MenuJuego');
         }
         else {
           if (data.error_username !== "") {
@@ -68,7 +67,7 @@ const InicioSesion = () => {
           }
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error));*/
   };
 
   return (

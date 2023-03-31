@@ -16,7 +16,7 @@ const CerrarSesion = () => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
   const confirmar = async (event) => {
-    navigate(process.env.PUBLIC_URL+ '/InicioSesion');
+    navigate(process.env.PUBLIC_URL+ '/');
   };
 
   return (

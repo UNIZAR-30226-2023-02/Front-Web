@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import Logo from './Imagenes/Logo.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
@@ -96,18 +95,24 @@ const ModoClasico = () => {
           <form className="App-Input" style={{marginTop:"3%"}}>
 
             <div className="App-CuadrosTextoIzq" > 
-              <div style={{marginLeft: "4%"}}>
+              <div style={{marginLeft: "3%"}}>
               <CuadroTexto texto="Nombre de la sala" label="salaNombre" nombre="salaNombre" valor={body.salaNombre} funcion={handleChange} />
               </div>
               <div style={{marginTop:"7%"}}>
-                  <CuadroTexto  texto="Tiempo de respuesta" type="number" label="time" nombre="time"  valor={body.time} funcion={handleChange} />
-              </div>
+                <label for="tiempoRespuesta" style={{color: "#174a67"}}> Tiempo de respuesta </label>
+                <select name="tiempoRespuesta" id="tiempoRespuesta" className="App-textoNegro" style={{width:"530px", height:"70px" }}>
+                    <option value="10">10 segundos</option>
+                    <option value="15">15 segundos</option>
+                    <option value="20">20 segundos</option>
+                    <option value="25">25 segundos</option>
+                    <option value="30">30 segundos</option>
+                </select> 
+                </div>
             </div>
 
             <div className="App-CuadrosTextoDer" style={{marginRight: "1%"}} > 
               <label for="numeroJugadores" style={{color: "#174a67"}}> Nº de jugadores: </label>
               <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}>
-                  <option value="nulo"></option>
                   <option value="dos">2</option>
                   <option value="cuatro">4</option>
                   <option value="seis">6</option>

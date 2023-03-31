@@ -6,6 +6,7 @@ import Equipos from'./Imagenes/Equipos.png';
 import Tematica from'./Imagenes/Tematica.png';
 import Perfil from'./Imagenes/Perfil.png';
 import Logo from './Imagenes/Logo.png';
+import Atras from "./Imagenes/Atras.png";
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
@@ -53,6 +54,10 @@ const CrearPartida = () => {
 
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
+
+  const flechaAtras = async (event) => {
+    navigate(process.env.PUBLIC_URL+ '/MenuJuego');
+  };
 
   const onSubmit1 = async (event) => {
     navigate(process.env.PUBLIC_URL + '/ModoClasico');
@@ -108,6 +113,7 @@ const CrearPartida = () => {
             <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onHistorial} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
           </div>
         )}
+        <img src={Atras} style={{width:"170px", height:"170px", top:"75%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
       </header>
     </div>
   );

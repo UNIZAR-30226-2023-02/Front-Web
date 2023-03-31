@@ -253,6 +253,17 @@
   border-radius: 50px;
   border: 3px solid black;
 }
+.App-CuadradoGris{
+  background-color: #929292;
+  left: 10%;
+  border-radius: 50px;
+  border: 3px solid black;
+}
+.App-CuadradoBlanco{
+  background-color: #ffffff;
+  left: 10%;
+  border: 3px solid black;
+}
 
 .App-CuadradoNegro{
   background-color: black;
