@@ -24,6 +24,17 @@
   background-repeat: no-repeat;
 }
 
+.App-headerJuego {
+  background-image: url('../Imagenes/FondoJuego.PNG');
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
 .App-tablero {
   background-image: url('../Imagenes/Tablero1.png');
   min-height: 100vh;
@@ -279,7 +290,6 @@
 
 .App-EsJugador {
   position: relative;
-
   align-items: center;
   background-repeat: no-repeat;
   width: 20%;
@@ -291,6 +301,14 @@
 .App-imagenJugador {
   width: 80%;
   height: 90%;
+  border-Radius: 5%;
+  background-color: white;
+  border: 2px solid rgb(255, 255, 255);
+  position: "absolute";
+}
+.App-imagenQuesito {
+  width: 10%;
+  height: 10%;
   border-Radius: 5%;
   background-color: white;
   border: 2px solid rgb(255, 255, 255);

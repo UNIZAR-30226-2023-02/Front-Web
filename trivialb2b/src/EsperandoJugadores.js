@@ -8,20 +8,14 @@ import Tablero1 from'./Imagenes/Tablero1.png';
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
-function Jugador(props) {
-  return (
-    <div className='App-EsJugador' >
-      <img src={Cristiano} className="App-imagenJugador"/><br></br>
-      <a style={{color:"white", fontSize:"30px"}}>{props.texto} </a>
-    </div>
-  )
-}
-
-
 const EsperandoJugadores = () => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(true);
+
+
+  const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
+
 
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -35,6 +29,16 @@ const EsperandoJugadores = () => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };       
 
+  
+  function jugadores() {
+    return vectorJugadores.map((elemento) => (
+      <div className='App-EsJugador' >
+        <img src={Cristiano} className="App-imagenJugador"/><br></br>
+        <a style={{color:"white", fontSize:"30px"}}>{elemento} </a>
+      </div>
+    ));
+  }
+
   return (
     
     <div className="App">
@@ -45,12 +49,7 @@ const EsperandoJugadores = () => {
             <div style={{marginTop: "3%"}}>                
               <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
               <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
-                <Jugador texto="La"/>
-                <Jugador texto="Madre"/>
-                <Jugador texto="De"/>
-                <Jugador texto="Diego"/>
-                <Jugador texto="chupa"/>
-                <Jugador texto="pollas"/>
+                {jugadores()}
               </div>
                 <button className="App-boton" style= {{marginTop:"5%"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
             </div>
@@ -72,12 +71,7 @@ const EsperandoJugadores = () => {
             <div style={{marginTop: "3%"}}>                
               <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
               <div style={{display:"flex", marginTop:"50px",  placeContent:"center"}}>
-                <Jugador texto=".La"/>
-                <Jugador texto="Madre"/>
-                <Jugador texto="De"/>
-                <Jugador texto="Diego"/>
-                <Jugador texto="chupa"/>
-                <Jugador texto="pollas"/>
+                {jugadores()}
               </div>
             </div>
           </div>

@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
+import { useSession, setSession } from 'react-session';
+import Cristiano from'./Imagenes/Cristiano.jpg';
+import Tablero1 from'./Imagenes/Tablero1.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "https://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
-
-const InicioSesion = () => {
+const Amigos = () => {
   const [body, setBody] = useState({ username: "", password: "" });
-  const [errores, setErorres] = useState({ er: "sin_error"});
+  const [errores, setErorres] = useState("");
+  const [show, setShow] = useState(true);
+
+
+  const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
+  //const listaJugadores = jugadores.map((jugador) => jugador);
+
 
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -18,43 +26,11 @@ const InicioSesion = () => {
     });
   };
 
-  const onSubmit = () => {
-    console.log(body);
-    fetch(URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => {console.log(data)
-        if ((body.username="") && (body.password="")) {
-          navigate(process.env.PUBLIC_URL+'/MenuJuego');
-        }
-        /*if (data.OK == "True"){
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
-        }*/
-        else {
-          navigate(process.env.PUBLIC_URL+'/Registrarse');/*
-          if (data.error_username != "") {
-            setErorres({er:"error_name"});
-          }
-          else if (data.error_password != ""){
-            setErorres({er:"error_password"});
-          }*/
-        }
-      })
-      .catch((error) => console.error(error));
-  };
-
   return (
+    
     <div className="App">
-      <div className = "App-header" > 
-      <div className="App-titulo" > Amigos
-        <div className="App-Quesitos"> </div> 
-        </div>
-      </div>
     </div>
   );
 };
 
-export default InicioSesion;
+export default Amigos;

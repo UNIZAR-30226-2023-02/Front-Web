@@ -24,6 +24,7 @@ import CerrarSesion from './CerrarSesion';
 import RedesSociales from './RedesSociales';
 import Historial from './Historial';
 import EsperandoJugadores from './EsperandoJugadores';
+import JuegoModoClasico from './JuegoModoClasico';
 
 
 const App = () => {
@@ -48,6 +49,7 @@ const App = () => {
       <Route path= '/CerrarSesion' Component={CerrarSesion} /> 
       <Route path= '/Historial' Component={Historial} /> 
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
+      <Route path= '/JuegoModoClasico' Component={JuegoModoClasico} /> 
     </Routes>
     </BrowserRouter>
   );
