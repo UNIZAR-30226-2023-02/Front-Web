@@ -1,6 +1,15 @@
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 
+
+function Boton (props) {
+  return (
+    <button className="App-boton" style= {{ marginBottom:props.style1, marginTop:props.style2 }} type="submit" onClick={props.function}>
+      {props.texto}
+    </button>
+  )
+}
+
 const MenuPrincipal = () => {
 
   const navigate = useNavigate();
@@ -15,15 +24,11 @@ const MenuPrincipal = () => {
   return (
     <div className="App">
       <header className="App-header">
-          <div className="App-titulo" style={{ top: "20%" }} > Trivial B2B  
-            <div className="App-Quesitos"/> 
-          </div>
-          <button className="App-boton" style= {{ marginBottom:"5%", marginTop:"5%" }} type="submit" onClick={() => IniciarSesion()}>
-            Inicio Sesión
-          </button>
-          <button className="App-boton" type="submit"  onClick={() => Registrarse()}>
-            Registrarse
-          </button>
+        <div className="App-titulo" style={{ top: "20%" }} > Trivial B2B  
+          <div className="App-Quesitos"/> 
+        </div>
+        <Boton texto="Inicio Sesión" style1="5%" style2="5%" function={IniciarSesion}/>
+        <Boton texto="Registrarse" style1="0%" style2="0%" function={Registrarse}/>
       </header>
     </div>
   );

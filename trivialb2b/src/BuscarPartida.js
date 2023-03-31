@@ -1,60 +1,203 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
+import Buscar from'./Imagenes/BuscarPartida.png';
+import Candado from'./Imagenes/Candado.png';
+
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "https://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 
-const BuscarPartida = () => {
-  const [body, setBody] = useState({ username: "", password: "" });
-  const [errores, setErorres] = useState({ er: "sin_error"});
+const ModoClasico = () => {
+    
+  const [sala1, setSala1] = useState({ nombre: "Sala 1", tiempo: "", numJugadores: "2", contraseña: "pepe1", creador: "Acher", modo: "Clasico"});
+  const [sala2, setSala2] = useState({ nombre: "Sala 2", tiempo: "", numJugadores: "4", contraseña: "", creador: "Roberto", modo: "Equipos"});
+
+  const [show, setShow] = useState(true);
 
   const navigate = useNavigate();
+  
   const handleChange = (e) => {
-    setBody({
-      ...body,
+    setSala1({
+      ...sala1,
       [e.target.name]: e.target.value,
     });
   };
 
-  const onSubmit = () => {
-    console.log(body);
-    fetch(URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => {console.log(data)
-        if ((body.username="") && (body.password="")) {
-          navigate(process.env.PUBLIC_URL+'/MenuJuego');
-        }
-        /*if (data.OK == "True"){
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
-        }*/
-        else {
-          navigate(process.env.PUBLIC_URL+'/Registrarse');/*
-          if (data.error_username != "") {
-            setErorres({er:"error_name"});
-          }
-          else if (data.error_password != ""){
-            setErorres({er:"error_password"});
-          }*/
-        }
-      })
-      .catch((error) => console.error(error));
+  const cancelar = async (event) => {
+    navigate(process.env.PUBLIC_URL + '/MenuJuego');
   };
+
 
   return (
     <div className="App">
       <div className = "App-header" > 
-      <div className="App-titulo" > BuscarPartida
-        <div className="App-Quesitos"> </div> 
+
+
+      {show ? (
+        <div className="App-CuadradoAmarillo" style={{ width: "1730px", height: "780px", position: "absolute", top: "8%", left: "5%"}}>
+          <div style={{marginTop:"10px"}}>
+            <a  style= {{ color: "#174a67", fontSize: "60px", fontStyle: "italic" }}>
+                Buscar Partida   
+            </a>
+          </div>
+          <div>
+            <img src={Buscar} style={{width:"5%", height:"7%", left:"29%",zIndex: "1", top:"3%", cursor: "pointer", position:"absolute"}} onClick={cancelar}/>
+            <input className="App-textoNegro" label="pepe" name="pepe" onChange={handleChange} style= {{top: "2%", left: "2%", position:"absolute", width: "500px", height: "50px"}}/>
+            <button className="App-botonAzul" style= {{top: "2%", left: "85%" , position:"absolute"}}onClick={() => cancelar()} >
+              Volver
+            </button>
+          </div>
+
+
+          <div className="App-CuadradoGris" style={{ width: "100%", height: "85%", position: "absolute", top: "15%", left: "-0.2%"}} onClick={() => {setShow(!show)}}>
+            <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "5%"}}>
+                Nombre
+            </a>
+            <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "25%"}}>
+                Modo
+            </a>
+            <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "45%"}}>
+                Jugadores
+            </a>
+            <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "70%"}}>
+                Creador
+            </a>
+          </div>
+
+          <div className="App-CuadradoBlanco" style={{ width: "100%", height: "73%", position: "absolute", top: "27%", left: "-0.2%"}} onClick={() => {setShow(!show)}}>
+
+            <div className="App-CuadradoBlanco" style={{ width: "100%", height: "15%", position: "relative",left: "-0.2%",cursor: "pointer"}}>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
+                {sala1.nombre}
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
+                {sala1.modo}
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
+                {sala1.numJugadores}
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
+                {sala1.creador}
+              </a>
+              <img src={Candado} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "93%"}}/>
+            </div>
+            <div className="App-CuadradoBlanco" style={{ width: "100%", height: "15%", position: "relative",left: "-0.2%",cursor: "pointer"}}>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
+                {sala2.nombre}
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
+                {sala2.modo}
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
+                {sala2.numJugadores}
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
+                {sala2.creador}
+              </a>
+            </div>
+
+          </div>
+          
         </div>
+
+
+        ) : (
+
+
+        <div>
+          <div className="App-CuadradoAmarillo" style={{ width: "1730px", height: "780px", position: "absolute", top: "8%", left: "5%", filter: 'blur(5px)'}}>
+            <div style={{marginTop:"10px"}}>
+              <a  style= {{ color: "#174a67", fontSize: "60px", fontStyle: "italic" }}>
+                  Buscar Partida   
+              </a>
+            </div>
+            <div>
+              <img src={Buscar} style={{width:"5%", height:"7%", left:"29%",zIndex: "1", top:"3%", cursor: "pointer", position:"absolute"}} onClick={cancelar}/>
+              <input className="App-textoNegro" label="pepe" name="pepe" onChange={handleChange} style= {{top: "2%", left: "2%", position:"absolute", width: "500px", height: "50px"}}/>
+              <button className="App-botonAzul" style= {{top: "2%", left: "85%" , position:"absolute"}}onClick={() => cancelar()} >
+                Volver
+              </button>
+            </div>
+
+            <div className="App-CuadradoGris" style={{ width: "100%", height: "85%", position: "absolute", top: "15%", left: "-0.2%"}}>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "5%"}}>
+                  Nombre
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "25%"}}>
+                  Modo
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "45%"}}>
+                  Jugadores
+              </a>
+              <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "70%"}}>
+                  Creador
+              </a>
+            </div>
+
+            <div className="App-CuadradoBlanco" style={{ width: "100%", height: "73%", position: "absolute", top: "27%", left: "-0.2%"}}>
+
+              <div className="App-CuadradoBlanco" style={{ width: "100%", height: "15%", position: "relative",left: "-0.2%",cursor: "pointer"}}>
+                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
+                  {sala1.nombre}
+                </a>
+                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
+                  {sala1.modo}
+                </a>
+                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
+                  {sala1.numJugadores}
+                </a>
+                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
+                  {sala1.creador}
+                </a>
+                <img src={Candado} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "93%"}}/>
+              </div>
+
+              <div className="App-CuadradoBlanco" style={{ width: "100%", height: "15%", position: "relative",left: "-0.2%",cursor: "pointer"}}>
+                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
+                    {sala2.nombre}
+                  </a>
+                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
+                    {sala2.modo}
+                  </a>
+                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
+                    {sala2.numJugadores}
+                  </a>
+                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
+                    {sala2.creador}
+                  </a>
+              </div>
+
+            </div>
+          </div>
+
+          <div className="App-CuadradoAmarillo" style={{ width: "800px", height: "500px", position: "absolute", top: "20%", left: "30%"}}>
+            <a  style= {{ color: "black", fontSize: "50px", fontStyle: "italic" ,position: "absolute", top: "8%", left: "35%"}}>
+              Sala Pública
+            </a>
+            <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "30%", left: "10%"}}>
+              Nombre de la sala: {sala1.nombre}
+            </a>
+            <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "40%", left: "10%"}}>
+              Modo de juego: {sala1.modo}
+            </a>
+            <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "50%", left: "10%"}}>
+              Jugadores: {sala1.numJugadores}
+            </a>
+            <button className="App-botonConfirmar" style= {{top: "75%", left: "20%" , position:"absolute"}}onClick={() => cancelar()} >
+              Entrar
+            </button>
+            <button className="App-botonCancelar" style= {{top: "75%", left: "55%" , position:"absolute"}}onClick={() => setShow(!show)} >
+              Cancelar
+            </button>
+          </div>
+
+        </div>
+          )}
       </div>
     </div>
   );
 };
 
-export default BuscarPartida;
+export default ModoClasico;

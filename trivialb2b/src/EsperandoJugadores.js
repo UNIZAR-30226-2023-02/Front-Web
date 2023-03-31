@@ -11,7 +11,7 @@ const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 function Jugador(props) {
   return (
     <div className='App-EsJugador' >
-      <img src={Cristiano} className="App-imagenJugador"/>
+      <img src={Cristiano} className="App-imagenJugador"/><br></br>
       <a style={{color:"white", fontSize:"30px"}}>{props.texto} </a>
     </div>
   )
@@ -44,15 +44,15 @@ const EsperandoJugadores = () => {
           <div className="App-CuadradoNegro" style={{ width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
             <div style={{marginTop: "3%"}}>                
               <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
-              <div style={{display:"flex", marginTop:"50px"}}>
-                <Jugador texto=".La"/>
+              <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
+                <Jugador texto="La"/>
                 <Jugador texto="Madre"/>
                 <Jugador texto="De"/>
                 <Jugador texto="Diego"/>
                 <Jugador texto="chupa"/>
                 <Jugador texto="pollas"/>
               </div>
-                <button className="App-boton" style= {{marginTop:"2%"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
+                <button className="App-boton" style= {{marginTop:"5%"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
             </div>
           </div>
           <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
@@ -71,7 +71,7 @@ const EsperandoJugadores = () => {
           <div className="App-CuadradoNegro" style={{filter: 'blur(5px)', width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
             <div style={{marginTop: "3%"}}>                
               <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
-              <div style={{display:"flex", marginTop:"50px"}}>
+              <div style={{display:"flex", marginTop:"50px",  placeContent:"center"}}>
                 <Jugador texto=".La"/>
                 <Jugador texto="Madre"/>
                 <Jugador texto="De"/>
@@ -81,18 +81,18 @@ const EsperandoJugadores = () => {
               </div>
             </div>
           </div>
-          <div className="App-CuadradoNegro" style={{ width: "1200px", height: "750px", position: "absolute", zIndex: "1", top: "25%", left: "26%", zIndex: "4"}}>
+          <div className="App-CuadradoNegro" style={{ width: "1200px", height: "720px", position: "absolute", zIndex: "1", top: "12%", left: "19%", zIndex: "4",   backgroundColor:"#303030"}}>
                 <div style={{marginTop: "3%"}}>                
-                  <a style={{color:"white", fontSize:"30px"}}>¿Estas seguro de que quieres abandonar la sala? </a>
+                  <a style={{color:"white", fontSize:"40px"}}>¿Estas seguro de que quieres abandonar la sala? </a>
                   <div style={{marginTop:"30px", color: "white"}}>
                     <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
                   </div>
                   <div style={{marginTop: "10%"}}>    
-                    <a style={{color:"white", fontSize:"20px"}}> Como eres el creador de la sala, al abandonar la sala desaparecerá la misma </a>
+                    <a style={{color:"white", fontSize:"30px"}}> Como eres el creador de la sala, al abandonar la sala desaparecerá la misma </a>
                   </div>
                   <div> 
-                    <button className="App-botonCancelar" style= {{marginTop:"180px", marginRight:"50px"}} onClick={() => abandonar() } > Abandonar </button>
-                    <button className="App-botonConfirmar" style= {{marginTop:"180px", marginLeft:"50px"}} onClick={() => setShow(!show) } > Permanecer </button>
+                    <button className="App-botonCancelar" style= {{marginTop:"220px", marginRight:"50px"}} onClick={() => abandonar() } > Abandonar </button>
+                    <button className="App-botonConfirmar" style= {{marginTop:"220px", marginLeft:"50px"}} onClick={() => setShow(!show) } > Permanecer </button>
                   </div>
                 </div>
               </div>

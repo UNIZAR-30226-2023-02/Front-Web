@@ -18,13 +18,11 @@ import ModoClasico from './ModoClasico';
 import ModoEquipos from './ModoEquipos';
 import ModoTematica from './ModoTematica';
 import Perfil from './Perfil';
-import CambiarDatosPerfil from './CambiarDatosPerfil';
 import Contacto from './Contacto';
 import Estadisticas from './Estadisticas';
 import CerrarSesion from './CerrarSesion';
 import RedesSociales from './RedesSociales';
 import Historial from './Historial';
-import PerfilConfirmacion from './PerfilConfirmacion';
 import EsperandoJugadores from './EsperandoJugadores';
 
 
@@ -44,13 +42,11 @@ const App = () => {
       <Route path= '/ModoEquipos' Component={ModoEquipos} /> 
       <Route path= '/ModoTematica' Component={ModoTematica} /> 
       <Route path= '/Perfil' Component={Perfil} /> 
-      <Route path= '/CambiarDatosPerfil' Component={CambiarDatosPerfil} /> 
       <Route path= '/Contacto' Component={Contacto} /> 
       <Route path= '/RedesSociales' Component={RedesSociales} /> 
       <Route path= '/Estadisticas' Component={Estadisticas} /> 
       <Route path= '/CerrarSesion' Component={CerrarSesion} /> 
       <Route path= '/Historial' Component={Historial} /> 
-      <Route path= '/PerfilConfirmacion' Component={PerfilConfirmacion} /> 
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
     </Routes>
     </BrowserRouter>

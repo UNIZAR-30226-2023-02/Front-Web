@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Atras from "./Imagenes/Atras.png";
 
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/register/";
+const URL = "http://e4d3-146-158-156-138.eu.ngrok.io/api/usuarios/register/";
+//const URL = "http://51.142.118.71:8000/api/usuarios/register/";
 
 function CuadroTexto(props) {
   return (
@@ -23,7 +23,7 @@ function CuadroTexto(props) {
 
 
 const Registrarse = () => {
-  const [body, setBody] = useState({ username: "", password: "", confirm_password: "", fecha_nac: "dd-mm-aaaa", correo: "pepe"});
+  const [body, setBody] = useState({ username: "Pepe", password: "123456789", confirm_password: "123456789", fecha_nac: "11-11-1111", correo: "pepe", telefono:"123456789"});
   const [errores, setErorres] = useState("");
 
   const navigate = useNavigate();
@@ -46,16 +46,17 @@ const Registrarse = () => {
     
     fetch(URL, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
       //.then((data) => console.log(data))
-      
+
       .then((data) => { 
         console.log(data)
         if (data.OK == "True"){
-          setErorres("")
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
+          setErorres("");
+          navigate(process.env.PUBLIC_URL+'/MunuJuego');
         }
         else {
           if (data.error_username !== "") {
