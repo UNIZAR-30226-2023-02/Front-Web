@@ -50,6 +50,7 @@ const ModoClasico = () => {
             </button>
           </div>
 
+
           <div className="App-CuadradoGris" style={{ width: "100%", height: "85%", position: "absolute", top: "15%", left: "-0.2%"}} onClick={() => {setShow(!show)}}>
             <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "5%"}}>
                 Nombre
