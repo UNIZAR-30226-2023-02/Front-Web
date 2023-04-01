@@ -220,7 +220,7 @@ const Tablero = () => {
     
     <div className="App">
       <header className="App-headerJuego" style={{zIndex: "1"}}>        
-            <div style={{ position: "absolute", zIndex: "2", height:"74%", width:"39%", top:"10%", left:"30.2%"}}>
+            <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"700px", top:"10%", left:"30.2%"}}>
                 <Linea1> </Linea1>
                 <div style={{ position:"absolute", left:"16.6%", transform: "rotate(+60deg)", height:"10%", width:"41%", top:"19.7%", zIndex: "1"}}>
                     <Linea2/>
