@@ -66,7 +66,7 @@ const Tablero = () => {
   return (
     
     <div className="App">
-      <header className="App-headerJuego" style={{zIndex: "1"}}>        
+      <header className="App-headerJuego" style={{zIndex: "1"}}>     
             <div style={{ position: "absolute", zIndex: "2", height:"74%", width:"39%", top:"10%", left:"30.2%"}}>
                 <Linea1> </Linea1>
                 <div style={{ position:"absolute", left:"17%", transform: "rotate(+60deg)", height:"10%", width:"41%", top:"20%"}}>
