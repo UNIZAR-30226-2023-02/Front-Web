@@ -25,6 +25,7 @@ import RedesSociales from './RedesSociales';
 import Historial from './Historial';
 import EsperandoJugadores from './EsperandoJugadores';
 import JuegoModoClasico from './JuegoModoClasico';
+import Tablero from './Tablero';
 
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
       <Route path= '/Historial' Component={Historial} /> 
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
       <Route path= '/JuegoModoClasico' Component={JuegoModoClasico} /> 
+      <Route path= '/Tablero' Component={Tablero} />
     </Routes>
     </BrowserRouter>
   );

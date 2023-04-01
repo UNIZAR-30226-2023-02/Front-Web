@@ -64,7 +64,7 @@ const MenuJuego = () => {
     navigate(process.env.PUBLIC_URL + '/BuscarPartida');
   };
   const onAmigos = async (event) => {
-    navigate(process.env.PUBLIC_URL + '/JuegoModoClasico');
+    navigate(process.env.PUBLIC_URL + '/Tablero');
   };
   const onTienda = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Tienda');
