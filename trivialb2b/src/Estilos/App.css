@@ -289,13 +289,14 @@
 }
 
 .App-EsJugador {
-  position: relative;
+  position: absolute;
   align-items: center;
   background-repeat: no-repeat;
   width: 20%;
   height: 30%;
   border-image: 50;
-  border: 2px solid rgb(255, 255, 255);
+ /* border: 2px solid rgb(255, 255, 255);*/
+  
 }
 
 .App-imagenJugador {
@@ -304,9 +305,10 @@
   border-Radius: 5%;
   position: "absolute";
 }
+
 .App-imagenQuesito {
-  width: 10%;
-  height: 10%;
+  width: 5%;
+  height: 5%;
   border-Radius: 5%;
   /*background-color: white;
   border: 2px solid rgb(255, 255, 255);*/
