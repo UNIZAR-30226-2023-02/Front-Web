@@ -2,22 +2,32 @@ import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
+
 import Cristiano from'./Imagenes/Cristiano.jpg';
 import Tablero1 from'./Imagenes/Tablero1.png';
+
 import Esquina_azul from './Imagenes/Esquina_azul.png';
 import Esquina_amarilla from './Imagenes/Esquina_amarilla.png';
 import Esquina_naranja from './Imagenes/Esquina_naranja.png';
 import Esquina_roja from './Imagenes/Esquina_roja.png';
 import Esquina_verde from './Imagenes/Esquina_verde.png';
 import Esquina_rosa from './Imagenes/Esquina_rosa.png';
+
 import Ficha_azul from './Imagenes/Ficha_azul.png';
 import Ficha_amarilla from './Imagenes/Ficha_amarilla.png';
 import Ficha_naranja from './Imagenes/Ficha_naranja.png';
 import Ficha_roja from './Imagenes/Ficha_roja.png';
 import Ficha_verde from './Imagenes/Ficha_verde.png';
 import Ficha_rosa from './Imagenes/Ficha_rosa.png';
+
+import Queso_azul from './Imagenes/Queso_azul.png';
+import Queso_amarillo from './Imagenes/Queso_amarillo.png';
+import Queso_naranja from './Imagenes/Queso_naranja.png';
+import Queso_rojo from './Imagenes/Queso_rojo.png';
+import Queso_verde from './Imagenes/Queso_verde.png';
+import Queso_rosa from './Imagenes/Queso_rosa.png';
+
 import B2B from './Imagenes/Logo.png';
-import Hexagon from 'react-hexagon';
 import Quesitos from './Imagenes/CrearPartida.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
@@ -28,8 +38,9 @@ const Tablero = () => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(true);
+  const [show1, setShow1] = useState(true);
 
-  const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis", "Roberta", "Diegini"];
+  const vectorJugadores = [{nombre:"Acher", queso:Queso_azul}, {nombre:"Carlos", queso:Queso_rojo}, {nombre:"Simon", queso:Queso_verde}, {nombre:"Hector", queso:Queso_naranja}, {nombre:"Roberto", queso:Queso_amarillo}, {nombre:"Diego", queso:Queso_rosa}];
 
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -46,172 +57,29 @@ const Tablero = () => {
             <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "3", top:"4%", left:"3%", border:"1px solid black"}}>  
                 <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:`${(indice % 2) * 80}%`}}>
                     <div>
-                        <img src={Cristiano} className="App-imagenQuesito"/>
-                        <a style={{color:"white", fontSize:"30px"}}>{elemento} </a>
+                        <img src={elemento.queso} className="App-imagenQuesito"/>
+                        <a style={{color:"white", fontSize:"30px"}}>{elemento.nombre} </a>
                         <br></br>
                     </div>
-                    <div>
-                        <img src={Cristiano} className="App-imagenJugador"/><br></br>
-                        <img src={Quesitos} className="App-imagenJugador"/><br></br>
+                    <div >
+                        <img src={Cristiano} className="App-imagenJugador" style={{ width: "30%", height: "50%", position: "absolute", top:"20%", left:"20%"}} /><br></br>
+                        <img src={Quesitos} className="App-imagenJugador" style={{ width: "35%", height: "50%", position: "absolute", top:"20%", left:"60%", backgroundColor:"none"}}/><br></br>
                     </div>
                 </div>
             </div>
         ));
     }
-}  
+  }  
 
-  function Linea1() {
+  function Linea(props) {
     return(
-        <div style={{position: "absolute", height: "10%", width:"41%", top:"45%", left:"2%"}}>
-            <button style={{ backgroundColor:"white" , height: "100%", width:"25%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"pink" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"orange", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"blue", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"green", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea2() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"white" , height: "100%", width:"25%"}}>  </button>
-            <button style={{ backgroundColor:"pink" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"green", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"orange", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"red", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-  
-  function Linea3() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"white" , height: "100%", width:"25%"}}>  </button>
-            <button style={{ backgroundColor:"green" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"red", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"pink", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"blue", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea4() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"white" , height: "100%", width:"25%"}}>  </button>
-            <button style={{ backgroundColor:"red" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"blue", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"green", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"pink", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"orange", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea5() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"white" , height: "100%", width:"25%"}}>  </button>
-            <button style={{ backgroundColor:"blue" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"orange", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"red", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"green", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-  
-  function Linea6() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"white" , height: "100%", width:"25%"}}>  </button>
-            <button style={{ backgroundColor:"orange" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"blue", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"red", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"pink", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea7() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"yellow" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"orange", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"green", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"pink", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea8() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"pink" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"red", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"green", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea9() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"green" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"pink", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"blue", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"red", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea10() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"red" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"green", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"orange", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"blue", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea11() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"blue" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"red", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"orange", height: "100%", width:"15%"}}>  </button>
-        </div>
-    )
-  }
-
-  function Linea12() {
-    return(
-        <div style={{position:"absolute", height:"100%", width:"100%"}}>
-            <button style={{ backgroundColor:"orange" , height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"blue", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"pink", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"white", height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor:"yellow", height: "100%", width:"15%"}}>  </button>
+        <div style={{position:"absolute", height: props.height, width: props.width, top: props.top, left: props.left , zIndex: "1", transform: props.transform}}>
+            <button style={{ backgroundColor: props.c1 , height: "100%", width: props.width1}}>  </button>
+            <button style={{ backgroundColor: props.c2, height: "100%", width:"15%"}}>  </button>
+            <button style={{ backgroundColor: props.c3, height: "100%", width:"15%"}}>  </button>
+            <button style={{ backgroundColor: props.c4, height: "100%", width:"15%"}}>  </button>
+            <button style={{ backgroundColor: props.c5, height: "100%", width:"15%"}}>  </button>
+            <button style={{ backgroundColor: props.c6, height: "100%", width:"15%"}}>  </button>
         </div>
     )
   }
@@ -221,41 +89,31 @@ const Tablero = () => {
     <div className="App">
       <header className="App-headerJuego" style={{zIndex: "1"}}>        
             <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"700px", top:"10%", left:"30.2%"}}>
-                <Linea1> </Linea1>
-                <div style={{ position:"absolute", left:"16.6%", transform: "rotate(+60deg)", height:"10%", width:"41%", top:"19.7%", zIndex: "1"}}>
-                    <Linea2/>
-                </div>
-                <div style={{ position:"absolute", left:"45.6%", transform: "rotate(+120deg)", height:"10%", width:"41%", top:"19.7%", zIndex: "1"}}>
-                    <Linea3/>
-                </div>
-                <div style={{ position:"absolute", left:"60%", transform: " scaleX(-1)", height:"10%", width:"41%", top:"45%", zIndex: "1"}}>
-                    <Linea4/>
-                </div>
-                <div style={{ position:"absolute", left:"45.6%", transform: "rotate(-120deg)",  height:"10%", width:"41%", top:"70%", zIndex: "1"}}>
-                    <Linea5/>
-                </div>
-                <div style={{ position:"absolute", left:"16.6%", transform: "rotate(-60deg)", height:"10%", width:"41%", top:"70%", zIndex: "1"}}>
-                    <Linea6/>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(-60deg)", height:"10.5%", width:"37%", left:"-2%", top:"24%", zIndex: "1"}}>
-                    <Linea7/>
-                </div>
-                <div style={{ position:"absolute", left:"33.5%", height:"10.5%", width:"37%", top:"3.5%", zIndex: "1"}}>
-                    <Linea8/>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(60deg)", left:"68.5%", height:"10.5%", width:"37%", top:"24%", zIndex: "1"}}>
-                    <Linea9/>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(120deg)", left:"68.5%", height:"10.5%", width:"37%", top:"65.5%", zIndex: "1"}}>
-                    <Linea10/>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(180deg)", height:"10.5%", width:"37%", left:"33%", top:"85.5%", zIndex: "1"}}>
-                    <Linea11/>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(-120deg)", height:"10.5%", width:"37%", left:"-2%", top:"65.5%", zIndex: "1"}}>
-                    <Linea12/>
-                </div>
+
+                <Linea height="10%" width="41%" top="45%" left="2%" c1="white" c2="yellow" c3="pink" c4="orange" c5="blue" c6="green" width1="25%" transform="0"/>
+
+                <Linea height="10%" width="41%" top="19.7%" left="16.6%" c1="white" c2="pink" c3="green" c4="yellow" c5="orange" c6="red" width1="25%" transform="rotate(+60deg)"/> 
+
+                <Linea height="10%" width="41%" top="19.7%" left="45.6%" c1="white" c2="green" c3="red" c4="pink" c5="yellow" c6="blue" width1="25%" transform="rotate(+120deg)"/> 
+
+                <Linea height="10%" width="41%" top="45%" left="60%" c1="white" c2="red" c3="blue" c4="green" c5="pink" c6="orange" width1="25%" transform="scaleX(-1)"/>  
+
+                <Linea height="10%" width="41%" top="70%" left="45.6%" c1="white" c2="blue" c3="orange" c4="red" c5="green" c6="yellow" width1="25%" transform="rotate(-120deg)"/> 
+
+                <Linea height="10%" width="41%" top="70%" left="16.6%" c1="white" c2="orange" c3="yellow" c4="blue" c5="red" c6="pink" width1="25%" transform="rotate(-60deg)"/> 
+                    
+                <Linea height="10.5%" width="37%" top="24%" left="-2%" c1="yellow" c2="white" c3="orange" c4="green" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)"/>  
                 
+                <Linea height="10.5%" width="37%" top="3.5%" left="33.5%" c1="pink" c2="white" c3="yellow" c4="red" c5="white" c6="green" width1="15%" transform=""/>  
+                
+                <Linea height="10.5%" width="37%" top="24%" left="68.5%" c1="green" c2="white" c3="pink" c4="blue" c5="white" c6="red" width1="15%" transform="rotate(60deg)"/>  
+                
+                <Linea height="10.5%" width="37%" top="65.5%" left="68.5%" c1="red" c2="white" c3="green" c4="orange" c5="white" c6="blue" width1="15%" transform="rotate(120deg)"/>  
+                
+                <Linea height="10.5%" width="37%" top="85.5%" left="33%" c1="blue" c2="white" c3="red" c4="yellow" c5="white" c6="orange" width1="15%" transform="rotate(180deg)"/>  
+                
+                <Linea height="10.5%" width="37%" top="65.5%" left="-2%" c1="orange" c2="white" c3="blue" c4="pink" c5="white" c6="yellow" width1="15%" transform="rotate(-120deg)"/>  
+            
                 <img style={{ position:"absolute", left:"4.9%", height:"41%", width:"50%", top:"-9.2%", zIndex: "2"}} src={Esquina_azul}/>
                 <img style={{ position:"absolute", transform: "rotate(+62deg)", left:"49%", height:"41%", width:"50%", top:"-8.89%", zIndex: "2"}} src={Esquina_naranja}/>
                 <img style={{ position:"absolute", transform: "rotate(+122deg)", left:"71.2%", height:"41%", width:"50%", top:"30%", zIndex: "2"}} src={Esquina_amarilla}/>
@@ -276,6 +134,25 @@ const Tablero = () => {
             </div>
             
             {jugadores()}
+
+            <button className="App-boton" style= {{top: "88%", left: "30%", position:"absolute"}} onClick={() => { setShow(!show)}}>
+                Pausar Partida
+            </button>
+            <button className="App-boton" style= {{top: "88%", left: "53%", position:"absolute"}} onClick={() => { setShow1(!show1)}}>
+                Abandonar Partida
+            </button>
+
+            {show ? (
+            <div/>
+            ) : (
+                <div/>
+            )}
+
+            {show1 ? (
+            <div/>
+            ) : (
+            <div/>
+            )}
 
         </header>
     </div> 
