@@ -295,23 +295,21 @@
   width: 20%;
   height: 30%;
   border-image: 50;
-  /*border: 2px solid rgb(255, 255, 255);*/
+  border: 2px solid rgb(255, 255, 255);
 }
 
 .App-imagenJugador {
   width: 80%;
   height: 90%;
   border-Radius: 5%;
-  background-color: white;
-  border: 2px solid rgb(255, 255, 255);
   position: "absolute";
 }
 .App-imagenQuesito {
   width: 10%;
   height: 10%;
   border-Radius: 5%;
-  background-color: white;
-  border: 2px solid rgb(255, 255, 255);
+  /*background-color: white;
+  border: 2px solid rgb(255, 255, 255);*/
   position: "absolute";
 }
 
