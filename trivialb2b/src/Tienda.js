@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './Estilos/App.css';
+import './Estilos/Estilo.css';
 import { useNavigate } from 'react-router-dom';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
@@ -7,53 +7,121 @@ const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
 
 const Tienda = () => {
-  const [body, setBody] = useState({ username: "", password: "" });
-  const [errores, setErorres] = useState({ er: "sin_error"});
+  const [cubeStyle, setCubeStyle] = useState({
+    transform: 'translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)'
+  });
+  const time = 4;
 
-  const navigate = useNavigate();
-  const handleChange = (e) => {
-    setBody({
-      ...body,
-      [e.target.name]: e.target.value,
+  const f1 = () => {
+    setCubeStyle({
+      ...cubeStyle,
+      transition: '',
+      transform: 'translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)'
     });
+
+    setTimeout(() => {
+      setCubeStyle({
+        ...cubeStyle,
+        transition: `transform ${time}s`
+      });
+
+      const randomValue = Math.floor((Math.random() * 6) + 1);
+      console.log(`randomValue: ${randomValue}`);
+
+      switch(randomValue) {
+        case 1:
+          setCubeStyle({
+            ...cubeStyle,
+            transform: 'translateY(400px) rotateX(3600deg) rotateY(3600deg) rotateZ(3600deg)'
+          });
+          break;
+        case 2:
+          setCubeStyle({
+            ...cubeStyle,
+            transform: 'translateY(400px) rotateX(4410deg) rotateY(3600deg) rotateZ(3600deg)'
+          });
+          break;
+        case 3:
+          setCubeStyle({
+            ...cubeStyle,
+            transform: 'translateY(400px) rotateX(3600deg) rotateY(4410deg) rotateZ(3600deg)'
+          });
+          break;
+        case 4:
+          setCubeStyle({
+            ...cubeStyle,
+            transform: 'translateY(400px) rotateX(3600deg) rotateY(2430deg) rotateZ(3600deg)'
+          });
+          break;
+        case 5:
+          setCubeStyle({
+            ...cubeStyle,
+            transform: 'translateY(400px) rotateX(2430deg) rotateY(3600deg) rotateZ(3600deg)'
+          });
+          break;
+        case 6:
+          setCubeStyle({
+            ...cubeStyle,
+            transform: 'translateY(400px) rotateX(3600deg) rotateY(1980deg) rotateZ(3600deg)'
+          });
+          break;
+      };
+    }, time * 10);
   };
 
-  const onSubmit = () => {
-    console.log(body);
-    fetch(URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => {console.log(data)
-        if ((body.username="") && (body.password="")) {
-          navigate(process.env.PUBLIC_URL+'/MenuJuego');
-        }
-        /*if (data.OK == "True"){
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
-        }*/
-        else {
-          navigate(process.env.PUBLIC_URL+'/Registrarse');/*
-          if (data.error_username != "") {
-            setErorres({er:"error_name"});
-          }
-          else if (data.error_password != ""){
-            setErorres({er:"error_password"});
-          }*/
-        }
-      })
-      .catch((error) => console.error(error));
-  };
+
 
   return (
-    <div className="App">
-      <div className = "App-header" > 
-      <div className="App-titulo" > Tienda 
-        <div className="App-Quesitos"> </div> 
+<div class="container">
+        <div class="cube" onClick={() => f1()}  style={{transform:cubeStyle.transform ,transition:cubeStyle.transition}}>
+            <div class="cube-face front">
+                <div class="inside">
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="cube-face back">
+                <div class="inside">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="cube-face left">
+                <div class="inside">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="cube-face right">
+                <div class="inside">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="cube-face top">
+                <div class="inside">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="cube-face bottom">
+                <div class="inside">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
+    
   );
 };
 
