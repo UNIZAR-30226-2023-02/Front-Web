@@ -289,7 +289,7 @@
 }
 
 .App-EsJugador {
-  position: absolute;
+  position: relative;
   align-items: center;
   background-repeat: no-repeat;
   width: 20%;
@@ -316,3 +316,30 @@
 }
 
 
+.horizontal-list {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  list-style: none;
+  height: 70%;
+  margin:0;
+  gap:0;
+}
+
+.horizontal-list__item {
+  flex: 0 0 auto;
+  width: 25%;
+  scroll-snap-align: start;
+  background-color: #000000;
+  border: "2px solid white";
+  letter-spacing: none;
+  margin-right: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.horizontal-list__item:last-child {
+  margin-right: 0;
+}

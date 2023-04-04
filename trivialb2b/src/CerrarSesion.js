@@ -8,8 +8,6 @@ const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 
 const CerrarSesion = () => {
-  const [body, setBody] = useState({ username: "", password: "" });
-
   const navigate = useNavigate();
 
   const cancelar = async (event) => {
