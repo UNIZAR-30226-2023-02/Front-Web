@@ -4,9 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
 import Cristiano from'./Imagenes/Cristiano.jpg';
 import Tablero1 from'./Imagenes/Tablero1.png';
+import { CountdownCircleTimer, useCountdown } from 'react-countdown-circle-timer'
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+
+const reloj = () => (
+    <CountdownCircleTimer
+      isPlaying
+      duration={7}
+      colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+      colorsTime={[7, 5, 2, 0]}
+      size={5}
+    >
+      {({ remainingTime }) => remainingTime}
+    </CountdownCircleTimer>
+  )
 
 
 const Tablero = () => {
@@ -63,50 +76,23 @@ const Tablero = () => {
     )
   }
 
+  const {
+    path,
+    pathLength,
+    stroke,
+    strokeDashoffset,
+    remainingTime,
+    elapsedTime,
+    size,
+    strokeWidth,
+    } = useCountdown({ isPlaying: true, duration: 7, colors: '#abc' })
+
   return (
     
     <div className="App">
       <header className="App-headerJuego" style={{zIndex: "1"}}>     
             <div style={{ position: "absolute", zIndex: "2", height:"74%", width:"39%", top:"10%", left:"30.2%"}}>
-                <Linea1> </Linea1>
-                <div style={{ position:"absolute", left:"17%", transform: "rotate(+60deg)", height:"10%", width:"41%", top:"20%"}}>
-                    <Linea2> </Linea2>
-                </div>
-                <div style={{ position:"absolute", left:"45%", transform: "rotate(+120deg)", height:"10%", width:"41%", top:"20%"}}>
-                    <Linea2> </Linea2>
-                </div>
-                <div style={{ position:"absolute", left:"60%", transform: " scaleX(-1)", height:"10%", width:"41%", top:"45%"}}>
-                    <Linea2> </Linea2>
-                </div>
-                <div style={{ position:"absolute", left:"45%", transform: "rotate(-120deg)",  height:"10%", width:"41%", top:"70%"}}>
-                    <Linea2> </Linea2>
-                </div>
-                <div style={{ position:"absolute", left:"17%", transform: "rotate(-60deg)", height:"10%", width:"41%", top:"70%"}}>
-                    <Linea2> </Linea2>
-                </div>
-
-                
-                <div style={{ position:"absolute", left:"33.5%", height:"10.5%", width:"37%", top:"3.5%"}}>
-                    <Linea3> </Linea3>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(-120deg)", left:"68.5%", height:"10.5%", width:"37%", top:"24%"}}>
-                    <Linea3> </Linea3>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(-60deg)", left:"68.5%", height:"10.5%", width:"37%", top:"65.5%"}}>
-                    <Linea3> </Linea3>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(-60deg)", left:"68.5%", height:"10.5%", width:"37%", top:"65.5%"}}>
-                    <Linea3> </Linea3>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(-60deg)", height:"10.5%", width:"37%", left:"-2%", top:"24%"}}>
-                    <Linea3> </Linea3>
-                </div>
-                <div style={{ position:"absolute", height:"10.5%", width:"37%", left:"33%", top:"86.5%"}}>
-                    <Linea3> </Linea3>
-                </div>
-                <div style={{ position:"absolute", transform: "rotate(60deg)", height:"10.5%", width:"37%", left:"-2%", top:"65.5%"}}>
-                    <Linea3> </Linea3>
-                </div>
+                {reloj()}
             </div>
 
         </header>
