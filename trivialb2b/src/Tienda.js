@@ -3,7 +3,7 @@ import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Cristiano from'./Imagenes/Cristiano.jpg';
 import Moneda from'./Imagenes/Moneda.png';
-import InfiniteScroll from 'react-infinite-scroll-component'
+import Atras from "./Imagenes/Atras.png";
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
@@ -11,16 +11,23 @@ const URL = "https://51.142.118.71:8000/api/usuarios/login/";
 
 const Tienda = () => {
 
-  const [show1, setShow1] = useState(true);
-  const [show2, setShow2] = useState(true);
-  const [show3, setShow3] = useState(true);
-  const [show4, setShow4] = useState(true);
+  const navigate = useNavigate();
+
+  const flechaAtras = async (event) => {
+    navigate(process.env.PUBLIC_URL+ '/MenuJuego');
+  };
+
+  const [show1, setShow1] = useState(false);
+  const [show12, setShow12] = useState(false);
+  const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(false);
+  const [show4, setShow4] = useState(false);
 
   const [monedas, setMonedas] = useState(15);
 
   const [tableroSeleccionado, setTableroSeleccionado] = useState({nombre:"", imagen:"", valor:""})
 
-  const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15},{nombre:"Tablero2", imagen:Cristiano, valor:12},{nombre:"Tablero3", imagen:Cristiano, valor:10},{nombre:"Tablero4", imagen:Cristiano, valor:1},{nombre:"Tablero5", imagen:Cristiano, valor:20},{nombre:"Tablero6", imagen:Cristiano, valor:30}];
+  const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15, estado:"seleccionado"},{nombre:"Tablero2", imagen:Cristiano, valor:12, estado:"adquirido"},{nombre:"Tablero3", imagen:Cristiano, valor:20, estado:""},{nombre:"Tablero4", imagen:Cristiano, valor:1, estado:""},{nombre:"Tablero5", imagen:Cristiano, valor:20, estado:""},{nombre:"Tablero6", imagen:Cristiano, valor:30, estado:""}];
 
   const fichas = [{nombre:"Ficha1", imagen:Cristiano},{nombre:"Ficha2", imagen:Cristiano},{nombre:"Ficha3", imagen:Cristiano},{nombre:"Ficha4", imagen:Cristiano},{nombre:"Ficha5", imagen:Cristiano},{nombre:"Ficha6", imagen:Cristiano}];
 
@@ -41,17 +48,33 @@ const Tienda = () => {
   
 
   const seleccionar = (e) => {
-    if (tableroSeleccionado.nombre !== e.nombre) {
-      setShow1(!show1);
-      if (monedas >= e.valor) {
-        setShow2(!show2);
+    
+    if (e.estado == "") {
+      setShow1(true);
+      setShow12(false);
+      setShow4(false);
+      if (monedas > e.valor) {
+        setShow2(false);
+        setShow3(true);
       }
       else {
-        setShow3(!show3);
+        setShow2(true);
+        setShow3(false);
       }
     }
-    else {
-      
+    else if (e.estado == "adquirido") {
+      setShow1(true);
+      setShow12(false);
+      setShow2(false);
+      setShow3(false);
+      setShow4(true);
+    }
+    else{
+      setShow1(false);
+      setShow12(true);
+      setShow2(false);
+      setShow3(false);
+      setShow4(false);
     }
     setTableroSeleccionado({
       ...tableroSeleccionado,
@@ -84,7 +107,7 @@ const Tienda = () => {
     return (
       <div className="horizontal-list" ref={containerRef}>
       {fichas.slice(0, visibleItems).map((item) => (
-        <div key={item.nombre} className="horizontal-list__item">
+        <div key={item.nombre} className="horizontal-list__item" onClick={() => seleccionar(item)}>
           <div style={{border: "2px solid white", height:"97.9%"}} >
             <div style={{ height:"20%", width:"100%", alignItems:"center", marginTop:"2%"}}>
               <a style={{color:"white", fontSize:"20px"}}>
@@ -132,44 +155,46 @@ const Tienda = () => {
 
         <Ficha/>
       </div>
-      <div style={{position:"absolute", top:"15%", left:"80%"}}>
+      <div style={{position:"absolute", top:"15%", left:"79%"}}>
       <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>Monedas: {monedas}</a>
       </div>
-      <img src={Moneda} className="App-imagenJugador"  style= {{ width:"300px", height:"300px", position:"absolute", top:"20%", left:"78%"}}/>
+      <img src={Moneda} className="App-imagenJugador"  style= {{ width:"300px", height:"300px", position:"absolute", top:"20%", left:"77%"}}/>
 
 
       {show1 ? ( 
-        <div>
-
-        </div>
-      ) : (
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>El tablero {tableroSeleccionado.nombre} cuesta: {tableroSeleccionado.valor} monedas</a>
-        </div>
-      )}
-
-      {show2 ? ( 
-        <div>
-
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.nombre} cuesta: {tableroSeleccionado.valor} monedas</a>
         </div>
       ) : (
+        <div/>
+      )}
+      {show12 ? ( 
+        <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.nombre} seleccionado</a>
+        </div>
+      ) : (
+        <div/>
+      )}
+      {show2 ? ( 
         <div style={{position:"absolute", top:"65%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
           <a style={{color:"red",fontSize:"40px", fontStyle: "italic"}}> Monedas Insuficientes</a>
         </div>
+      ) : (
+        <div/>
       )}
 
       {show3 ? ( 
-       <div/>
+        <button className="App-botonConfirmar" style= {{position:"absolute", top:"65%", left:"80%", position:"absolute"}}  > Comprar </button>
       ) : (
-        <button className="App-boton" style= {{position:"absolute", top:"75%", left:"80%", position:"absolute"}}  > Comprar </button>
+        <div/>
       )}
 
       {show4 ? ( 
-        <div/>
+        <button className="App-boton" style= {{position:"absolute", top:"65%", left:"79%", position:"absolute"}}  > Seleccionar </button>
       ) : (
-        <button className="App-boton" style= {{position:"absolute", top:"75%", left:"80%", position:"absolute"}}  > Seleccionar </button>
+        <div/>
       )}
-
+      <img src={Atras} style={{width:"150px", height:"150px", top:"5%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
     </div>
   );
 };

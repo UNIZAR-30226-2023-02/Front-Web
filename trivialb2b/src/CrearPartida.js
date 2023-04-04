@@ -66,7 +66,7 @@ const CrearPartida = () => {
     navigate(process.env.PUBLIC_URL + '/ModoEquipos');
   };
   const onSubmit3 = async (event) => {
-    navigate(process.env.PUBLIC_URL + '/ModoTematica');
+    navigate(process.env.PUBLIC_URL + '/Tablero');
   };
   const onPerfil = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Perfil');
