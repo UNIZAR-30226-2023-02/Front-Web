@@ -330,7 +330,7 @@
 
 .horizontal-list__item {
   flex: 0 0 auto;
-  width: 25%;
+  width: 24%;
   scroll-snap-align: start;
   background-color: #000000;
   border: "2px solid white";
@@ -338,6 +338,7 @@
   margin-right: 0;
   margin: 0;
   padding: 0;
+  cursor: pointer;
 }
 
 .horizontal-list__item:last-child {
