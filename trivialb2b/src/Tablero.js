@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './Estilos/App.css';
 import './Estilos/Estilo.css';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +30,8 @@ import Queso_rojo from './Imagenes/Queso_rojo.png';
 import Queso_verde from './Imagenes/Queso_verde.png';
 import Queso_rosa from './Imagenes/Queso_rosa.png';
 
+import Cruz from './Imagenes/Cruz.png';
+import ChatImg from './Imagenes/Chat.png';
 import B2B from './Imagenes/Logo.png';
 import Quesitos from './Imagenes/CrearPartida.png';
 
@@ -40,11 +42,13 @@ const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 
 const Tablero = () => {
+    const navigate = useNavigate();
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(false);
 
   const [cubeStyle, setCubeStyle] = useState({
     transform: 'translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)'
@@ -194,8 +198,86 @@ const Tablero = () => {
         );
     };
 
-  const navigate = useNavigate();
+
+    const roomName= "pepe3";
+    const [chatLog, setChatLog] = useState('');
+    const [messageInput, setMessageInput] = useState('');
+    const chatLogRef = useRef(null);
+    const chatSocketRef = useRef(null);
   
+    useEffect(() => {
+      chatSocketRef.current = new WebSocket(
+        `ws://b64b-146-158-156-138.eu.ngrok.io/ws/chat/${roomName}/`
+      );
+  
+      chatSocketRef.current.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        setChatLog(prevChatLog => prevChatLog + data.message + '\n');
+      };
+
+      chatSocketRef.current.onerror = function(event) {
+        console.error('Chat socket error:', event);
+      };
+      
+  
+      chatSocketRef.current.onclose = function(event) {
+        console.error('Chat socket closed unexpectedly');
+      };
+  
+      return () => {
+        chatSocketRef.current.close();
+      };
+    }, [roomName]);
+  
+  
+    function handleMessageInputChange(event) {
+      setMessageInput(event.target.value);
+    }
+  
+    function handleChatMessageSubmit() {
+      const message = messageInput.trim();
+      if (message) {
+        chatSocketRef.current.send(JSON.stringify({ message }));
+        setMessageInput('');
+      }
+    }
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+          handleChatMessageSubmit();
+        }
+    }
+
+
+  function Chat() {
+    return (      
+    <div style={{position:"absolute", top:"0%", left:"75%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"white",borderRadius:"0px 0px 0px 30px"}}>
+        <a style={{color:"black", fontSize:"30px"}}> CHAT </a>
+        <img style={{ position:"absolute", left:"3%", height:"30px", width:"30px", top:"1%", zIndex: "5", cursor:"pointer"}} src={Cruz}onClick={() => { setShow3(false)}}/>
+        <textarea
+        style={{position:"absolute", top:"5%", left:"0%", width:"99%", height:"90%"}}
+        ref={chatLogRef}
+        id="chat-log"
+        cols="100"
+        rows="20"
+        value={chatLog}
+        readOnly
+        />
+        <input
+        id="chat-message-input"
+        type="text"
+        size="100"
+        value={messageInput}
+        onChange={handleMessageInputChange}
+        onKeyPress={handleKeyPress}
+        style={{position:"absolute", top:"90.2%", left:"0%", width:"99%", height:"9%", border:" 2px solid black", borderRadius:"0px 0px 0px 30px", fontSize:"30px"}}
+        />
+        <button id="chat-message-submit" onClick={handleChatMessageSubmit} className="App-botonSinS" style={{position:"absolute", top:"90.4%", left:"75%", fontSize:"30px", width:"25%", height:"9.3%", borderRadius:"0px 0px 0px 0px"}}>
+        Enviar
+        </button>
+    </div>
+  );
+  }
+
     function Dado() {
         return (
         <div class="container">
@@ -375,7 +457,7 @@ const Tablero = () => {
             <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => { setShow2(!show2)}}>
                 Abandonar Partida
             </button>
-
+            <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => { setShow3(true)}}/>
             {show ? (
             <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", borderRadius: "40px 40px 0px 0px", zIndex:"6", borderRadius:"50%"}}>
                 <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px"respuesta="Entretenimiento" border= "40px 40px 0px 0px" marginTop="0%" color="orange"/>
@@ -440,6 +522,12 @@ const Tablero = () => {
                     Si
                 </button>
             </div>
+            ) : (
+            <div/>
+            )}
+
+            {show3 ? (
+            <Chat/>
             ) : (
             <div/>
             )}

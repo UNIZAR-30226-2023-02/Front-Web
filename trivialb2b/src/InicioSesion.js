@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from "./Imagenes/Atras.png";
+import { useSession, setSession } from 'react-session';
 
-const URL = "http://e4d3-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
+const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 //const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 function Boton(props) {
@@ -41,7 +42,7 @@ const InicioSesion = () => {
   const IniciarSesion = () => {
     console.log(body);
     navigate(process.env.PUBLIC_URL+'/MenuJuego');
-    /*
+    
     fetch(URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -67,7 +68,7 @@ const InicioSesion = () => {
           }
         }
       })
-      .catch((error) => console.error(error));*/
+      .catch((error) => console.error(error));
   };
 
   return (

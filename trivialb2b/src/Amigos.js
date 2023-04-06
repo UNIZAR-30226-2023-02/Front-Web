@@ -20,18 +20,20 @@ const Amigos = () => {
   const [eliminarA, setEliminaA] = useState("");
   const [amigo, setAmigo] = useState({ nombre: "", correo: "", telefono: "", fechaNac: "", imagen: ""});
 
-  const [amigo1, setAmigo1] = useState({ nombre: "Roberto", correo: "@gmail.com", telefono: "111111111", fechaNac: "", imagen: Cristiano});
-  const [amigo2, setAmigo2] = useState({ nombre: "Acher", correo: "@gmail.com", telefono: "22222222", fechaNac: "", imagen: Cristiano});
-  const [amigo3, setAmigo3] = useState({ nombre: "Diego", correo: "@gmail.com", telefono: "333333333", fechaNac: "", imagen: Cristiano});
-  const [amigo4, setAmigo4] = useState({ nombre: "Héctor", correo: "@gmail.com", telefono: "44444444", fechaNac: "", imagen: Cristiano});
-  const [amigo5, setAmigo5] = useState({ nombre: "Simón", correo: "@gmail.com", telefono: "555555555", fechaNac: "", imagen: Cristiano});
-  const [amigo6, setAmigo6] = useState({ nombre: "Carlos", correo: "@gmail.com", telefono: "666666666", fechaNac: "", imagen: Cristiano});
-  const [amigo7, setAmigo7] = useState({ nombre: "Javier", correo: "@gmail.com", telefono: "777777777", fechaNac: "", imagen: Cristiano});
+  const [amigo1, setAmigo1] = useState({ nombre: "Roberto", correo: "roberto@gmail.com", telefono: "111111111", fechaNac: "2002-02-01", imagen: Cristiano});
+  const [amigo2, setAmigo2] = useState({ nombre: "Acher", correo: "@gmail.com", telefono: "22222222", fechaNac: "21-01-2020", imagen: Cristiano});
+  const [amigo3, setAmigo3] = useState({ nombre: "Diego", correo: "@gmail.com", telefono: "333333333", fechaNac: "21-01-2020", imagen: Cristiano});
+  const [amigo4, setAmigo4] = useState({ nombre: "Héctor", correo: "@gmail.com", telefono: "44444444", fechaNac: "21-01-2020", imagen: Cristiano});
+  const [amigo5, setAmigo5] = useState({ nombre: "Simón", correo: "@gmail.com", telefono: "555555555", fechaNac: "21-01-2020", imagen: Cristiano});
+  const [amigo6, setAmigo6] = useState({ nombre: "Carlos", correo: "@gmail.com", telefono: "666666666", fechaNac: "21-01-2020", imagen: Cristiano});
+  const [amigo7, setAmigo7] = useState({ nombre: "Javier", correo: "@gmail.com", telefono: "777777777", fechaNac: "21-01-2020", imagen: Cristiano});
 
   const vecAmigos = [amigo1,amigo2,amigo3,amigo4,amigo5,amigo6,amigo7];
 
   const [show, setShow] = useState(true);
-  const [show1, setShow1] = useState(true);
+  const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(false);
 
   const navigate = useNavigate();
   
@@ -39,11 +41,10 @@ const Amigos = () => {
     setAmigo({
       ...amigo,
       ["nombre"]: e.nombre,
-      ["tiempo"]: e.tiempo,
-      ["numJugadores"]: e.numJugadores,
-      ["password"]: e.password,
-      ["creador"]: e.creador,
-      ["modo"]: e.modo,
+      ["correo"]: e.correo,
+      ["telefono"]: e.telefono,
+      ["fechaNac"]: e.fechaNac,
+      ["imagen"]: e.imagen
     })
   };
   const onNombreA = (e) => {
@@ -66,9 +67,8 @@ const Amigos = () => {
   };
 
   function f_amigos() {
-
     return vecAmigos.map((elemento) => (
-      <div className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}onClick={() => {handleChange(elemento);setShow(!show);}}>
+      <div className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}onClick={() => {handleChange(elemento);setShow(false);setShow3(true);}}>
         <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
           {elemento.nombre}
         </a>
@@ -79,6 +79,7 @@ const Amigos = () => {
       </div>
     ));
   }
+
   return (
     <div className="App">
 
@@ -105,8 +106,8 @@ const Amigos = () => {
             Añadir Amigo
           </button>
 
-          <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow(false);setShow1(false);}}/>
-          <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow(false);setShow1(false);}}>
+          <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow(false);setShow2(true);}}/>
+          <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow(false);setShow2(true);}}>
             Eliminar Amigo
           </button>
 
@@ -160,7 +161,7 @@ const Amigos = () => {
                 onChange={onNombreA}
                 style={{position: "absolute", top: "53%", left: "23%"}}
               />
-              <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={cancelar}>
+              <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow(true);setShow1(false)}}>
                 Cancelar
               </button>
               <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={confirmar}>
@@ -169,6 +170,10 @@ const Amigos = () => {
 
             </div>
           ) : (
+            <div/>
+          )}
+
+          {show2 ? (
           <div className="App-CuadradoNegro" style={{ width: "45%", height: "60%", position: "absolute", top: "25%", left: "27%", borderRadius: "50px 50px 50px 50px"}}>
             <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", borderRadius: "50px 50px 50px 50px"}}>
               <div style={{marginTop:"2%"}}>
@@ -188,7 +193,7 @@ const Amigos = () => {
               style={{position: "absolute", top: "53%", left: "23%"}}
             />
             <a style={{position: "absolute", top: "67%", left: "35%",color:"red", fontSize:"30px"}}> No existe este amigo </a>
-            <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={cancelar}>
+            <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow(true);setShow2(false)}}>
               Cancelar
             </button>
             <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={confirmar}>
@@ -196,33 +201,29 @@ const Amigos = () => {
             </button>
 
           </div>
-           )}
+          ) : (
+            <div/>
+          )}
+          {show3 ? (
 
-          {show1 ? (
-
-          <div className="App-CuadradoNegro" style={{ width: "45%", height: "60%", position: "absolute", top: "25%", left: "27%", borderRadius: "50px 50px 50px 50px"}}>
+          <div className="App-CuadradoNegro" style={{ width: "60%", height: "60%", position: "absolute", top: "25%", left: "20%", borderRadius: "50px 50px 50px 50px"}}>
             <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", borderRadius: "50px 50px 50px 50px"}}>
               <div style={{marginTop:"2%"}}>
-                <a style={{color:"white", fontSize:"50px"}}> Añadir Amigo </a>
+                <a style={{color:"white", fontSize:"50px"}}> Datos Usuario </a>
               </div>
               <div style={{marginTop:"2%", color: "white"}}>
                   <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
               </div>
             </div>
-            <a style={{position: "absolute", top: "30%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Escribe a continuacion el nombre del amigo que quieres añadir: </a>
-            <a style={{position: "absolute", top: "55%", left: "6%",color:"white", fontSize:"30px"}}> Nombre: </a>
-            <input className="App-textoNegro"
-              type="nombre"
-              label="nombre"
-              name="nombre"
-              onChange={onNombreA}
-              style={{position: "absolute", top: "53%", left: "23%"}}
-            />
-            <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={cancelar}>
-              Cancelar
-            </button>
-            <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={confirmar}>
-              Confirmar
+            <a style={{position: "absolute", top: "35%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Nombre: {amigo.nombre} </a>
+            <a style={{position: "absolute", top: "35%", left: "53%", color:"white", fontSize:"30px", textAlign:"left"}}> Correo: {amigo.correo} </a>
+            <a style={{position: "absolute", top: "60%", left: "53%", color:"white", fontSize:"30px", textAlign:"left"}}> Telefono: {amigo.telefono} </a>
+            <a style={{position: "absolute", top: "60%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Fecha de nacimiento: {amigo.fechaNac} </a>
+
+
+
+            <button className="App-boton" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow(true); setShow3(false);}}>
+              Salir
             </button>
 
           </div>

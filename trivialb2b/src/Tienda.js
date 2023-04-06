@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Cristiano from'./Imagenes/Cristiano.jpg';
 import Moneda from'./Imagenes/Moneda.png';
 import Atras from "./Imagenes/Atras.png";
+import Candado from "./Imagenes/Candado2.png";
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
@@ -17,6 +18,7 @@ const Tienda = () => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
 
+  const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show12, setShow12] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -27,17 +29,18 @@ const Tienda = () => {
 
   const [tableroSeleccionado, setTableroSeleccionado] = useState({nombre:"", imagen:"", valor:""})
 
-  const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15, estado:"seleccionado"},{nombre:"Tablero2", imagen:Cristiano, valor:12, estado:"adquirido"},{nombre:"Tablero3", imagen:Cristiano, valor:20, estado:""},{nombre:"Tablero4", imagen:Cristiano, valor:1, estado:""},{nombre:"Tablero5", imagen:Cristiano, valor:20, estado:""},{nombre:"Tablero6", imagen:Cristiano, valor:30, estado:""}];
+  const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Tablero2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Tablero3", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Tablero5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
 
-  const fichas = [{nombre:"Ficha1", imagen:Cristiano},{nombre:"Ficha2", imagen:Cristiano},{nombre:"Ficha3", imagen:Cristiano},{nombre:"Ficha4", imagen:Cristiano},{nombre:"Ficha5", imagen:Cristiano},{nombre:"Ficha6", imagen:Cristiano}];
+  const fichas = [{nombre:"Ficha1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Ficha2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Ficha3", imagen:Cristiano, valor:20, estado:"", comprado:true},{nombre:"Ficha4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Ficha5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Ficha6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
 
-  const [visibleItems, setVisibleItems] = useState(4);
+
+  const [visibleItems, setVisibleItems] = useState(6);
   const containerRef = useRef(null);
   useEffect(() => {
     const handleScroll = () => {
       const container = containerRef.current;
       if (container.scrollLeft + container.clientWidth >= container.scrollWidth) {
-        setVisibleItems(visibleItems + 4);
+        setVisibleItems(visibleItems + 6);
       }
     };
     containerRef.current.addEventListener('scroll', handleScroll);
@@ -95,14 +98,22 @@ const Tienda = () => {
                 {item.nombre}
               </a>
             </div>
+            {item.comprado ? (
             <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%"}}/>
+            ) : (
+              <div style={{position:"relative", top:"5%", left:"1%"}}>
+                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%"}}/>
+                <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
+              </div>
+            )} 
           </div>
+          
         </div>
       ))}
       </div>
     )
   }
-
+  
   function Ficha() {
     return (
       <div className="horizontal-list" ref={containerRef}>
@@ -114,7 +125,14 @@ const Tienda = () => {
                 {item.nombre}
               </a>
             </div>
+            {item.comprado ? (
             <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%"}}/>
+            ) : (
+              <div style={{position:"relative", top:"5%", left:"1%"}}>
+                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%"}}/>
+                <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
+              </div>
+            )} 
           </div>
         </div>
       ))}
