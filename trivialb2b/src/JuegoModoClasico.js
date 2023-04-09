@@ -6,7 +6,7 @@ import Cristiano from'./Imagenes/Cristiano.jpg';
 import Tablero1 from'./Imagenes/Tablero1.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+//const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 
 const JuegoModoClasico = () => {

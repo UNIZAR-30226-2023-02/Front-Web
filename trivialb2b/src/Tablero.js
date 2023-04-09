@@ -7,8 +7,6 @@ import { CountdownCircleTimer, useCountdown } from 'react-countdown-circle-timer
 //npm install react-countdown-circle-timer
 
 import Cristiano from'./Imagenes/Cristiano.jpg';
-import Tablero1 from'./Imagenes/Tablero1.png';
-
 import Esquina_azul from './Imagenes/Esquina_azul.png';
 import Esquina_amarilla from './Imagenes/Esquina_amarilla.png';
 import Esquina_naranja from './Imagenes/Esquina_naranja.png';
@@ -36,7 +34,8 @@ import B2B from './Imagenes/Logo.png';
 import Quesitos from './Imagenes/CrearPartida.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+//const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://a91d-146-158-156-138.ngrok-free.app/";
 
 
 
@@ -204,7 +203,7 @@ const Tablero = () => {
     const [messageInput, setMessageInput] = useState('');
     const chatLogRef = useRef(null);
     const chatSocketRef = useRef(null);
-  
+    
     useEffect(() => {
       chatSocketRef.current = new WebSocket(
         `ws://b64b-146-158-156-138.eu.ngrok.io/ws/chat/${roomName}/`
@@ -228,7 +227,7 @@ const Tablero = () => {
         chatSocketRef.current.close();
       };
     }, [roomName]);
-  
+    
   
     function handleMessageInputChange(event) {
       setMessageInput(event.target.value);
