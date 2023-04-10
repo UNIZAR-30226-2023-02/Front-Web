@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from "./Imagenes/Atras.png";
-import { useSession, setSession } from 'react-session';
+import { useSession } from 'react-session';
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
@@ -26,6 +26,7 @@ function Boton(props) {
 const InicioSesion = () => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
+  //const [usuario, setUsuario] = useSession();
 
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -55,7 +56,7 @@ const InicioSesion = () => {
         }
         else if (data.OK == "True"){
           setErorres("");
-          //const usuario = { nombre: body.username, contraseña: body.password};
+          //sessionStorage.setItem('usuario', data.token);
           navigate(process.env.PUBLIC_URL+ '/MenuJuego');
         }
         else if (data.error_username != "") {
@@ -64,7 +65,7 @@ const InicioSesion = () => {
         else {
           setErorres(data.error_password);
         }
-        
+
       })
       .catch((error) => console.error(error));
   };

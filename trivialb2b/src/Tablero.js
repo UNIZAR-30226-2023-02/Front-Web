@@ -3,7 +3,7 @@ import './Estilos/App.css';
 import './Estilos/Estilo.css';
 import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
-import { CountdownCircleTimer, useCountdown } from 'react-countdown-circle-timer';
+import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 //npm install react-countdown-circle-timer
 
 import Cristiano from'./Imagenes/Cristiano.jpg';
@@ -34,8 +34,8 @@ import B2B from './Imagenes/Logo.png';
 import Quesitos from './Imagenes/CrearPartida.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-//const URL = "http://51.142.118.71:8000/api/usuarios/login/";
-const URL = "http://a91d-146-158-156-138.ngrok-free.app/";
+const URL = "http://51.142.118.71:8000/";
+//const URL = "http://85be-146-158-156-138.ngrok-free.app/";
 
 
 
@@ -206,7 +206,7 @@ const Tablero = () => {
     
     useEffect(() => {
       chatSocketRef.current = new WebSocket(
-        `ws://b64b-146-158-156-138.eu.ngrok.io/ws/chat/${roomName}/`
+        `ws://51.142.118.71:3000/ws/chat/${roomName}/`
       );
   
       chatSocketRef.current.onmessage = function(event) {
@@ -279,51 +279,51 @@ const Tablero = () => {
 
     function Dado() {
         return (
-        <div class="container">
-            <div class="cube"   style={{transform:cubeStyle.transform ,transition:cubeStyle.transition}}>
-                <div class="cube-face front">
-                    <div class="inside">
-                        <span class="dot"></span>
+        <div className="container">
+            <div className="cube"   style={{transform:cubeStyle.transform ,transition:cubeStyle.transition}}>
+                <div className="cube-face front">
+                    <div className="inside">
+                        <span className="dot"></span>
                     </div>
                 </div>
-                <div class="cube-face back">
-                    <div class="inside">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
+                <div className="cube-face back">
+                    <div className="inside">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
                     </div>
                 </div>
-                <div class="cube-face left">
-                    <div class="inside">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
+                <div className="cube-face left">
+                    <div className="inside">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
                     </div>
                 </div>
-                <div class="cube-face right">
-                    <div class="inside">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
+                <div className="cube-face right">
+                    <div className="inside">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
                     </div>
                 </div>
-                <div class="cube-face top">
-                    <div class="inside">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
+                <div className="cube-face top">
+                    <div className="inside">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
                     </div>
                 </div>
-                <div class="cube-face bottom">
-                    <div class="inside">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
+                <div className="cube-face bottom">
+                    <div className="inside">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
                     </div>
                 </div>
             </div>
