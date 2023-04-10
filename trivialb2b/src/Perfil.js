@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from './Imagenes/Atras.png';
 import { sessionStorage } from 'web-storage';
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/usuarios/datos/";
 
 function CuadroTexto(props) {
   return (
@@ -22,36 +22,40 @@ function CuadroTexto(props) {
 }
 
 const Perfil = () => {
-  const [body, setBody] = useState({ username: "", fecha_nac: "", correo: " ", telefono: ""});
+  const [body, setBody] = useState({ username: "", fecha_nac: "", correo: "", telefono: ""});
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
   const [show2, setShow2] = useState(true);
 
-  const usuario = localStorage.getItem('usuario');
-  console.log(usuario);
 
-  const ConseguirDatos = () => {
+  if (typeof sessionStorage !== "undefined") {
+    const token = sessionStorage.getItem('usuario');
+    console.log(token);
+  } else {
+    console.log('sessionStorage no está definido');
+  }
+
+
     fetch(URL, {
       method: "POST",
-      headers: { "Authorization": "Token " + "d0f4d83aa08fa8fde4ebb00ac44b43099d47424d" },
-      body: JSON.stringify(body),
+      headers: { "Authorization": "Token " + "0aafbbce536ffaa31f7c7875c931301d73c7240a" },
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        body.username= data.username;
+        /*body.username= data.username;
         body.fecha_nac=data.fecha_nac;
         body.correo= data.correo;
-        body.telefono=data.telefono;
-      })
-    };
-
-
+        body.telefono=data.telefono;*/
+    })
 
   const handleChange = (e) => {
     setBody({
       ...body,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleChange2 = (e) => {
   };
 
   const flechaAtras = async (event) => {
@@ -62,7 +66,7 @@ const Perfil = () => {
     navigate(process.env.PUBLIC_URL+ '/Perfil');
   };
 
-  const Confirmar = () => {
+  /*const Confirmar = () => {
     console.log(body);;
 
     fetch(URL, {
@@ -94,25 +98,25 @@ const Perfil = () => {
           else if (data.error_correo !== ""){
             setErorres("Error correo");
           }
-        }*/
+        }
       })
       .catch((error) => console.error(error));
       navigate(process.env.PUBLIC_URL + '/PerfilConfirmacion');
-  };
+  };*/
 
   function VisualizarDatos() {
     return (
       <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
         <div className="App-CuadrosTextoIzq" > 
           <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Nombre Usuario" valor="Acher" />
+            <CuadroTexto texto="Nombre Usuario" valor="Acher" funcion={handleChange2}  />
           </div>
-          <CuadroTexto texto="Fecha de nacimiento" valor="01-02-2002"   /> 
+          <CuadroTexto texto="Fecha de nacimiento" valor="01-02-2002"   funcion={handleChange2}  /> 
         </div>
         <div className="App-CuadrosTextoDer" > 
-          <CuadroTexto texto="Correo electronico" valor="pepe@unizar.es"  />
+          <CuadroTexto texto="Correo electronico" valor="pepe@unizar.es"  funcion={handleChange2}  />
           <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Teléfono móvil" valor="605828074"  />
+            <CuadroTexto texto="Teléfono móvil" valor="605828074" funcion={handleChange2}   />
           </div>
         </div>
         <img src={Atras} style={{width:"170px", height:"170px", top:"83%", left:"1.1%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
@@ -133,7 +137,7 @@ const Perfil = () => {
           <div className="App-CuadrosTextoDer"> 
             
               <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
-            <div style={{marginLeft: "7%"}}>
+            <div style={{marginLeft:"7%"}}>
               <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono" valor={body.telefono} funcion={handleChange} />
             </div>
           </div>
@@ -146,9 +150,9 @@ const Perfil = () => {
           Cancelar
         </button>
         <button
-          marginLeft= "10%"
+          
           className="App-botonConfirmar"
-          style= {{top: "80%", left:"53%", position:"absolute"}}
+          style= {{top: "80%", left:"53%", position:"absolute", marginLeft: "10%"}}
           onClick={() => { setShow2(!show2)}}>
           Confirmar
         </button>

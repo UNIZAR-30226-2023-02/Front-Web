@@ -57,7 +57,7 @@ const Registrarse = () => {
         }
         else if (data.OK == "True"){
           setErorres("");
-          navigate(process.env.PUBLIC_URL+'/MenuJuego');
+          navigate(process.env.PUBLIC_URL+'/InicioSesion');
         }
         else {
           if (data.error_username !== "") {
