@@ -31,6 +31,7 @@ const InicioSesion = () => {
   const [usuario, setUsuario] = useState();
 
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     setBody({
       ...body,
@@ -43,7 +44,6 @@ const InicioSesion = () => {
   };
 
   const IniciarSesion = () => {
-    console.log(body);
     
     fetch(URL, {
       method: "POST",
@@ -54,7 +54,7 @@ const InicioSesion = () => {
       .then((data) => {console.log(data)
        
         if ((body.username=="") && (body.password=="")) {
-          setErorres("Campos vacíos");
+          setErorres("Algún campo está vacío");
         }
         else if (data.OK == "True"){
           setErorres("");

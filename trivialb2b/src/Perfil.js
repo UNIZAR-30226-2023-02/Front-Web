@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from './Imagenes/Atras.png';
-import { useSession, setSession } from 'react-session';
+import { sessionStorage } from 'web-storage';
 
-const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
-//const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+//const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
+const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 function CuadroTexto(props) {
   return (
@@ -22,28 +22,34 @@ function CuadroTexto(props) {
 }
 
 const Perfil = () => {
-  const body = { username:"pepe1"};
-  
-  fetch(URL, {
-    method: "POST",
-    headers: { "Authorization": "Token " + "d0f4d83aa08fa8fde4ebb00ac44b43099d47424d" },
-    body: JSON.stringify(body),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => console.error(error));
-    
-    
-  
-  const [body1, setBody1] = useState({ username: "", fecha_nac: "dd-mm-aaaa", correo: " ", telefono: ""});
-  const [errores, setErorres] = useState("");
+  const [body, setBody] = useState({ username: "", fecha_nac: "", correo: " ", telefono: ""});
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
   const [show2, setShow2] = useState(true);
 
+  const usuario = localStorage.getItem('usuario');
+  console.log(usuario);
+
+  const ConseguirDatos = () => {
+    fetch(URL, {
+      method: "POST",
+      headers: { "Authorization": "Token " + "d0f4d83aa08fa8fde4ebb00ac44b43099d47424d" },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        body.username= data.username;
+        body.fecha_nac=data.fecha_nac;
+        body.correo= data.correo;
+        body.telefono=data.telefono;
+      })
+    };
+
+
+
   const handleChange = (e) => {
-    setBody1({
-      ...body1,
+    setBody({
+      ...body,
       [e.target.name]: e.target.value,
     });
   };
@@ -57,8 +63,7 @@ const Perfil = () => {
   };
 
   const Confirmar = () => {
-    console.log(body);
-    //navigate(process.env.PUBLIC_URL + '/MenuJuego');
+    console.log(body);;
 
     fetch(URL, {
       method: "POST",
@@ -121,15 +126,15 @@ const Perfil = () => {
         <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
           <div className="App-CuadrosTextoIzq" > 
             <div style={{marginLeft:"7%"}}>
-              <CuadroTexto texto="Nombre Usuario" label="username" nombre="username" valor={body1.username} funcion={handleChange} />
+              <CuadroTexto texto="Nombre Usuario" label="username" nombre="username" valor={body.username} funcion={handleChange} />
             </div>
-            <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac" valor={body1.fecha_nac} funcion={handleChange} /> 
+            <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac" valor={body.fecha_nac} funcion={handleChange} /> 
           </div>
           <div className="App-CuadrosTextoDer"> 
             
-              <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body1.correo} funcion={handleChange} />
+              <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
             <div style={{marginLeft: "7%"}}>
-              <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono" valor={body1.telefono} funcion={handleChange} />
+              <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono" valor={body.telefono} funcion={handleChange} />
             </div>
           </div>
         </form>
