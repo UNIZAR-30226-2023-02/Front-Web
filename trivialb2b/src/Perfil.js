@@ -36,10 +36,13 @@ const Perfil = () => {
   
   console.log("Perfil");
   
-  const token = cookies.get('token');
-  const usuario = cookies.get('tokenUsuario');
+  const token = cookies.get('token')
+  const usuario = cookies.get('tokenUsuario')
+  /*const [body1, setBody1] = useState({ username: cookies.get('tokenUsuario')});*/
 
-  //console.log(token);
+
+  console.log(token);
+  console.log(usuario);
 
 /*
   // Descifrar el valor
@@ -51,15 +54,15 @@ const Perfil = () => {
 
     fetch(URL, {
       method: "POST",
-      headers: { "Authorization": "Token " + token },
-      body: JSON.stringify(usuario),
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({username: cookies.get('tokenUsuario')})
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        body.username= data.username;
+        /*body.username= data.username;
         body.fecha_nac=data.fecha_nac;
         body.correo= data.correo;
-        body.telefono=data.telefono;
+        body.telefono=data.telefono;*/
     })
 
   const handleChange = (e) => {
