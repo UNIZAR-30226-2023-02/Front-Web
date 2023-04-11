@@ -125,7 +125,7 @@ const ModoClasico = () => {
           </form>
 
           <div style={{fontSize:"23px", color:"red", position:"absolute", left:"45%", top:"65%"}}>
-            <a  >epepepeppepep{errores}</a>
+            <a  > Mensaje de error{errores}</a>
           </div>
 
           <div style={{fontSize:"23px", color:"black", position:"absolute", left:"36%", top:"73%"}}> 

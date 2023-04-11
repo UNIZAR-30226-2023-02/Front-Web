@@ -3,7 +3,7 @@ import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
 import Atras from "./Imagenes/Atras.png";
-import Vinicius from "./Imagenes/Vinicius.png";
+import Vinicius from "./Imagenes/Usuario.png";
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
@@ -32,7 +32,7 @@ const Historial = () => {
   function Partida(props) {
     return (    
       <div style={{ width: "800px", height: "100px", position: "relative", border: "2px solid white", backgroundColor:props.color, borderRadius:"50px", marginTop:"20px", cursor:"pointer"}} onClick={props.function}>
-        <img src={props.src} style={{width:"14%", height:"90%", top:"5%", left:"5%", cursor: "pointer", position: "absolute"}}/>
+        <img src={props.src} style={{width:"11%", height:"90%", top:"5%", left:"5%", cursor: "pointer", position: "absolute"}}/>
         <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic", top:"20%", left:"40%", position: "absolute"}}> {props.modo} </a>
       </div>
     );

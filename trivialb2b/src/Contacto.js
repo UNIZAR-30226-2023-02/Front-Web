@@ -15,7 +15,6 @@ function LetraContacto(props) {
 }
 
 const Contacto = () => {
-  const [body, setBody] = useState({ username: "", fecha_nac: "dd-mm-aaaa", correo: " ", telefono: ""});
   const navigate = useNavigate();
 
   const continuar = async (event) => {
@@ -30,8 +29,8 @@ const Contacto = () => {
                     <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
                   </div>
                   <div>
-                    <LetraContacto titulo="Correo electronico" variable="nano@unizar.es"/>
-                    <LetraContacto titulo="Telefono" variable="696969696"/>
+                    <LetraContacto titulo="Correo electronico" variable="prueba@unizar.es"/>
+                    <LetraContacto titulo="Telefono" variable="123456789"/>
                   </div>
                   <div> <button className="App-boton" style= {{top:"78%", left: "46%", position:"absolute"}} onClick={() => continuar() } > Volver </button></div>
                 </div>

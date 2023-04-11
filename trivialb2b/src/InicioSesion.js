@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from "./Imagenes/Atras.png";
-import { sessionStorage } from 'web-storage';
+import CryptoJS from 'crypto-js';
+import Cookies from 'universal-cookie';
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
-
-
 
 function Boton(props) {
   return (
@@ -24,12 +23,18 @@ function Boton(props) {
   )
 }
 
+/*
+const valorOriginal = 'hola mundo';
+const clave = 'mi clave secreta';
+const valorCifrado = CryptoJS.AES.encrypt(valorOriginal, clave).toString();*/
 
-const InicioSesion = () => {
+const InicioSesion = ({ miVariable, setMiVariable }) => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [usuario, setUsuario] = useState();
 
+  const cookies= new Cookies();
+  
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -58,8 +63,8 @@ const InicioSesion = () => {
         }
         else if (data.OK == "True"){
           setErorres("");
-          //sessionStorage.SetItem('usuario', data.token);
-          console.log(usuario);
+          cookies.set('token', data.token, {path: '/'})
+          cookies.set('tokenUsuario', body.username, {path: '/'})
           navigate(process.env.PUBLIC_URL+ '/MenuJuego');
         }
         else if (data.error_username != "") {
@@ -99,4 +104,5 @@ const InicioSesion = () => {
   );
 };
 
+//export  { valorCifrado, clave};
 export default InicioSesion;

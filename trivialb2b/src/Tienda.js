@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import Cristiano from'./Imagenes/Cristiano.jpg';
+import Cristiano from'./Imagenes/Usuario.png';
 import Moneda from'./Imagenes/Moneda.png';
 import Atras from "./Imagenes/Atras.png";
 import Candado from "./Imagenes/Candado2.png";
@@ -99,10 +99,10 @@ const Tienda = () => {
               </a>
             </div>
             {item.comprado ? (
-            <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%"}}/>
+            <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
-                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%"}}/>
+                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
                 <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
               </div>
             )} 
@@ -126,10 +126,10 @@ const Tienda = () => {
               </a>
             </div>
             {item.comprado ? (
-            <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%"}}/>
+            <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
-                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%"}}/>
+                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
                 <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
               </div>
             )} 

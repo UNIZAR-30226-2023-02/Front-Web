@@ -5,7 +5,7 @@ import Buscar from'./Imagenes/BuscarPartida.png';
 import Candado from'./Imagenes/Candado.png';
 import Atras from "./Imagenes/Atras.png";
 import Añadir from "./Imagenes/DatosUsuario.png";
-import Cristiano from'./Imagenes/Vinicius.png';
+import Cristiano from'./Imagenes/Usuario.png';
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 
@@ -15,7 +15,6 @@ const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 
 const Amigos = () => {
-    
   const [nuevoA, setNuevoA] = useState("");
   const [eliminarA, setEliminaA] = useState("");
   const [amigo, setAmigo] = useState({ nombre: "", correo: "", telefono: "", fechaNac: "", imagen: ""});

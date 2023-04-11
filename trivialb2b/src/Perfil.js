@@ -3,9 +3,14 @@ import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from './Imagenes/Atras.png';
 import { sessionStorage } from 'web-storage';
+import CryptoJS from 'crypto-js';
+import Cookies from 'universal-cookie';
+
+//import {valorCifrado , clave} from './InicioSesion';
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
 const URL = "http://51.142.118.71:8000/api/usuarios/datos/";
+
 
 function CuadroTexto(props) {
   return (
@@ -27,25 +32,34 @@ const Perfil = () => {
   const [show, setShow] = useState(true);
   const [show2, setShow2] = useState(true);
 
+  const cookies= new Cookies();
+  
+  console.log("Perfil");
+  
+  const token = cookies.get('token');
+  const usuario = cookies.get('tokenUsuario');
 
-  if (typeof sessionStorage !== "undefined") {
-    const token = sessionStorage.getItem('usuario');
-    console.log(token);
-  } else {
-    console.log('sessionStorage no está definido');
-  }
+  //console.log(token);
 
+/*
+  // Descifrar el valor
+  const bytes = CryptoJS.AES.decrypt(valorCifrado, clave);
+  const valorDescifrado = bytes.toString(CryptoJS.enc.Utf8);
+
+  console.log(valorDescifrado); // Imprimir el valor descifrado en la consola
+*/
 
     fetch(URL, {
       method: "POST",
-      headers: { "Authorization": "Token " + "0aafbbce536ffaa31f7c7875c931301d73c7240a" },
+      headers: { "Authorization": "Token " + token },
+      body: JSON.stringify(usuario),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        /*body.username= data.username;
+        body.username= data.username;
         body.fecha_nac=data.fecha_nac;
         body.correo= data.correo;
-        body.telefono=data.telefono;*/
+        body.telefono=data.telefono;
     })
 
   const handleChange = (e) => {
@@ -109,14 +123,14 @@ const Perfil = () => {
       <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
         <div className="App-CuadrosTextoIzq" > 
           <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Nombre Usuario" valor="Acher" funcion={handleChange2}  />
+            <CuadroTexto texto="Nombre Usuario" valor="Diego" funcion={handleChange2}  />
           </div>
-          <CuadroTexto texto="Fecha de nacimiento" valor="01-02-2002"   funcion={handleChange2}  /> 
+          <CuadroTexto texto="Fecha de nacimiento" valor="2002-01-01"   funcion={handleChange2}  /> 
         </div>
         <div className="App-CuadrosTextoDer" > 
-          <CuadroTexto texto="Correo electronico" valor="pepe@unizar.es"  funcion={handleChange2}  />
+          <CuadroTexto texto="Correo electronico" valor="diego@unizar.es"  funcion={handleChange2}  />
           <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Teléfono móvil" valor="605828074" funcion={handleChange2}   />
+            <CuadroTexto texto="Teléfono móvil" valor="123456789" funcion={handleChange2}   />
           </div>
         </div>
         <img src={Atras} style={{width:"170px", height:"170px", top:"83%", left:"1.1%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>

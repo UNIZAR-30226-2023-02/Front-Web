@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
-import Cristiano from'./Imagenes/Cristiano.jpg';
+import Usuario from'./Imagenes/Usuario.png';
 import Tablero1 from'./Imagenes/Tablero1.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
@@ -33,7 +33,7 @@ const EsperandoJugadores = () => {
   function jugadores() {
     return vectorJugadores.map((elemento) => (
       <div className='App-EsJugador' >
-        <img src={Cristiano} className="App-imagenJugador"/><br></br>
+        <img src={Usuario} className="App-imagenJugador" style={{backgroundColor:"white"}}/><br></br>
         <a style={{color:"white", fontSize:"30px"}}>{elemento} </a>
       </div>
     ));

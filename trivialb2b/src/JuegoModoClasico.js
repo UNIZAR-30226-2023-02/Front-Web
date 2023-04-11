@@ -14,7 +14,7 @@ const JuegoModoClasico = () => {
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(true);
 
-  const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
+  const vectorJugadores = ["Acher", "Miguel", "Pablo", "Luis"];
 
   const navigate = useNavigate();
   const handleChange = (e) => {

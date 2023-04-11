@@ -1,5 +1,5 @@
 import './Estilos/App.css';
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -32,8 +32,8 @@ const App = () => {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path= '/' Component={MenuPrincipal} />
-      <Route path= '/InicioSesion' Component={InicioSesion} />      
+      <Route path= '/' Component={MenuPrincipal }/>    
+      <Route path= '/InicioSesion' Component={InicioSesion} />     
       <Route path= '/Registrarse' Component={Registrarse} />    
       <Route path= '/MenuJuego' Component={MenuJuego} /> 
       <Route path= '/CrearPartida' Component={CrearPartida} /> 

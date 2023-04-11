@@ -6,7 +6,7 @@ import { useSession, setSession } from 'react-session';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 //npm install react-countdown-circle-timer
 
-import Cristiano from'./Imagenes/Cristiano.jpg';
+import Cristiano from'./Imagenes/Usuario.png';
 import Esquina_azul from './Imagenes/Esquina_azul.png';
 import Esquina_amarilla from './Imagenes/Esquina_amarilla.png';
 import Esquina_naranja from './Imagenes/Esquina_naranja.png';
@@ -357,7 +357,7 @@ const Tablero = () => {
                     <br></br>
                 </div>
                 <div style={{marginTop:"3%"}}>
-                    <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "60%", position: "absolute", top:"25%", left:"5%"}} /><br></br>
+                    <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"5%", backgroundColor:"white"}} /><br></br>
                     <img src={Quesitos} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/><br></br>
                 </div>
             </div>
@@ -375,7 +375,7 @@ const Tablero = () => {
                     <br></br>
                 </div>
                 <div style={{marginTop:"3%"}}>
-                    <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "60%", position: "absolute", top:"25%", left:"70%"}} /><br></br>
+                    <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"70%", backgroundColor:"white"}} /><br></br>
                     <img src={Quesitos} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"35%", backgroundColor:"none"}}/><br></br>
                 </div>
             </div>
@@ -386,12 +386,12 @@ const Tablero = () => {
   function Linea(props) {
     return(
         <div style={{position:"absolute", height: props.height, width: props.width, top: props.top, left: props.left , zIndex: "1", transform: props.transform}}>
-            <button style={{ backgroundColor: props.c1 , height: "100%", width: props.width1}}>  </button>
-            <button style={{ backgroundColor: props.c2, height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor: props.c3, height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor: props.c4, height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor: props.c5, height: "100%", width:"15%"}}>  </button>
-            <button style={{ backgroundColor: props.c6, height: "100%", width:"15%"}}>  </button>
+            <button style={{ backgroundColor: props.c1 , height: "100%", width: props.width1}} onClick={() => {setShow(true)}}>  </button>
+            <button style={{ backgroundColor: props.c2, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
+            <button style={{ backgroundColor: props.c3, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
+            <button style={{ backgroundColor: props.c4, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
+            <button style={{ backgroundColor: props.c5, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
+            <button style={{ backgroundColor: props.c6, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
         </div>
     );
     }
@@ -443,8 +443,8 @@ const Tablero = () => {
                 <img style={{ position:"absolute", left:"48%", height:"3%", width:"3%", top:"44%", zIndex: "3"}} src={Ficha_verde}/>
                 <img style={{ position:"absolute", left:"56%", height:"3%", width:"3%", top:"33%", zIndex: "3"}} src={Ficha_naranja}/>
 
-                <div  style={{width:"17%", height:"20%", left:"44.8%", top:"29.6%", position:"absolute", border:"2px solid black", backgroundColor:"white", zIndex: "0"}}>
-                    <img src={B2B} style={{width:"70%",marginTop:"24%"}}/>
+                <div  style={{width:"17%", height:"20%", left:"44.8%", top:"29.6%", position:"absolute", border:"2px solid black", backgroundColor:"white", zIndex: "0", cursor:"pointer"}}>
+                    <img src={B2B} style={{width:"70%",marginTop:"24%"} }/>
                 </div>
             </div>
             {posicionElementos()}
@@ -466,7 +466,7 @@ const Tablero = () => {
                 <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={vectorPregunta[3].texto} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
                 <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={vectorPregunta[4].texto} border= "0px 0px 0px 0px"marginTop="4%" color="white"/>
 
-                <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:"orange"}}>
+                <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:"orange"}} >
                     <br></br><br></br><br></br>
                         <a style={{fontSize:"30px"}}>
                         Tiempo para responder
@@ -477,7 +477,6 @@ const Tablero = () => {
                 </div>
             </div>
             ) : (
-                
                 <div/>
             )}
 
