@@ -58,15 +58,8 @@ const InicioSesion = () => {
         }
         else if (data.OK == "True"){
           setErorres("");
-<<<<<<< HEAD
           //sessionStorage.SetItem('usuario', data.token);
           console.log(usuario);
-=======
-          console.log(data.token);
-          if (typeof sessionStorage !== "undefined") {
-            sessionStorage.setItem('usuario', data.token);
-          }
->>>>>>> f07086b3827c9a497479c4d4377615446d4e2b74
           navigate(process.env.PUBLIC_URL+ '/MenuJuego');
         }
         else if (data.error_username != "") {
