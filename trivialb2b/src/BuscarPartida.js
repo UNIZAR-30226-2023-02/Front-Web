@@ -54,7 +54,7 @@ const ModoClasico = () => {
   function jugadores() {
 
     return salas.map((elemento) => (
-      <div className="App-CuadradoBlanco" style={{ width: "99.6%", height: "15%", position: "relative", left: "0%",cursor: "pointer"}}onClick={() => {handleChange(elemento);setShow(!show); if (elemento.publica){setShow1(false)}}}>
+      <div className="App-CuadradoBlanco" style={{ width: "99.6%", height: "15%", position: "relative", left: "0%",cursor: "pointer"}}onClick={() => {handleChange(elemento);setShow(!show); if (elemento.publica){setShow1(false)}else{setShow1(true)}}}>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
           {elemento.nombre}
         </a>

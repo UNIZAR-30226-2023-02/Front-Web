@@ -58,7 +58,7 @@ const InicioSesion = () => {
         }
         else if (data.OK == "True"){
           setErorres("");
-          sessionStorage.SetItem('usuario', data.token);
+          //sessionStorage.SetItem('usuario', data.token);
           console.log(usuario);
           navigate(process.env.PUBLIC_URL+ '/MenuJuego');
         }
