@@ -57,7 +57,7 @@ const Registrarse = () => {
         }
         else if (data.OK == "True"){
           setErorres("");
-          navigate(process.env.PUBLIC_URL+'/MenuJuego');
+          navigate(process.env.PUBLIC_URL+'/InicioSesion');
         }
         else {
           if (data.error_username !== "") {
@@ -111,7 +111,7 @@ const Registrarse = () => {
               </div>
             </div>
           </form>
-          <div style={{top:"62%", position:"absolute", fontSize:"25px"}}>
+          <div style={{top:"73%", position:"absolute", fontSize:"25px"}}>
             <font color="red" > {errores}</font>
           </div>
           <button className="App-boton" style= {{top: "80%", left: "auto", position:"absolute"}} onClick={() => Registrarse()} >
