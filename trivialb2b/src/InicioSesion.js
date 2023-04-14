@@ -33,6 +33,7 @@ const InicioSesion = ({ miVariable, setMiVariable }) => {
   const [errores, setErorres] = useState("");
   const [usuario, setUsuario] = useState();
 
+
   const cookies= new Cookies();
   
   const navigate = useNavigate();
