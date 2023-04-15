@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import './Estilos/App.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Atras from './Imagenes/Atras.png';
 import CryptoJS from 'crypto-js';
 import Cookies from 'universal-cookie';
+import { TextField } from "@mui/material";
 
 //import {valorCifrado , clave} from './InicioSesion';
 
@@ -18,15 +19,18 @@ function CuadroTexto(props) {
         label={props.label}
         name={props.nombre}
         value={props.valor}
-        onChange={props.funcion}
+        onChange={props.onchange}
       />
     </div>
   )
 }
 
+
+
 const Perfil = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
@@ -34,14 +38,16 @@ const Perfil = () => {
   const [body, setBody] = useState({ username: "", fecha_nac: "", correo: "", telefono: ""});
   const [errores, setErorres] = useState("");
 
+  console.log("hola");
+
+  const handleChange2 = () => {
+  };
+
   const handleChange = (e) => {
     setBody({
       ...body,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const handleChange2 = () => {
   };
 
   const flechaAtras = async (event) => {
@@ -68,19 +74,21 @@ const Perfil = () => {
     });
   }, []);
 
-  function VisualizarDatos() {
+
+  function VisualizarDatos() { 
+  
     return (
       <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
         <div className="App-CuadrosTextoIzq" > 
           <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Nombre Usuario" valor={body.username} funcion={handleChange2}  />
+            <CuadroTexto texto="Nombre Usuario" valor={body.username} onchange={handleChange2}  />
           </div>
-          <CuadroTexto texto="Fecha de nacimiento" valor={body.fecha_nac}   funcion={handleChange2}  /> 
+          <CuadroTexto texto="Fecha de nacimiento" valor={body.fecha_nac}   onchange={handleChange2}  /> 
         </div>
         <div className="App-CuadrosTextoDer" > 
-          <CuadroTexto texto="Correo electronico" valor={body.correo}  funcion={handleChange2}  />
+          <CuadroTexto texto="Correo electronico" valor={body.correo}  onchange={handleChange2}  />
           <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Teléfono móvil" valor={body.telefono} funcion={handleChange2}   />
+            <CuadroTexto texto="Teléfono móvil" valor={body.telefono} onchange={handleChange2}   />
           </div>
         </div>
         <img src={Atras} style={{width:"170px", height:"170px", top:"83%", left:"1.1%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
@@ -88,7 +96,7 @@ const Perfil = () => {
     )
   }
 
-  
+  /*
   function fetchCambiardatos() {
     fetch(URL, {
       method: "POST",
@@ -107,36 +115,13 @@ const Perfil = () => {
       }
     })
     .catch((error) => console.error(error));
-  }
+  }*/
 
+  const confirmarCambios = async () => {
+    //await fetchCambiardatos();
+    setShow2(!show2);
+  };
 
-  function CambiarDatos() {
-    console.log("CambiarDatos");
-    return (
-      <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
-        <div className="App-CuadrosTextoIzq" > 
-          <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Nombre Usuario" label="username" nombre="username" valor={body.username} funcion={handleChange} />
-          </div>
-          <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac" valor={body.fecha_nac} funcion={handleChange} /> 
-        </div>
-        <div className="App-CuadrosTextoDer"> 
-          
-            <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} funcion={handleChange} />
-          <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono" valor={body.telefono} funcion={handleChange} />
-          </div>
-        </div>
-        <button className="App-botonCancelar" style= {{top: "80%", left:"37%", position:"absolute"}} onClick={() => setShow(!show)} >
-          Cancelar
-        </button>
-        <button className="App-botonConfirmar" style= {{top: "80%", left:"53%", position:"absolute", marginLeft: "10%"}} onClick={() => { fetchCambiardatos() && setShow2(!show2)}}>
-          Confirmar
-        </button>
-        <img src={Atras} style={{width:"170px", height:"170px", top:"75%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
-        </form>
-    )
-  }
 
   function ConfirmacionDatos() {
     console.log("ConfirmarDatos");
@@ -182,7 +167,6 @@ const Perfil = () => {
     )
   }
 
-
   return (
     <div className="App">
       <div className = "App-header" > 
@@ -195,7 +179,29 @@ const Perfil = () => {
         ) : ( 
           <div>
             {show2 ? (
-              <CambiarDatos/>
+              <div>
+              <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
+                <div className="App-CuadrosTextoIzq" > 
+                  <div style={{marginLeft:"7%"}}>
+                    <CuadroTexto texto="Nombre Usuario" label="username" nombre="username" valor={body.username} onchange={handleChange} />
+                  </div>
+                  <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac" valor={body.fecha_nac} onchange={handleChange} /> 
+                </div>
+                <div className="App-CuadrosTextoDer"> 
+                    <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} onchange={handleChange} />
+                  <div style={{marginLeft:"7%"}}>
+                    <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono" valor={body.telefono} onchange={handleChange} />
+                  </div>
+                </div>
+                </form>
+                <button className="App-botonCancelar" style= {{top: "80%", left:"37%", position:"absolute"}} onClick={() => setShow(!show)} >
+                  Cancelar
+                </button>
+                <button className="App-botonConfirmar" style= {{top: "80%", left:"53%", position:"absolute", marginLeft: "10%"}} onClick={() => { confirmarCambios()}}>
+                  Confirmar
+                </button>
+                <img src={Atras} style={{width:"170px", height:"170px", top:"75%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
+                </div>
               ) : (
               <ConfirmacionDatos/>
             )}
@@ -213,4 +219,6 @@ const Perfil = () => {
   );
 };
 
+
 export default Perfil;
+
