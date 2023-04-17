@@ -10,6 +10,7 @@ import { TextField } from "@mui/material";
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
 const URL = "http://51.142.118.71:8000/api/usuarios/datos/";
+const URL1 = "http://51.142.118.71:8000/api/usuarios/cambiar_datos/";
 
 function CuadroTexto(props) {
   return (
@@ -26,7 +27,6 @@ function CuadroTexto(props) {
 }
 
 
-
 const Perfil = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
@@ -35,10 +35,10 @@ const Perfil = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
   const [show2, setShow2] = useState(true);
-  const [body, setBody] = useState({ username: "", fecha_nac: "", correo: "", telefono: ""});
+  const [body, setBody] = useState({ fecha_nac: "", correo: "", telefono: ""});
   const [errores, setErorres] = useState("");
-
-  console.log("hola");
+  const [usuario, setUsuario] = useState("");
+  
 
   const handleChange2 = () => {
   };
@@ -62,8 +62,8 @@ const Perfil = () => {
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
+        setUsuario(data.username)
         setBody({ 
-          username: data.username,
           fecha_nac: data.fecha_nac,
           correo: data.correo,
           telefono: data.telefono
@@ -78,27 +78,22 @@ const Perfil = () => {
   function VisualizarDatos() { 
   
     return (
-      <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
-        <div className="App-CuadrosTextoIzq" > 
-          <div style={{marginLeft:"7%"}}>
-            <CuadroTexto texto="Nombre Usuario" valor={body.username} onchange={handleChange2}  />
+      <form className="App-Input" style={{left: "20%", top:"45%", height:"30%", width: "50%", position: "absolute"}}>
+        <div style={{position:"absolute"}}>
+            <CuadroTexto texto="Fecha de nacimiento" valor={body.fecha_nac}   onchange={handleChange2}  /> 
+          <div style={{marginLeft:"3.5%"}}>
+            <CuadroTexto texto="Correo electronico" valor={body.correo}  onchange={handleChange2}  />
           </div>
-          <CuadroTexto texto="Fecha de nacimiento" valor={body.fecha_nac}   onchange={handleChange2}  /> 
-        </div>
-        <div className="App-CuadrosTextoDer" > 
-          <CuadroTexto texto="Correo electronico" valor={body.correo}  onchange={handleChange2}  />
-          <div style={{marginLeft:"7%"}}>
+          <div style={{marginLeft:"10.5%"}}>
             <CuadroTexto texto="Teléfono móvil" valor={body.telefono} onchange={handleChange2}   />
           </div>
         </div>
-        <img src={Atras} style={{width:"170px", height:"170px", top:"83%", left:"1.1%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
       </form>
     )
   }
 
-  /*
   function fetchCambiardatos() {
-    fetch(URL, {
+    fetch(URL1, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -106,19 +101,18 @@ const Perfil = () => {
     .then((response) => response.json())
     .then((data) => {
       if (data.OK === "True"){
-        setErorres("");
-        let cambiarDatos = false;
-        navigate(process.env.PUBLIC_URL+ '/Perfil', {state: { cambiarDatos }});
+        setErorres(""); 
+        setShow2(false);
       }
       else {
         setErorres(data.error_username || data.error_fecha_nac || data.error_correo || data.error_telefono);
       }
     })
     .catch((error) => console.error(error));
-  }*/
+  }
 
   const confirmarCambios = async () => {
-    //await fetchCambiardatos();
+    await fetchCambiardatos();
     setShow2(!show2);
   };
 
@@ -126,21 +120,19 @@ const Perfil = () => {
   function ConfirmacionDatos() {
     console.log("ConfirmarDatos");
     return (
-        <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute", filter: 'blur(5px)'}}>
-          <div className="App-CuadrosTextoIzq" > 
-            <div style={{marginLeft:"7%"}}>
-              <CuadroTexto texto="Nombre Usuario" label="username" nombre="username" valor={body.username} />
+      <div>
+        <form className="App-Input" style={{left: "20%", top:"45%", height:"30%", width: "50%", position: "absolute"}}>
+          <div style={{position:"absolute"}}>
+              <CuadroTexto texto="Fecha de nacimiento" valor={body.fecha_nac}   onchange={handleChange2}  /> 
+            <div style={{marginLeft:"3.5%"}}>
+              <CuadroTexto texto="Correo electronico" valor={body.correo}  onchange={handleChange2}  />
             </div>
-            <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac" valor={body.fecha_nac} /> 
-          </div>
-          <div className="App-CuadrosTextoDer"> 
-            
-              <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} />
-            <div style={{marginLeft: "7%"}}>
-              <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono" valor={body.telefono} />
+            <div style={{marginLeft:"10.5%"}}>
+              <CuadroTexto texto="Teléfono móvil" valor={body.telefono} onchange={handleChange2}   />
             </div>
           </div>
-
+        </form>
+        
         <button
           className="App-botonCancelar" 
           style= {{top: "80%", left:"37%", position:"absolute" , filter: 'blur(5px)', pointerEvents:"none"}}
@@ -155,22 +147,22 @@ const Perfil = () => {
           onClick={() => { setShow2(!show2) }}>
           Confirmar
         </button>
-        <div className="App-CuadradoNegro" style={{ width: "1000px", height: "600px", position: "absolute", zIndex: "1", top: "24%", left: "25%"}}>
-          <div style={{marginTop: "10%"}}>                
-            <a style={{color:"white", fontSize:"50px"}}>Se han cambiado los datos personales </a>
-            <br></br>
-            <a style={{color:"green", fontSize:"50px"}}> correctamente</a>
-            <div> <button className="App-boton" style= {{marginTop:"130px", left: "44%"}} onClick={() => {setShow(!show); setShow2(!show2)}} > Continuar </button></div>
-          </div>
-        </div>
-      </form>
+      <div className="App-CuadradoNegro" style={{ width: "1000px", height: "600px", position: "absolute", zIndex: "1", top: "24%", left: "25%"}}>
+      <div style={{marginTop: "10%"}}>                
+        <a style={{color:"white", fontSize:"50px"}}>Se han cambiado los datos personales </a>
+        <br></br>
+        <a style={{color:"green", fontSize:"50px"}}> correctamente</a>
+        <div> <button className="App-boton" style= {{marginTop:"130px", left: "44%"}} onClick={() => {setShow(!show); setShow2(!show2)}} > Continuar </button></div>
+      </div>
+    </div>
+    </div>
     )
   }
 
   return (
     <div className="App">
       <div className = "App-header" > 
-        <div className="App-titulo" style= {{top: "7%"}} > Perfil
+        <div className="App-titulo" style= {{top: "7%"}} > {usuario}
           <div className="App-Quesitos" style= {{left: "20%"}}/> 
         </div>
         <div className="App-iconoRegistro"> </div>
@@ -180,27 +172,26 @@ const Perfil = () => {
           <div>
             {show2 ? (
               <div>
-              <form className="App-Input" style={{left: "4%", top:"50%", height:"30%", width: "92%", position: "absolute"}}>
-                <div className="App-CuadrosTextoIzq" > 
-                  <div style={{marginLeft:"7%"}}>
-                    <CuadroTexto texto="Nombre Usuario" label="username" nombre="username" valor={body.username} onchange={handleChange} />
+                <form className="App-Input" style={{left: "20%", top:"45%", height:"30%", width: "50%", position: "absolute"}}>
+                  <div style={{position:"absolute"}}>
+                    <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac" valor={body.fecha_nac} onchange={handleChange} /> 
+                    <div style={{marginLeft:"3.5%"}}>
+                      <CuadroTexto texto="Correo electronico" label="correo" nombre="correo" valor={body.correo} onchange={handleChange} /> 
+                    </div>
+                    <div style={{marginLeft:"10.5%"}}>
+                      <CuadroTexto texto="Teléfono móvil" label="telefono" nombre="telefono" valor={body.telefono} onchange={handleChange} /> 
+                    </div>
                   </div>
-                  <CuadroTexto texto="Fecha de nacimiento" label="fecha_nac" nombre="fecha_nac" valor={body.fecha_nac} onchange={handleChange} /> 
+                </form> 
+                <div style={{top:"62%", position:"absolute", fontSize:"33px"}}>
+                  <span style={{color:"red"}}>{errores}</span>
                 </div>
-                <div className="App-CuadrosTextoDer"> 
-                    <CuadroTexto texto="Correo electronico" type="email" label="correo" nombre="correo" valor={body.correo} onchange={handleChange} />
-                  <div style={{marginLeft:"7%"}}>
-                    <CuadroTexto texto="Teléfono móvil" type="number" label="telefono" nombre="telefono" valor={body.telefono} onchange={handleChange} />
-                  </div>
-                </div>
-                </form>
                 <button className="App-botonCancelar" style= {{top: "80%", left:"37%", position:"absolute"}} onClick={() => setShow(!show)} >
                   Cancelar
                 </button>
                 <button className="App-botonConfirmar" style= {{top: "80%", left:"53%", position:"absolute", marginLeft: "10%"}} onClick={() => { confirmarCambios()}}>
                   Confirmar
                 </button>
-                <img src={Atras} style={{width:"170px", height:"170px", top:"75%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
                 </div>
               ) : (
               <ConfirmacionDatos/>
@@ -214,6 +205,7 @@ const Perfil = () => {
           </button>
         </div>
         }
+         <img src={Atras} style={{width:"170px", height:"170px", top:"80%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
     </div>
   </div>
   );
