@@ -10,7 +10,7 @@ import { TextField } from "@mui/material";
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
 const URL = "http://51.142.118.71:8000/api/usuarios/datos/";
-const URL1 = "http://51.142.118.71:8000/api/usuarios/cambiar_datos/";
+const URL1 = "http://51.142.118.71:8000/api/usuarios/cambiar-datos/";
 
 function CuadroTexto(props) {
   return (
@@ -99,12 +99,13 @@ const Perfil = () => {
       body: JSON.stringify(body),
     })
     .then((response) => response.json())
-    .then((data) => {
+    .then((data) => { console.log()
       if (data.OK === "True"){
         setErorres(""); 
         setShow2(false);
       }
       else {
+        console.log("ERROR");
         setErorres(data.error_username || data.error_fecha_nac || data.error_correo || data.error_telefono);
       }
     })
@@ -112,7 +113,7 @@ const Perfil = () => {
   }
 
   const confirmarCambios = async () => {
-    await fetchCambiardatos();
+    fetchCambiardatos();
     setShow2(!show2);
   };
 
