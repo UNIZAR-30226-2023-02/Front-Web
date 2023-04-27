@@ -9,7 +9,7 @@ import { TextField } from "@mui/material";
 //import {valorCifrado , clave} from './InicioSesion';
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
-const URL = "http://51.142.118.71:8000/api/usuarios/datos/";
+const URL = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
 const URL1 = "http://51.142.118.71:8000/api/usuarios/cambiar-datos/";
 
 function CuadroTexto(props) {

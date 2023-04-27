@@ -163,6 +163,39 @@ const Tablero = () => {
     ];
 
 
+    /* --- SOCKET --- */
+    const roomName= "pepe3";
+    const [chatLog, setChatLog] = useState('');
+    const [messageInput, setMessageInput] = useState('');
+    const chatLogRef = useRef(null);
+    const chatSocketRef = useRef(null);
+
+    useEffect(() => {
+        chatSocketRef.current = new WebSocket(
+          `ws://51.142.118.71:3000/ws/chat/${roomName}/`
+        );
+    
+        chatSocketRef.current.onmessage = function(event) {
+          const data = JSON.parse(event.data);
+          
+          
+        };
+    
+        chatSocketRef.current.onerror = function(event) {
+          console.error('Chat socket error:', event);
+        };
+        
+    
+        chatSocketRef.current.onclose = function(event) {
+          console.error('Chat socket closed unexpectedly');
+        };
+    
+        return () => {
+          chatSocketRef.current.close();
+        };
+    }, [roomName]);
+
+
   /* --- DADO --- */
   const [cubeStyle, setCubeStyle] = useState({
     transform: 'translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)'
@@ -342,8 +375,7 @@ const Tablero = () => {
       );
   };
 
-
-  /* --- SOCKET ---*/
+  /* --- CHAT ---*/
   const roomName= "pepe3";
   const [chatLog, setChatLog] = useState('');
   const [messageInput, setMessageInput] = useState('');
@@ -373,10 +405,7 @@ const Tablero = () => {
       chatSocketRef.current.close();
     };
   }, [roomName]);
-  
 
-
-  /* --- CHAT ---*/
   function handleMessageInputChange(event) {
     setMessageInput(event.target.value);
   }
