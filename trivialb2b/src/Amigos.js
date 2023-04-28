@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Buscar from'./Imagenes/BuscarPartida.png';
@@ -7,32 +7,52 @@ import Atras from "./Imagenes/Atras.png";
 import Añadir from "./Imagenes/DatosUsuario.png";
 import Cristiano from'./Imagenes/Usuario.png';
 import InfiniteScroll from 'react-infinite-scroll-component'
-
+import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
 
 
 
 const Amigos = () => {
   const [nuevoA, setNuevoA] = useState("");
   const [eliminarA, setEliminaA] = useState("");
-  const [amigo, setAmigo] = useState({ nombre: "", correo: "", telefono: "", fechaNac: "", imagen: ""});
 
-  const [amigo1, setAmigo1] = useState({ nombre: "Roberto", correo: "roberto@gmail.com", telefono: "111111111", fechaNac: "2002-02-01", imagen: Cristiano});
-  const [amigo2, setAmigo2] = useState({ nombre: "Acher", correo: "@gmail.com", telefono: "22222222", fechaNac: "21-01-2020", imagen: Cristiano});
-  const [amigo3, setAmigo3] = useState({ nombre: "Diego", correo: "@gmail.com", telefono: "333333333", fechaNac: "21-01-2020", imagen: Cristiano});
-  const [amigo4, setAmigo4] = useState({ nombre: "Héctor", correo: "@gmail.com", telefono: "44444444", fechaNac: "21-01-2020", imagen: Cristiano});
-  const [amigo5, setAmigo5] = useState({ nombre: "Simón", correo: "@gmail.com", telefono: "555555555", fechaNac: "21-01-2020", imagen: Cristiano});
-  const [amigo6, setAmigo6] = useState({ nombre: "Carlos", correo: "@gmail.com", telefono: "666666666", fechaNac: "21-01-2020", imagen: Cristiano});
-  const [amigo7, setAmigo7] = useState({ nombre: "Javier", correo: "@gmail.com", telefono: "777777777", fechaNac: "21-01-2020", imagen: Cristiano});
+  const [amigo, setAmigo] = useState([{nombre:""}]);
 
-  const vecAmigos = [amigo1,amigo2,amigo3,amigo4,amigo5,amigo6,amigo7];
+  const a = ["p","a","b"];
 
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
+
+
+  const cookies= new Cookies();
+  const token = cookies.get('token');
+
+  useEffect(() => {
+    fetch(URL, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          data.amigos.map((persona, indice) => (
+            setAmigo(persona),
+            a[indice]= persona
+          ));
+         
+          console.log(a)
+
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  },[]);
+
 
   const navigate = useNavigate();
   
@@ -64,12 +84,12 @@ const Amigos = () => {
   const flechaAtras = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
-
+  
   function f_amigos() {
-    return vecAmigos.map((elemento) => (
-      <div className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}onClick={() => {handleChange(elemento);setShow(false);setShow3(true);}}>
+    return a.map((elemento) => (
+      <div className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}onClick={() => {/*handleChange(elemento)*/;setShow(false);setShow3(true);}}>
         <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
-          {elemento.nombre}
+          {elemento}
         </a>
         <img src={Cristiano} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "0%"}}/>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "70%", left: "0%"}}>
@@ -78,7 +98,7 @@ const Amigos = () => {
       </div>
     ));
   }
-
+  
   return (
     <div className="App">
 
@@ -88,7 +108,7 @@ const Amigos = () => {
 
           <div className="App-CuadradoBlanco" style={{ width: "50%", height: "88%", position: "absolute", top: "5%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
           <InfiniteScroll
-            dataLength={vecAmigos.length}
+            dataLength={a.length}
             pageStart={0}
             loadMore={f_amigos}
             hasMore={true || false}
@@ -118,7 +138,7 @@ const Amigos = () => {
 
             <div className="App-CuadradoBlanco" style={{ width: "50%", height: "88%", position: "absolute", top: "5%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
             <InfiniteScroll
-              dataLength={vecAmigos.length}
+              dataLength={amigo.length}
               pageStart={0}
               loadMore={f_amigos}
               hasMore={true || false}

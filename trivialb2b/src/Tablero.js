@@ -156,6 +156,8 @@ const Tablero = () => {
   /* --- SOCKET --- */
   const chatLogRef = useRef(null);
   const chatSocketRef = useRef(null);
+
+  
   
   useEffect(() => {
     chatSocketRef.current = new WebSocket(
@@ -190,6 +192,13 @@ const Tablero = () => {
       chatSocketRef.current.close();
     };
   });
+
+  const enviarMensaje = (valor) => {
+    chatSocketRef.current(JSON.stringify({
+      type: "pepe",
+      msg: valor
+    }));
+  }
 
 
   /* --- DADO --- */
@@ -653,12 +662,12 @@ const Tablero = () => {
                     {l:"31.5%", t:"7.5%"},  {l:"33%", t:"13%"},     {l:"36.5%", t:"18.5%"}, {l:"39.5%", t:"23.5%"}, {l:"42.5%", t:"29%"},
                     {l:"17.5%", t:"35.5%"}, {l:"23.5%", t:"35.5%"}, {l:"29.5%", t:"35.5%"}, {l:"35.5%", t:"35.5%"}, {l:"42%", t:"35.5%"}, {l:"56%", t:"33%"} */} 
 
-                <img style={{ position:"absolute", left:amarilla[0].l, top:amarilla[0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_amarilla}/>
-                <img style={{ position:"absolute", left:roja    [0].l, top:roja    [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_roja}/> 
-                <img style={{ position:"absolute", left:azul    [0].l, top:azul    [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_azul}/>
-                <img style={{ position:"absolute", left:rosa    [0].l, top:rosa    [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_rosa}/>
-                <img style={{ position:"absolute", left:verde   [0].l, top:verde   [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_verde}/>
-                <img style={{ position:"absolute", left:naranja [0].l, top:naranja [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
+                <img style={{ position:"absolute", left:amarilla[72].l, top:amarilla[72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_amarilla}/>
+                <img style={{ position:"absolute", left:roja    [72].l, top:roja    [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_roja}/> 
+                <img style={{ position:"absolute", left:azul    [72].l, top:azul    [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_azul}/>
+                <img style={{ position:"absolute", left:rosa    [72].l, top:rosa    [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_rosa}/>
+                <img style={{ position:"absolute", left:verde   [72].l, top:verde   [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_verde}/>
+                <img style={{ position:"absolute", left:naranja [72].l, top:naranja [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
                 
             </div>
 

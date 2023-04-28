@@ -7,7 +7,7 @@ import Cookies from 'universal-cookie';
 import { TextField } from "@mui/material";
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://localhost:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 function Boton(props) {
   return (
@@ -24,17 +24,12 @@ function Boton(props) {
   )
 }
 
-/*
-const valorOriginal = 'hola mundo';
-const clave = 'mi clave secreta';
-const valorCifrado = CryptoJS.AES.encrypt(valorOriginal, clave).toString();*/
-
 const InicioSesion = ({ miVariable, setMiVariable }) => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [usuario, setUsuario] = useState();
 
-
+  console.log("pepe");
   const cookies= new Cookies();
   
   const navigate = useNavigate();
