@@ -43,33 +43,23 @@ const URL = "http://51.142.118.71:8000/";
 const Tablero = () => {
   /* --- VARIABLES Y CONSTANTES --- */
   const navigate = useNavigate();
-  const [body, setBody] = useState({ username: "", password: "" });
+  const [body, setBody] = useState();
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
-
+  
   const vectorJugadores = [{nombre:"Jugador1", queso:Queso_azul, turno:true}, {nombre:"Jugador2", queso:Queso_rojo, turno:false}, {nombre:"Jugador3", queso:Queso_verde, turno:false}, {nombre:"Jugador4", queso:Queso_naranja, turno:false}, {nombre:"Jugador5", queso:Queso_amarillo, turno:false}, {nombre:"Jugador6", queso:Queso_rosa, turno:false}];
   /**const vectorJugadores4 = [{nombre:"Jugador1", queso:Queso_azul}, {nombre:"Jugador2", queso:Queso_rojo}, {nombre:"Jugador3", queso:Queso_verde}, {nombre:"Jugador4", queso:Queso_verde}];
   const vectorJugadores2 = [{nombre:"Jugador1", queso:Queso_azul}, {nombre:"Jugador2", queso:Queso_verde}];*/
 
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
-  const vector1 = [];
-  const vector2 = [];
+  const vector1 = [{nombre:"", queso:Queso_azul, turno:true}, {nombre:"Jugador2", queso:Queso_rojo, turno:false}, {nombre:"Jugador3", queso:Queso_verde, turno:false}];
+  const vector2 = [{nombre:"Jugador4", queso:Queso_naranja, turno:false}, {nombre:"Jugador5", queso:Queso_amarillo, turno:false}, {nombre:"Jugador6", queso:Queso_rosa, turno:false}];
 
-  const numJugadores = vectorJugadores.length;
-
-    for( let j=0; j < numJugadores; j++) {
-        if(j < (numJugadores/2)) {
-            vector1[j]=vectorJugadores[j];
-        }
-        else {
-            vector2[j]=vectorJugadores[j];
-            
-        }
-    }
+ 
 
     const amarilla = [
         {l:"29%", t:"73.5%"},   {l:"37.9%", t:"76%"}, {l:"42.3%", t:"76%"},   {l:"48%", t:"76%"},   {l:"53.5%", t:"76%"}, {l:"59%", t:"76%"},     {l:"64.5%", t:"76%"}, 
@@ -163,37 +153,43 @@ const Tablero = () => {
     ];
 
 
-    /* --- SOCKET --- */
-    const roomName= "pepe3";
-    const [chatLog, setChatLog] = useState('');
-    const [messageInput, setMessageInput] = useState('');
-    const chatLogRef = useRef(null);
-    const chatSocketRef = useRef(null);
+  /* --- SOCKET --- */
+  const chatLogRef = useRef(null);
+  const chatSocketRef = useRef(null);
+  
+  useEffect(() => {
+    chatSocketRef.current = new WebSocket(
+      `ws://localhost:8000/ws/partida/1/`
+    );
 
-    useEffect(() => {
-        chatSocketRef.current = new WebSocket(
-          `ws://51.142.118.71:3000/ws/chat/${roomName}/`
-        );
+    chatSocketRef.current.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      try {
+        console.log("Mensaje del Backend:");
+        console.log(data);
+        setBody(data.jugador1);
+        console.log(vector1);
+        console.log(vector2);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    chatSocketRef.current.onerror = function(event) {
+      console.error('Chat socket error:', event);
+    };
     
-        chatSocketRef.current.onmessage = function(event) {
-          const data = JSON.parse(event.data);
-          
-          
-        };
-    
-        chatSocketRef.current.onerror = function(event) {
-          console.error('Chat socket error:', event);
-        };
-        
-    
-        chatSocketRef.current.onclose = function(event) {
-          console.error('Chat socket closed unexpectedly');
-        };
-    
-        return () => {
-          chatSocketRef.current.close();
-        };
-    }, [roomName]);
+    chatSocketRef.current.onclose = function(event) {
+      console.error('Chat socket closed unexpectedly');
+    }
+
+    chatSocketRef.current.disconnect = function(event) {
+      console.error('Chat socket closed unexpectedly');
+    }
+
+    return () => {
+      chatSocketRef.current.close();
+    };
+  });
 
 
   /* --- DADO --- */
@@ -375,46 +371,46 @@ const Tablero = () => {
       );
   };
 
-  /* --- CHAT ---*/
-  const roomName= "pepe3";
-  const [chatLog, setChatLog] = useState('');
-  const [messageInput, setMessageInput] = useState('');
-  const chatLogRef = useRef(null);
-  const chatSocketRef = useRef(null);
+  /* --- CHAT ---*//*
+  const roomCHat= "pepe3";
+  const [chatLog2, setChatLog2] = useState('');
+  const [messageInput2, setMessageInput2] = useState('');
+  const chatLogRef2 = useRef(null);
+  const chatSocketRef2 = useRef(null);*/
   
-  useEffect(() => {
-    chatSocketRef.current = new WebSocket(
-      `ws://51.142.118.71:3000/ws/chat/${roomName}/`
+  /*useEffect(() => {
+    chatSocketRef2.current = new WebSocket(
+      `ws://51.142.118.71:3000/ws/chat/${roomCHat}/`
     );
 
-    chatSocketRef.current.onmessage = function(event) {
+    chatSocketRef2.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
-      setChatLog(prevChatLog => prevChatLog + data.message + '\n');
+      setChatLog2(prevChatLog => prevChatLog + data.message + '\n');
     };
 
-    chatSocketRef.current.onerror = function(event) {
+    chatSocketRef2.current.onerror = function(event) {
       console.error('Chat socket error:', event);
     };
     
 
-    chatSocketRef.current.onclose = function(event) {
+    chatSocketRef2.current.onclose = function(event) {
       console.error('Chat socket closed unexpectedly');
-    };
-
+    };*/
+/*
     return () => {
-      chatSocketRef.current.close();
+      chatSocketRef2.current.close();
     };
-  }, [roomName]);
-
+  }, [roomCHat]);*/
+/*
   function handleMessageInputChange(event) {
-    setMessageInput(event.target.value);
+    setMessageInput2(event.target.value);
   }
 
   function handleChatMessageSubmit() {
-    const message = messageInput.trim();
+    const message = messageInput2.trim();
     if (message) {
       chatSocketRef.current.send(JSON.stringify({ message }));
-      setMessageInput('');
+      setMessageInput2('');
     }
   }
   function handleKeyPress(event) {
@@ -434,14 +430,14 @@ const Tablero = () => {
         id="chat-log"
         cols="100"
         rows="20"
-        value={chatLog}
+        value={chatLog2}
         readOnly
         />
         <input
         id="chat-message-input"
         type="text"
         size="100"
-        value={messageInput}
+        value={messageInput2}
         onChange={handleMessageInputChange}
         onKeyPress={handleKeyPress}
         style={{position:"absolute", top:"90.2%", left:"0%", width:"99%", height:"9%", border:" 2px solid black", borderRadius:"0px 0px 0px 30px", fontSize:"30px"}}
@@ -451,7 +447,7 @@ const Tablero = () => {
         </button>
     </div>
     );
-  }
+  }*/
 
 
   /* --- TURNO --- */
@@ -657,12 +653,12 @@ const Tablero = () => {
                     {l:"31.5%", t:"7.5%"},  {l:"33%", t:"13%"},     {l:"36.5%", t:"18.5%"}, {l:"39.5%", t:"23.5%"}, {l:"42.5%", t:"29%"},
                     {l:"17.5%", t:"35.5%"}, {l:"23.5%", t:"35.5%"}, {l:"29.5%", t:"35.5%"}, {l:"35.5%", t:"35.5%"}, {l:"42%", t:"35.5%"}, {l:"56%", t:"33%"} */} 
 
-                <img style={{ position:"absolute", left:amarilla[72].l, top:amarilla[72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_amarilla}/>
-                <img style={{ position:"absolute", left:roja    [72].l, top:roja    [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_roja}/> 
-                <img style={{ position:"absolute", left:azul    [72].l, top:azul    [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_azul}/>
-                <img style={{ position:"absolute", left:rosa    [72].l, top:rosa    [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_rosa}/>
-                <img style={{ position:"absolute", left:verde   [72].l, top:verde   [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_verde}/>
-                <img style={{ position:"absolute", left:naranja [72].l, top:naranja [72].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
+                <img style={{ position:"absolute", left:amarilla[0].l, top:amarilla[0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_amarilla}/>
+                <img style={{ position:"absolute", left:roja    [0].l, top:roja    [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_roja}/> 
+                <img style={{ position:"absolute", left:azul    [0].l, top:azul    [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_azul}/>
+                <img style={{ position:"absolute", left:rosa    [0].l, top:rosa    [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_rosa}/>
+                <img style={{ position:"absolute", left:verde   [0].l, top:verde   [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_verde}/>
+                <img style={{ position:"absolute", left:naranja [0].l, top:naranja [0].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
                 
             </div>
 
@@ -670,11 +666,11 @@ const Tablero = () => {
             <Jugadores1/>
             <Jugadores2/>
 
-            <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => { setShow1(!show1)}}>
+            <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setBody("pepe"); {/*setShow1(!show1)*/}}}>
                 Pausar Partida
             </button>
             <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => { setShow2(!show2)}}>
-                Abandonar Partida
+                {body}
             </button>
             <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => { setShow3(true)}}/>
 
@@ -682,11 +678,11 @@ const Tablero = () => {
             {show ? (
             <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", borderRadius: "40px 40px 0px 0px", zIndex:"6", borderRadius:"50%"}}>
                 <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px"respuesta="Entretenimiento" border= "40px 40px 0px 0px" marginTop="0%" color="orange"/>
-                <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={vectorPregunta[0].texto} border= "0px 0px 0px 0px" marginTop="1.2%" color="orange"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={vectorPregunta[1].texto} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={vectorPregunta[2].texto} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={vectorPregunta[3].texto} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={vectorPregunta[4].texto} border= "0px 0px 0px 0px"marginTop="4%" color="white"/>
+                <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={body} border= "0px 0px 0px 0px" marginTop="1.2%" color="orange"/>
+                <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={vector1[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
+                <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={vector1[2].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
+                <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={vector2[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
+                <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={vector2[2].nombre} border= "0px 0px 0px 0px"marginTop="4%" color="white"/>
 
                 <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:"orange"}} >
                     <br></br><br></br><br></br>
@@ -749,7 +745,7 @@ const Tablero = () => {
             )}
 
             {show3 ? (
-            <Chat/>
+              <div/>
             ) : (
             <div/>
             )}
