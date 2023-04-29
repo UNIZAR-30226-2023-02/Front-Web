@@ -5,12 +5,16 @@ import Cristiano from'./Imagenes/Usuario.png';
 import Moneda from'./Imagenes/Moneda.png';
 import Atras from "./Imagenes/Atras.png";
 import Candado from "./Imagenes/Candado2.png";
+import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "https://51.142.118.71:8000/api/usuarios/login/";
-
+const URLObjetos = "https://51.142.118.71:8000/api/tienda/objetos/";
+const URLComprar = "https://51.142.118.71:8000/api/tienda/comprar/";
+const URLUsar = "https://51.142.118.71:8000/api/tienda/usar/";
 
 const Tienda = () => {
+
+  console.log("Tienda");
 
   const navigate = useNavigate();
 
@@ -25,14 +29,41 @@ const Tienda = () => {
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
 
+  const [ficha, setFicha] = useState({ id: "", coste: "", enUso: "", adquirido: "", imagen: "" });
+  const [tablero, setTablero] = useState({ id: "", coste: "", enUso: "", adquirido: "", imagen: "" });
+
+  const fichas = [];
+  const tableros = [];
+
   const [monedas, setMonedas] = useState(15);
-
+  
   const [tableroSeleccionado, setTableroSeleccionado] = useState({nombre:"", imagen:"", valor:""})
+  //const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Tablero2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Tablero3", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Tablero5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
+  //const fichas = [{nombre:"Ficha1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Ficha2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Ficha3", imagen:Cristiano, valor:20, estado:"", comprado:true},{nombre:"Ficha4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Ficha5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Ficha6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
 
-  const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Tablero2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Tablero3", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Tablero5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
 
-  const fichas = [{nombre:"Ficha1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Ficha2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Ficha3", imagen:Cristiano, valor:20, estado:"", comprado:true},{nombre:"Ficha4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Ficha5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Ficha6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
+  const cookies= new Cookies();
+  const token = cookies.get('token');
 
+  useEffect(() => {
+    console.log("Fetch");
+    fetch(URLObjetos, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+            data.fichas.map((fichaAux, indice) => (
+            setFicha(fichaAux),
+            fichas[indice]= fichaAux
+          ));
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  },[]);
 
   const [visibleItems, setVisibleItems] = useState(6);
   const containerRef = useRef(null);
@@ -45,7 +76,7 @@ const Tienda = () => {
     };
     containerRef.current.addEventListener('scroll', handleScroll);
     return () => {
-      containerRef.current.removeEventListener('scroll', handleScroll);
+      //containerRef.current.removeEventListener('scroll', handleScroll);
     };
   }, [visibleItems])
   
