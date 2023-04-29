@@ -143,9 +143,8 @@ const Perfil = () => {
           Cancelar
         </button>
         <button
-          marginLeft= "10%"
           className="App-botonConfirmar"
-          style= {{top: "80%", left:"53%", position:"absolute" , filter: 'blur(5px)', pointerEvents:"none"}}
+          style= {{top: "80%", left:"53%", position:"absolute" , filter: 'blur(5px)', pointerEvents:"none", marginLeft:"10%"}}
           onClick={() => { setShow2(!show2) }}>
           Confirmar
         </button>

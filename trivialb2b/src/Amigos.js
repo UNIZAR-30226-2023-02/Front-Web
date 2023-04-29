@@ -10,7 +10,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
+const URL1 = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
+const URL2 = "http://51.142.118.71:8000/api/usuarios/add/amigo/";
 
 
 
@@ -20,7 +21,7 @@ const Amigos = () => {
 
   const [amigo, setAmigo] = useState([{nombre:""}]);
 
-  const a = ["p","a","b"];
+  const a = [];
 
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(false);
@@ -32,7 +33,7 @@ const Amigos = () => {
   const token = cookies.get('token');
 
   useEffect(() => {
-    fetch(URL, {
+    fetch(URL1, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
@@ -84,12 +85,28 @@ const Amigos = () => {
   const flechaAtras = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
+  const add = async (event) => {
+    fetch(URL2, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({"amigo": nuevoA}),
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          console.log(data)
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  };
   
   function f_amigos() {
     return a.map((elemento) => (
       <div className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}onClick={() => {/*handleChange(elemento)*/;setShow(false);setShow3(true);}}>
-        <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
-          {elemento}
+        <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}} >
+          {elemento}{amigo}
         </a>
         <img src={Cristiano} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "0%"}}/>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "70%", left: "0%"}}>
@@ -183,7 +200,7 @@ const Amigos = () => {
               <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow(true);setShow1(false)}}>
                 Cancelar
               </button>
-              <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={confirmar}>
+              <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={add}>
                 Confirmar
               </button>
 

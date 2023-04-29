@@ -24,7 +24,6 @@ const URL = "http://51.142.118.71:8000/api/usuarios/estadisticas-yo/";
     const [dep, setDep] = useState({total:"", bien:"", mal:"", porcentaje:""});
     const [est, setEst] = useState({quesitos_totales:"", total_preguntas:"", total_respuestas_correctas: "",total_respuestas_incorrectas: "", porcentaje_respuestas: ""});
 
-    console.log(token)
     useEffect(() => {
       fetch(URL, {
         method: "POST",
