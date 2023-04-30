@@ -29,11 +29,8 @@ const Tienda = () => {
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
 
-  const [ficha, setFicha] = useState({ id: "", coste: "", enUso: "", adquirido: "", imagen: "" });
-  const [tablero, setTablero] = useState({ id: "", coste: "", enUso: "", adquirido: "", imagen: "" });
-
-  const fichas = [];
-  const tableros = [];
+  const [fichas, setFichas] = useState([]);
+  const [tableros, setTableros] = useState([]);
 
   const [monedas, setMonedas] = useState(15);
   
@@ -54,10 +51,16 @@ const Tienda = () => {
       .then((response) => response.json())
       .then((data) => {console.log(data)
         if (data.OK == "True"){
-            data.fichas.map((fichaAux, indice) => (
-            setFicha(fichaAux),
-            fichas[indice]= fichaAux
-          ));
+          data.fichas.forEach(element => {
+            fichas.push(element);
+          });
+          setFichas(fichas);
+          console.log(fichas)
+          data.tableros.forEach(element => {
+            tableros.push(element);
+          });
+          setTableros(tableros);
+          console.log(tableros)
         }
     })
     .catch((error) => {
@@ -82,12 +85,11 @@ const Tienda = () => {
   
 
   const seleccionar = (e) => {
-    
-    if (e.estado == "") {
+    if (e.adquirido == 0) {
       setShow1(true);
       setShow12(false);
       setShow4(false);
-      if (monedas > e.valor) {
+      if (monedas > e.coste) {
         setShow2(false);
         setShow3(true);
       }
@@ -96,25 +98,63 @@ const Tienda = () => {
         setShow3(false);
       }
     }
-    else if (e.estado == "adquirido") {
+    else{
+      if (e.enUso == 0) {
       setShow1(true);
       setShow12(false);
       setShow2(false);
       setShow3(false);
       setShow4(true);
-    }
-    else{
-      setShow1(false);
-      setShow12(true);
-      setShow2(false);
-      setShow3(false);
-      setShow4(false);
+      }
+      else {
+        setShow1(false);
+        setShow12(true);
+        setShow2(false);
+        setShow3(false);
+        setShow4(false);
+      }
     }
     setTableroSeleccionado({
       ...tableroSeleccionado,
-      nombre: e.nombre,
+      nombre: e.id,
       imagen: e.imagen,
-      valor: e.valor,
+      valor: e.coste,
+    });
+  };
+  
+  function comprar() {
+    fetch(URLComprar, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({"id": tableroSeleccionado.nombre}),
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          window.location.reload(true);
+          console.log(data)
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  };
+
+  function usar() {
+    fetch(URLUsar, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({"id": tableroSeleccionado.nombre}),
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          window.location.reload(true);
+          console.log(data)
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
     });
   };
 
@@ -122,14 +162,14 @@ const Tienda = () => {
     return (
       <div className="horizontal-list" ref={containerRef}>
       {tableros.slice(0, visibleItems).map((item) => (
-        <div key={item.nombre} className="horizontal-list__item" onClick={() => seleccionar(item)}>
+        <div key={item.id} className="horizontal-list__item" onClick={() => seleccionar(item)}>
           <div style={{border: "2px solid white", height:"97.9%"}} >
             <div style={{ height:"20%", width:"100%", alignItems:"center", marginTop:"2%"}}>
               <a style={{color:"white", fontSize:"20px"}}>
-                {item.nombre}
+                {item.id}
               </a>
             </div>
-            {item.comprado ? (
+            {item.adquirido ? (
             <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
@@ -138,7 +178,6 @@ const Tienda = () => {
               </div>
             )} 
           </div>
-          
         </div>
       ))}
       </div>
@@ -149,14 +188,14 @@ const Tienda = () => {
     return (
       <div className="horizontal-list" ref={containerRef}>
       {fichas.slice(0, visibleItems).map((item) => (
-        <div key={item.nombre} className="horizontal-list__item" onClick={() => seleccionar(item)}>
+        <div key={item.id} className="horizontal-list__item" onClick={() => seleccionar(item)}>
           <div style={{border: "2px solid white", height:"97.9%"}} >
             <div style={{ height:"20%", width:"100%", alignItems:"center", marginTop:"2%"}}>
               <a style={{color:"white", fontSize:"20px"}}>
-                {item.nombre}
+                {item.id}
               </a>
             </div>
-            {item.comprado ? (
+            {item.adquirido ? (
             <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
@@ -212,14 +251,14 @@ const Tienda = () => {
 
       {show1 ? ( 
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.nombre} cuesta: {tableroSeleccionado.valor} monedas</a>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.id} cuesta: {tableroSeleccionado.coste} monedas</a>
         </div>
       ) : (
         <div/>
       )}
       {show12 ? ( 
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.nombre} seleccionado</a>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.id} seleccionado</a>
         </div>
       ) : (
         <div/>
@@ -233,13 +272,13 @@ const Tienda = () => {
       )}
 
       {show3 ? ( 
-        <button className="App-botonConfirmar" style= {{position:"absolute", top:"65%", left:"80%", position:"absolute"}}  > Comprar </button>
+        <button className="App-botonConfirmar" style= {{position:"absolute", top:"65%", left:"80%", position:"absolute"}} onClick={() => comprar()} > Comprar </button>
       ) : (
         <div/>
       )}
 
       {show4 ? ( 
-        <button className="App-boton" style= {{position:"absolute", top:"65%", left:"79%", position:"absolute"}}  > Seleccionar </button>
+        <button className="App-boton" style= {{position:"absolute", top:"65%", left:"79%", position:"absolute"}} onClick={() => usar()}  > Seleccionar </button>
       ) : (
         <div/>
       )}

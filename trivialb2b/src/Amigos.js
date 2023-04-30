@@ -12,6 +12,7 @@ import Cookies from 'universal-cookie';
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL1 = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
 const URL2 = "http://51.142.118.71:8000/api/usuarios/add/amigo/";
+const URL3 = "http://51.142.118.71:8000/api/usuarios/datos-usuario/";
 
 
 
@@ -24,6 +25,8 @@ const Amigos = () => {
   const ePrueba = [{nombre: "Acher", correo: "acher@gmail.com", telefono: "605828074", fechaNac:"2002-11-12", imagen:"Hola"}]
 
   const [amigos, setAmigos] = useState([]);
+  const [datos, setDatos] = useState({username: ""});
+
 
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(false);
@@ -57,9 +60,6 @@ const Amigos = () => {
 
   const navigate = useNavigate();
   
-  const rellenarCamposAmigo = (e) => {
-  };
-
   const onNombreA = (e) => {
     setNuevoA(e.target.value)
   };
@@ -67,14 +67,8 @@ const Amigos = () => {
     setEliminaA(e.target.value)
   };
   const confirmar = async (event) => {
-    setShow(true)
+    //Eliminar
   };
-  const cancelar = async (event) => {
-    setShow(true)
-  };
-  const eliminar = async (event) => {
-    navigate(process.env.PUBLIC_URL + '/MenuJuego');
-  };  
   const flechaAtras = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
@@ -88,7 +82,30 @@ const Amigos = () => {
       .then((response) => response.json())
       .then((data) => {console.log(data)
         if (data.OK == "True"){
-          navigate(process.env.PUBLIC_URL+ '/Amigos');
+          window.location.reload(true);
+          console.log(data)
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  };
+
+  function mostrarDatosUsuario(usuario) {
+    console.log(usuario)
+    fetch(URL3, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({"username": usuario}),
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          setShow3(true)
+          ePrueba.nombre = data.username
+          ePrueba.fechaNac = data.fechaNac
+          ePrueba.correo = data.correo
+          ePrueba.telefono = data.telefono
           console.log(data)
         }
     })
@@ -98,10 +115,10 @@ const Amigos = () => {
   };
   
    function f_amigos() {
-      return amigos.map((elemento) => (
-        <div className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}} onClick={() => {setShow(false); setShow3(true); setShow2(false) /*handleChange(ePrueba)*/}}>
+      return amigos.map((amigo, elemento) => (
+        <div key={elemento} className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}  onClick={() => {setShow3(true); setShow2(false); mostrarDatosUsuario(amigo)}}>
           <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic", position: "absolute", top: "15%", left: "25%"}} >
-            {elemento}
+            {amigo}
           </a>
           <img src={Cristiano} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "0%"}}/>
           <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "70%", left: "0%"}}>
@@ -113,35 +130,8 @@ const Amigos = () => {
   
   return (
     <div className="App">
-
-      {show ? (
-        <div className="App-CuadradoAmarillo" style={{ width: "1500px", height: "500px", position: "absolute", top: "25%", left: "10%"}}>
-          <div className="App-CuadradoBlanco" style={{ width: "50%", height: "88%", position: "absolute", top: "5%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
-          <InfiniteScroll
-            dataLength={amigos.length}
-            pageStart={0}
-            loadMore={f_amigos}
-            hasMore={true || false}
-            loader={<div className="loader" key={0}>Loading ...</div>}
-            useWindow={false}
-            style={{position:"absolute", width: "95%", height: "99.7%", top:"0.1%", left:"5%"}}
-          >
-            {f_amigos()}
-            
-          </InfiniteScroll>
-          </div>
-          <img src={Añadir} style={{width:"10%", height:"30%", left:"60%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow(false); setShow1(true);}}/>
-          <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "57%", position:"absolute"}} onClick={() =>{setShow(false); setShow1(true);}}>
-            Añadir Amigo
-          </button>
-          <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow(false); setShow2(true);}}/>
-          <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow(false); setShow2(true);}}>
-            Eliminar Amigo
-          </button>
-        </div>
-
-        ) : (
         <div>
+        {show ? (
           <div className="App-CuadradoAmarillo" style={{ width: "1500px", height: "500px", position: "absolute", top: "25%", left: "10%"}}>
             <div className="App-CuadradoBlanco" style={{ width: "50%", height: "88%", position: "absolute", top: "5%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
             <InfiniteScroll
@@ -149,26 +139,49 @@ const Amigos = () => {
               pageStart={0}
               loadMore={f_amigos}
               hasMore={true || false}
-              loader={<div className="loader" key={0}>Loading ...</div>}
               useWindow={false}
               style={{position:"absolute", width: "95%", height: "99.7%", top:"0.1%", left:"5%"}}
             >
               {f_amigos()}
             </InfiniteScroll>
             </div>
-            <img src={Añadir} style={{width:"10%", height:"30%", left:"60%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow(false); setShow1(true);}}/>
-            <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "57%", position:"absolute"}} onClick={() =>{setShow(false); setShow1(true);}} >
+            <img src={Añadir} style={{width:"10%", height:"30%", left:"60%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow1(true);}}/>
+            <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "57%", position:"absolute"}} onClick={() =>{setShow1(true);}} >
               Añadir Amigo
             </button>
-            <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow(false);setShow1(false);}}/>
-            <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow(false); setShow1(true);}}>
-              Eliminar Amigo
+            <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(false);}}/>
+            <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow1(true);}}>
+              Eliminar Amigo 
             </button>
           </div>
-
+ 
+        ) : (
+            <div className="App-CuadradoAmarillo" style={{ width: "1500px", height: "500px", position: "absolute", top: "25%", left: "10%"}}>
+              <div className="App-CuadradoBlanco" style={{ width: "50%", height: "88%", position: "absolute", top: "5%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
+              <InfiniteScroll
+                dataLength={amigos.length}
+                pageStart={0}
+                loadMore={f_amigos}
+                hasMore={true || false}
+                useWindow={false}
+                style={{position:"absolute", width: "95%", height: "99.7%", top:"0.1%", left:"5%"}}
+              >
+                {f_amigos()}
+              </InfiniteScroll>
+              </div>
+              <img src={Añadir} style={{width:"10%", height:"30%", left:"60%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow1(true);}}/>
+              <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "57%", position:"absolute"}} onClick={() =>{setShow1(true);}} >
+                Añadir Amigo
+              </button>
+              <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(false);}}/>
+              <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow1(true);}}>
+                Eliminar Amigo 
+              </button>
+            </div>
+        )}
           {show1 ? (
-            <div className="App-CuadradoNegro" style={{ width: "45%", height: "60%", position: "absolute", top: "25%", left: "27%", borderRadius: "50px 50px 50px 50px"}}>
-              <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", borderRadius: "50px 50px 50px 50px"}}>
+            <div className="App-CuadradoNegro" style={{ width: "45%", height: "60%", position: "absolute", top: "25%", left: "27%", zIndex:"3", borderRadius: "50px 50px 50px 50px"}}>
+              <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", zIndex:"3",  borderRadius: "50px 50px 50px 50px"}}>
                 <div style={{marginTop:"2%"}}>
                   <a style={{color:"white", fontSize:"50px"}}> Añadir Amigo </a>
                 </div>
@@ -185,10 +198,10 @@ const Amigos = () => {
                 onChange={onNombreA}
                 style={{position: "absolute", top: "53%", left: "23%"}}
               />
-              <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow(true); setShow1(false)}}>
+              <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow1(false)}}>
                 Cancelar
               </button>
-              <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={() => {add(); setShow(false); setShow1(false); setShow2(false)}}>
+              <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={() => {add(); setShow1(false); setShow2(false)}}>
                 Confirmar
               </button>
 
@@ -196,6 +209,8 @@ const Amigos = () => {
           ) : (
             <div/>
           )}
+
+          
 
           {show2 ? (
           <div className="App-CuadradoNegro" style={{ width: "45%", height: "60%", position: "absolute", top: "25%", left: "27%", borderRadius: "50px 50px 50px 50px"}}>
@@ -217,7 +232,7 @@ const Amigos = () => {
               style={{position: "absolute", top: "53%", left: "23%"}}
             />
             <a style={{position: "absolute", top: "67%", left: "35%",color:"red", fontSize:"30px"}}> No existe este amigo </a>
-            <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow(true);setShow2(false)}}>
+            <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow2(false)}}>
               Cancelar
             </button>
             <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={confirmar}>
@@ -230,8 +245,8 @@ const Amigos = () => {
           )}
           {show3 ? (
 
-          <div className="App-CuadradoNegro" style={{ width: "60%", height: "60%", position: "absolute", top: "25%", left: "20%", borderRadius: "50px 50px 50px 50px"}}>
-            <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", borderRadius: "50px 50px 50px 50px"}}>
+          <div className="App-CuadradoNegro" style={{ width: "60%", height: "60%", position: "absolute", top: "25%", left: "20%", borderRadius: "50px 50px 50px 50px", zIndex:"5"}}>
+            <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", zIndex:"5", borderRadius: "50px 50px 50px 50px"}}>
               <div style={{marginTop:"2%"}}>
                 <a style={{color:"white", fontSize:"50px"}}> Datos Usuario </a>
               </div>
@@ -244,7 +259,7 @@ const Amigos = () => {
             <a style={{position: "absolute", top: "60%", left: "53%", color:"white", fontSize:"30px", textAlign:"left"}}> Telefono: {ePrueba.telefono} </a>
             <a style={{position: "absolute", top: "60%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Fecha de nacimiento: {ePrueba.fechaNac} </a>
 
-            <button className="App-boton" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow(true); setShow3(false);}}>
+            <button className="App-boton" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow3(false);}}>
               Salir
             </button>
 
@@ -255,10 +270,7 @@ const Amigos = () => {
             <div/>
 
           )}
-
         </div>
-
-        )}
         <img src={Atras} style={{width:"150px", height:"150px", top:"80%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>
         <div className = "App-header" > 
             <div className="App-titulo" style= {{top: "7%"}} > Amigos

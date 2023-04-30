@@ -1,44 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Buscar from'./Imagenes/BuscarPartida.png';
 import Candado from'./Imagenes/Candado.png';
 import Transparente from'./Imagenes/Transparente.png';
-import InfiniteScroll from 'react-infinite-scroll-component'
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Cookies from 'universal-cookie';
 
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/usuarios/lista-salas/";
 
 
 
 const ModoClasico = () => {
     
-  const [sala, setSala] = useState({ nombre: "", tiempo: "", numJugadores: "", password: "", creador: "", modo: ""});
-  const [sala1, setSala1] = useState({ nombre: "Sala 1", tiempo: "", numJugadores: "2", password: "pepe1", creador: "Acher", modo: "Clasico", publica: true});
-  const [sala2, setSala2] = useState({ nombre: "Sala 2", tiempo: "", numJugadores: "4", password: "", creador: "Roberto", modo: "Equipos", publica: false});
-  const [sala3, setSala3] = useState({ nombre: "Sala 3", tiempo: "", numJugadores: "2", password: "pepe1", creador: "Acher", modo: "Clasico", publica: true});
-  const [sala4, setSala4] = useState({ nombre: "Sala 4", tiempo: "", numJugadores: "2", password: "pepe1", creador: "Acher", modo: "Clasico", publica: true});
-  const [sala5, setSala5] = useState({ nombre: "Sala 5", tiempo: "", numJugadores: "4", password: "", creador: "Roberto", modo: "Equipos", publica: false});
-  const [sala6, setSala6] = useState({ nombre: "Sala 6", tiempo: "", numJugadores: "2", password: "pepe1", creador: "Acher", modo: "Clasico", publica: true});
-  const [sala7, setSala7] = useState({ nombre: "Sala 7", tiempo: "", numJugadores: "4", password: "", creador: "Roberto", modo: "Equipos", publica: false});
+  const [sala, setSala] = useState({ nombre: "", tiempo: "", numJugadores: "", password: "", creador: "", modo: "", tipo: ""});
+  
+  const [salas, setSalas] = useState([]);
 
-  const salas = [sala1,sala2,sala3,sala4,sala5,sala6,sala7];
 
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(true);
 
   const navigate = useNavigate();
+
+  /*const cookies= new Cookies();
+  const token = cookies.get('token');*/
+
+  useEffect(() => {
+    fetch(URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          data.salas.forEach(element => {
+            salas.push(element);
+          });
+          setSalas(salas);
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  },[]);
   
   const handleChange = (e) => {
     setSala({
       ...sala,
-      ["nombre"]: e.nombre,
-      ["tiempo"]: e.tiempo,
-      ["numJugadores"]: e.numJugadores,
-      ["password"]: e.password,
-      ["creador"]: e.creador,
-      ["modo"]: e.modo,
+      ["nombre"]: e.nombre_sala,
+      ["tiempo"]: e.tiempo_respuesta,
+      ["numJugadores"]: e.n_jugadores,
+      ["creador"]: e.creador_username,
+      ["modo"]: e.tipo_partida,
+      ["tipo"]: e.tipo_sala,
     })
   };
 
@@ -56,19 +73,19 @@ const ModoClasico = () => {
     return salas.map((elemento) => (
       <div className="App-CuadradoBlanco" style={{ width: "99.6%", height: "15%", position: "relative", left: "0%",cursor: "pointer"}}onClick={() => {handleChange(elemento);setShow(!show); if (elemento.publica){setShow1(false)}else{setShow1(true)}}}>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
-          {elemento.nombre}
+          {elemento.nombre_sala}
         </a>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
-          {elemento.modo}
+          {elemento.tipo_partida}
         </a>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
-          {elemento.numJugadores}
+          {elemento.n_jugadores}
         </a>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
-          {elemento.creador}
+          {elemento.creador_username}
         </a>
 
-        { elemento.publica ?
+        { (elemento.tipo_sala == "Publico") ?
           <img src={Candado} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "93%"}}/>
           :
           <img src={Transparente} style= {{width:"auto", height:"90%",position: "absolute", top: "15%", left: "93%"}}/>
@@ -163,36 +180,19 @@ const ModoClasico = () => {
 
             <div className="App-CuadradoBlanco" style={{ width: "100%", height: "73%", position: "absolute", top: "27%", left: "-0.2%"}}>
 
-              <div className="App-CuadradoBlanco" style={{ width: "100%", height: "15%", position: "relative",left: "-0.2%",cursor: "pointer"}}>
-                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
-                  {sala1.nombre}
-                </a>
-                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
-                  {sala1.modo}
-                </a>
-                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
-                  {sala1.numJugadores}
-                </a>
-                <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
-                  {sala1.creador}
-                </a>
-                <img src={Candado} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "93%"}}/>
-              </div>
-
-              <div className="App-CuadradoBlanco" style={{ width: "100%", height: "15%", position: "relative",left: "-0.2%",cursor: "pointer"}}>
-                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
-                    {sala2.nombre}
-                  </a>
-                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
-                    {sala2.modo}
-                  </a>
-                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
-                    {sala2.numJugadores}
-                  </a>
-                  <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
-                    {sala2.creador}
-                  </a>
-              </div>
+            <div className="App-CuadradoBlanco" style={{ width: "100%", height: "73%", position: "absolute", top: "27%", left: "-0.2%"}}>
+              <InfiniteScroll
+                dataLength={salas.length}
+                pageStart={0}
+                loadMore={jugadores}
+                hasMore={true || false}
+                loader={<div className="loader" key={0}>Loading ...</div>}
+                useWindow={false}
+                style={{position:"absolute", width: "100%", height: "100%"}}
+              >
+                {jugadores()}
+              </InfiniteScroll>
+            </div>
 
             </div>
           </div>

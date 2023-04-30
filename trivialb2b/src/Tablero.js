@@ -174,7 +174,7 @@ const Tablero = () => {
 
   useEffect(() => {
     chatSocketRef.current = new WebSocket(
-      `ws://localhost:8000/ws/partida/1/`
+      `ws://51.142.118.71:8000/ws/partida/1/`
     );
 
     chatSocketRef.current.onmessage = function(event) {
@@ -183,6 +183,11 @@ const Tablero = () => {
         console.log("Mensaje del Backend:");
         console.log(data)
         vector2[0].nombre = data.jugador1
+        vector2[1].nombre = data.jugador2
+        vector2[2].nombre = data.jugador3
+        vector2[3].nombre = data.jugador4
+        vector2[4].nombre = data.jugador5
+        vector2[5].nombre = data.jugador6
         setV1(vector2)
         console.log(vector1)
       } catch (err) {

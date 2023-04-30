@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
 import Usuario from'./Imagenes/Usuario.png';
 import Tablero1 from'./Imagenes/Tablero1.png';
+import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
@@ -16,6 +17,28 @@ const EsperandoJugadores = () => {
 
   const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
 
+  const cookies= new Cookies();
+  const token = cookies.get('token');
+
+  /*useEffect(() => {
+    fetch(URL, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({username: cookies.get('tokenUsuario')})
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        setUsuario(data.username)
+        setBody({ 
+          fecha_nac: data.fecha_nac,
+          correo: data.correo,
+          telefono: data.telefono
+        });
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  },[]);*/
 
   const navigate = useNavigate();
   const handleChange = (e) => {
