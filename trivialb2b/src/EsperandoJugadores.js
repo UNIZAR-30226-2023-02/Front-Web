@@ -12,25 +12,37 @@ const EsperandoJugadores = () => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(true);
+  const [show1, setShow1] = useState(true);
 
+  const navigate = useNavigate();
+
+  const [jugadoresSala, setJugadoresSala] = useState([]);
 
   const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
 
   const cookies= new Cookies();
-  const token = cookies.get('tokenUsuario');
+  const usuario = cookies.get('tokenUsuario');
   const websocket = cookies.get('WebSocketEsperando');
   console.log(websocket);
 
   const chatSocketRef = useRef(null);
-  console.log(token)
   useEffect(() => {
-    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?token=" + token);
+    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?token=" + usuario);
  
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
         console.log("Mensaje del Backend:");
-        console.log(data)
+        if (data.accion = "nuevo_usuario") {
+          jugadoresSala.push(data.username);
+        }
+        else if (data.accion = "usuarios_listos"){
+          setShow1(false)
+        }
+        else {
+          cookies.set('websocket_partida', data.websocket, {path: '/'})
+          navigate(process.env.PUBLIC_URL+ '/Tablero');
+        }
 
       } catch (err) {
         console.log(err);
@@ -49,7 +61,6 @@ const EsperandoJugadores = () => {
     };
   },[]);
 
-  const navigate = useNavigate();
   const handleChange = (e) => {
     setBody({
       ...body,
@@ -60,6 +71,12 @@ const EsperandoJugadores = () => {
   const abandonar = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };       
+
+  function empezarPartida() {
+      chatSocketRef.current(
+        JSON.stringify()
+      );
+  }
 
   
   function jugadores() {
@@ -72,9 +89,7 @@ const EsperandoJugadores = () => {
   }
 
   return (
-    
     <div className="App">
-
       {show ? (
         <div>
           <div className="App-CuadradoNegro" style={{ width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
@@ -83,25 +98,25 @@ const EsperandoJugadores = () => {
               <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
                 {jugadores()}
               </div>
-                <button className="App-boton" style= {{marginTop:"5%"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
             </div>
           </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
+
+
+          {show1 ? (
+            <div>
+              <button className="App-botonConfirmar" style= {{position: "absolute", top: "64%", left: "30%", zIndex: "5"}} onClick={() =>  empezarPartida()} > Empezar partida </button>
+              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "50%", zIndex: "5"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
+            </div>
+          ) : (
+              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "41%", zIndex: "3"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
+          )}
         </div>
+
       ) : (
         <div>
           <div className="App-CuadradoNegro" style={{filter: 'blur(5px)', width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
             <div style={{marginTop: "3%"}}>                
-              <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
+              <a style={{color:"white", fontSize:"50px"}}> Esperando Jugadores </a>
               <div style={{display:"flex", marginTop:"50px",  placeContent:"center"}}>
                 {jugadores()}
               </div>
@@ -122,18 +137,13 @@ const EsperandoJugadores = () => {
                   </div>
                 </div>
               </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
         </div>
         )}
+        <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
+            <div style={{ position: "absolute", zIndex: "2", height:"98%", width:"55%",  filter: 'blur(5px)'}}>
+              <img src={Tablero1} style={{height:"98%", width:"98%"}}/> 
+            </div> 
+          </div>
     </div>
   );
 };

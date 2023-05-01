@@ -8,6 +8,7 @@ import Añadir from "./Imagenes/DatosUsuario.png";
 import Cristiano from'./Imagenes/Usuario.png';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Cookies from 'universal-cookie';
+import EliminarAmigo from './Imagenes/EliminarAmigo.png';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL1 = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
@@ -169,7 +170,7 @@ const Amigos = () => {
             <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "57%", position:"absolute"}} onClick={() =>{setShow1(true);}} >
               Añadir Amigo
             </button>
-            <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(false);}}/>
+            <img src={EliminarAmigo} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(false);}}/>
             <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow2(true);}}>
               Eliminar Amigo 
             </button>
@@ -193,7 +194,7 @@ const Amigos = () => {
               <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "57%", position:"absolute"}} onClick={() =>{setShow1(true);}} >
                 Añadir Amigo
               </button>
-              <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(true);}}/>
+              <img src={EliminarAmigo} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(true);}}/>
               <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow2(true);}}>
                 Eliminar Amigo 
               </button>
