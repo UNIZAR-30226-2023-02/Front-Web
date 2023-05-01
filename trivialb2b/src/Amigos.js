@@ -13,13 +13,16 @@ import Cookies from 'universal-cookie';
 const URL1 = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
 const URL2 = "http://51.142.118.71:8000/api/usuarios/add/amigo/";
 const URL3 = "http://51.142.118.71:8000/api/usuarios/datos-usuario/";
+const URL4 = "http://51.142.118.71:8000/api/usuarios/delete/amigo/";
 
 
 
 
 const Amigos = () => {
+
   const [nuevoA, setNuevoA] = useState("");
-  const [eliminarA, setEliminaA] = useState( );
+  const [eliminarA, setEliminarA] = useState("");
+
   const [amigo, setAmigo] = useState({nombre: "", correo: "", telefono: "", fechaNac:"", imagen:""});
   const [amigos, setAmigos] = useState([]);
 
@@ -55,15 +58,13 @@ const Amigos = () => {
 
   const navigate = useNavigate();
   
-  const onNombreA = (e) => {
+  const nombreAñadir = (e) => {
     setNuevoA(e.target.value)
   };
-  const onNombreE = (e) => {
-    setEliminaA(e.target.value)
+  const nombreEliminar = (e) => {
+    setEliminarA(e.target.value)
   };
-  const confirmar = async (event) => {
-    //Eliminar
-  };
+
   const flechaAtras = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
@@ -73,6 +74,25 @@ const Amigos = () => {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
       body: JSON.stringify({"amigo": nuevoA}),
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          window.location.reload(true);
+          console.log(data)
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  };
+
+  function eliminarAmigo () {
+    console.log(eliminarA)
+    fetch(URL4, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({"amigo": eliminarA}),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
@@ -109,23 +129,7 @@ const Amigos = () => {
     });
   };
 
-  function eliminarAmigo () {
-    fetch(URL3, {
-      method: "POST",
-      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({"amigo": eliminarA}),
-    })
-      .then((response) => response.json())
-      .then((data) => {console.log(data)
-        if (data.OK == "True"){
-          window.location.reload(true);
-          console.log(data)
-        }
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-  };
+
 
 
 
@@ -166,7 +170,7 @@ const Amigos = () => {
               Añadir Amigo
             </button>
             <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(false);}}/>
-            <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow1(true);}}>
+            <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow2(true);}}>
               Eliminar Amigo 
             </button>
           </div>
@@ -211,7 +215,7 @@ const Amigos = () => {
                 type="nombre"
                 label="nombre"
                 name="nombre"
-                onChange={onNombreA}
+                onChange={nombreAñadir}
                 style={{position: "absolute", top: "53%", left: "23%"}}
               />
               <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow1(false)}}>
@@ -244,7 +248,7 @@ const Amigos = () => {
               type="nombre"
               label="nombre"
               name="nombre"
-              onChange={onNombreE}
+              onChange={nombreEliminar}
               style={{position: "absolute", top: "53%", left: "23%"}}
             />
             <a style={{position: "absolute", top: "67%", left: "35%",color:"red", fontSize:"30px"}}> No existe este amigo </a>

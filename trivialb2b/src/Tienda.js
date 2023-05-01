@@ -123,15 +123,14 @@ const Tienda = () => {
     fetch(URL2, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({"id": itemSeleccionado.nombre}),
+      body: JSON.stringify({"objeto_id": itemSeleccionado.nombre}),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        /*if (data.OK == "True"){
+        if (data.OK == "True"){
           window.location.reload(true);
           console.log(data)
-        }*/
-        //window.location.reload(true);
+        }
         console.log(data)
     })
     .catch((error) => {
@@ -145,7 +144,7 @@ const Tienda = () => {
     fetch(URL3, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({"id": itemSeleccionado.nombre}),
+      body: JSON.stringify({"objeto_id": itemSeleccionado.nombre}),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
