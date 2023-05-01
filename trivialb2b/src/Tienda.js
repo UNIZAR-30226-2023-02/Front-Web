@@ -8,16 +8,13 @@ import Candado from "./Imagenes/Candado2.png";
 import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URLObjetos = "https://51.142.118.71:8000/api/tienda/objetos/";
-const URLComprar = "https://51.142.118.71:8000/api/tienda/comprar/";
-const URLUsar = "https://51.142.118.71:8000/api/tienda/usar/";
+const URL1 = "http://51.142.118.71:8000/api/tienda/objetos/";
+const URL2 = "http://51.142.118.71:8000/api/tienda/comprar/";
+const URL3 = "http://51.142.118.71:8000/api/tienda/usar/";
 
 const Tienda = () => {
 
-  console.log("Tienda");
-
   const navigate = useNavigate();
-
   const flechaAtras = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
@@ -34,7 +31,8 @@ const Tienda = () => {
 
   const [monedas, setMonedas] = useState(15);
   
-  const [tableroSeleccionado, setTableroSeleccionado] = useState({nombre:"", imagen:"", valor:""})
+  const [itemSeleccionado, setItemSeleccionado] = useState({nombre:"", imagen:"", valor:""})
+  
   //const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Tablero2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Tablero3", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Tablero5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
   //const fichas = [{nombre:"Ficha1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Ficha2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Ficha3", imagen:Cristiano, valor:20, estado:"", comprado:true},{nombre:"Ficha4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Ficha5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Ficha6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
 
@@ -43,25 +41,21 @@ const Tienda = () => {
   const token = cookies.get('token');
 
   useEffect(() => {
-    console.log("Fetch");
-    fetch(URLObjetos, {
+    fetch(URL1, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.OK == "True"){
-          data.fichas.forEach(element => {
-            fichas.push(element);
-          });
-          setFichas(fichas);
-          console.log(fichas)
-          data.tableros.forEach(element => {
-            tableros.push(element);
-          });
-          setTableros(tableros);
-          console.log(tableros)
-        }
+      data.fichas.forEach(element => {
+        fichas.push(element);
+      });
+      setFichas(fichas);
+      data.tableros.forEach(element => {
+        tableros.push(element);
+      });
+      setTableros(tableros);
+      setShow(true)
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -70,6 +64,7 @@ const Tienda = () => {
 
   const [visibleItems, setVisibleItems] = useState(6);
   const containerRef = useRef(null);
+
   useEffect(() => {
     const handleScroll = () => {
       const container = containerRef.current;
@@ -114,8 +109,8 @@ const Tienda = () => {
         setShow4(false);
       }
     }
-    setTableroSeleccionado({
-      ...tableroSeleccionado,
+    setItemSeleccionado({
+      ...itemSeleccionado,
       nombre: e.id,
       imagen: e.imagen,
       valor: e.coste,
@@ -123,17 +118,21 @@ const Tienda = () => {
   };
   
   function comprar() {
-    fetch(URLComprar, {
+    console.log(itemSeleccionado)
+    console.log(itemSeleccionado.nombre)
+    fetch(URL2, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({"id": tableroSeleccionado.nombre}),
+      body: JSON.stringify({"id": itemSeleccionado.nombre}),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.OK == "True"){
+        /*if (data.OK == "True"){
           window.location.reload(true);
           console.log(data)
-        }
+        }*/
+        //window.location.reload(true);
+        console.log(data)
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -141,17 +140,21 @@ const Tienda = () => {
   };
 
   function usar() {
-    fetch(URLUsar, {
+    console.log(itemSeleccionado)
+    console.log(itemSeleccionado.nombre)
+    fetch(URL3, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({"id": tableroSeleccionado.nombre}),
+      body: JSON.stringify({"id": itemSeleccionado.nombre}),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.OK == "True"){
+        /*if (data.OK == "True"){
           window.location.reload(true);
           console.log(data)
-        }
+        }*/
+        window.location.reload(true);
+        console.log(data)
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -170,10 +173,10 @@ const Tienda = () => {
               </a>
             </div>
             {item.adquirido ? (
-            <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
+            <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
-                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
+                <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
                 <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
               </div>
             )} 
@@ -196,10 +199,10 @@ const Tienda = () => {
               </a>
             </div>
             {item.adquirido ? (
-            <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
+            <img src={'http://51.142.118.71:8000' + item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
-                <img src={item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
+                <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
                 <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
               </div>
             )} 
@@ -218,7 +221,6 @@ const Tienda = () => {
           </div>
       </div>
 
-
       <div className="App-CuadradoNegro"  style= {{width:"65%", height:"30%", top: "26%", left: "7%", position:"absolute", border: "2px solid white", borderRadius: "50px 50px 0px 0px"}}>
         <div className="App-CuadradoNegro"  style= {{width:"100%", height:"30%", top: "0%", left: "-0.2%", position:"relative", border: "2px solid white", borderRadius: "50px 50px 0px 0px"}}>
           <div style={{marginTop:"1%"}}>
@@ -228,7 +230,12 @@ const Tienda = () => {
           </div>
         </div>
 
-        <Tablero/>
+      {show ? ( 
+         Tablero()  
+      ) : ( 
+         Tablero()  )
+      }
+
 
       </div>
 
@@ -251,14 +258,14 @@ const Tienda = () => {
 
       {show1 ? ( 
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.id} cuesta: {tableroSeleccionado.coste} monedas</a>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{itemSeleccionado.id} cuesta: {itemSeleccionado.coste} monedas</a>
         </div>
       ) : (
         <div/>
       )}
       {show12 ? ( 
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{tableroSeleccionado.id} seleccionado</a>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{itemSeleccionado.id} seleccionado</a>
         </div>
       ) : (
         <div/>
@@ -278,7 +285,7 @@ const Tienda = () => {
       )}
 
       {show4 ? ( 
-        <button className="App-boton" style= {{position:"absolute", top:"65%", left:"79%", position:"absolute"}} onClick={() => usar()}  > Seleccionar </button>
+        <button className="App-boton" style= {{position:"absolute", top:"65%", left:"79%", position:"absolute"}} onClick={() => usar(itemSeleccionado)}  > Seleccionar </button>
       ) : (
         <div/>
       )}

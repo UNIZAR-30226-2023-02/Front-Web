@@ -21,12 +21,7 @@ const Amigos = () => {
   const [nuevoA, setNuevoA] = useState("");
   const [eliminarA, setEliminaA] = useState( );
   const [amigo, setAmigo] = useState({nombre: "", correo: "", telefono: "", fechaNac:"", imagen:""});
-
-  const ePrueba = [{nombre: "Acher", correo: "acher@gmail.com", telefono: "605828074", fechaNac:"2002-11-12", imagen:"Hola"}]
-
   const [amigos, setAmigos] = useState([]);
-  const [datos, setDatos] = useState({username: ""});
-
 
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(false);
@@ -92,7 +87,6 @@ const Amigos = () => {
   };
 
   function mostrarDatosUsuario(usuario) {
-    console.log(usuario)
     fetch(URL3, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -102,10 +96,29 @@ const Amigos = () => {
       .then((data) => {console.log(data)
         if (data.OK == "True"){
           setShow3(true)
-          ePrueba.nombre = data.username
-          ePrueba.fechaNac = data.fechaNac
-          ePrueba.correo = data.correo
-          ePrueba.telefono = data.telefono
+          setAmigo({ 
+            nombre: usuario,
+            correo: data.correo,
+            telefono: data.telefono,
+            fechaNac: data.fecha_nac
+          });
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  };
+
+  function eliminarAmigo () {
+    fetch(URL3, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({"amigo": eliminarA}),
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          window.location.reload(true);
           console.log(data)
         }
     })
@@ -113,6 +126,9 @@ const Amigos = () => {
       console.error("Error fetching data:", error);
     });
   };
+
+
+
   
    function f_amigos() {
       return amigos.map((amigo, elemento) => (
@@ -173,8 +189,8 @@ const Amigos = () => {
               <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "57%", position:"absolute"}} onClick={() =>{setShow1(true);}} >
                 Añadir Amigo
               </button>
-              <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(false);}}/>
-              <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow1(true);}}>
+              <img src={Añadir} style={{width:"10%", height:"30%", left:"81%", top:"20%", zIndex: "1", cursor: "pointer", position:"absolute"}} onClick={() =>{setShow2(true);}}/>
+              <button className="App-boton" style= {{fontSize:"32px", top: "60%", left: "78%", position:"absolute"}} onClick={() =>{setShow2(true);}}>
                 Eliminar Amigo 
               </button>
             </div>
@@ -235,7 +251,7 @@ const Amigos = () => {
             <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow2(false)}}>
               Cancelar
             </button>
-            <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={confirmar}>
+            <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={() => {eliminarAmigo(); setShow1(false); setShow2(false)}}>
               Confirmar
             </button>
 
@@ -254,10 +270,10 @@ const Amigos = () => {
                   <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
               </div>
             </div>
-            <a style={{position: "absolute", top: "35%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Nombre: {ePrueba.nombre} </a>
-            <a style={{position: "absolute", top: "35%", left: "53%", color:"white", fontSize:"30px", textAlign:"left"}}> Correo: {ePrueba.correo} </a>
-            <a style={{position: "absolute", top: "60%", left: "53%", color:"white", fontSize:"30px", textAlign:"left"}}> Telefono: {ePrueba.telefono} </a>
-            <a style={{position: "absolute", top: "60%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Fecha de nacimiento: {ePrueba.fechaNac} </a>
+            <a style={{position: "absolute", top: "35%", left: "6%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Nombre: {amigo.nombre} </a>
+            <a style={{position: "absolute", top: "35%", left: "53%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Correo: {amigo.correo} </a>
+            <a style={{position: "absolute", top: "60%", left: "53%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Telefono: {amigo.telefono} </a>
+            <a style={{position: "absolute", top: "60%", left: "6%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Fecha de nacimiento: {amigo.fechaNac} </a>
 
             <button className="App-boton" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow3(false);}}>
               Salir
