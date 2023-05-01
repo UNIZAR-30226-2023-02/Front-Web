@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect, useRef } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
@@ -7,7 +7,6 @@ import Tablero1 from'./Imagenes/Tablero1.png';
 import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 const EsperandoJugadores = () => {
   const [body, setBody] = useState({ username: "", password: "" });
@@ -18,27 +17,37 @@ const EsperandoJugadores = () => {
   const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
 
   const cookies= new Cookies();
-  const token = cookies.get('token');
+  const token = cookies.get('tokenUsuario');
+  const websocket = cookies.get('WebSocketEsperando');
+  console.log(websocket);
 
-  /*useEffect(() => {
-    fetch(URL, {
-      method: "POST",
-      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({username: cookies.get('tokenUsuario')})
-    })
-      .then((response) => response.json())
-      .then((data) => {console.log(data)
-        setUsuario(data.username)
-        setBody({ 
-          fecha_nac: data.fecha_nac,
-          correo: data.correo,
-          telefono: data.telefono
-        });
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-  },[]);*/
+  const chatSocketRef = useRef(null);
+  console.log(token)
+  useEffect(() => {
+    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?token=" + token);
+ 
+    chatSocketRef.current.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      try {
+        console.log("Mensaje del Backend:");
+        console.log(data)
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    chatSocketRef.current.onerror = function(event) {
+      console.error('Game socket error:', event);
+    };
+    
+    chatSocketRef.current.onclose = function(event) {
+      console.error('Game socket closed unexpectedly');
+    }
+
+    return () => {
+      chatSocketRef.current.close();
+    };
+  },[]);
 
   const navigate = useNavigate();
   const handleChange = (e) => {

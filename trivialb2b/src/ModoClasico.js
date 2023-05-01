@@ -22,11 +22,12 @@ return (
 
 const ModoClasico = () => {
     
-  const [body, setBody] = useState({ nombre_sala: "", tiempo_respuesta: "15", password_sala: "", n_jugadores: "2", tipo_partida: "Modo-Clasico" });
+  const [body, setBody] = useState({ nombre_sala: "", tiempo_respuesta: "15", password_sala: "", n_jugadores: "2", tipo_partida: "Clasico" });
   const [errores, setErorres] = useState("");
 
   const navigate = useNavigate();
   const cookies= new Cookies();
+  const token = cookies.get('token');
   
   const handleChange = (e) => {
     setBody({
@@ -43,7 +44,7 @@ const ModoClasico = () => {
     console.log(body);
     fetch(URL, {
       method: "POST",
-      headers: {"Content-Type": "application/json" },
+      headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
@@ -57,6 +58,7 @@ const ModoClasico = () => {
           cookies.set('password-sala', body.password_sala, {path: '/'})
           cookies.set('n_jugadores', body.n_jugadores, {path: '/'})
           cookies.set('tipo_partida', body.tipo_partida, {path: '/'})
+          cookies.set('WebSocketEsperando', data.websocket, {path: '/'})
           navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
         }
         else {

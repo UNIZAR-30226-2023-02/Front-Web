@@ -13,7 +13,7 @@ const URL = "http://51.142.118.71:8000/api/usuarios/estadisticas-yo/";
     const token = cookies.get('token');
     const navigate = useNavigate();
     const flechaAtras = async () => {
-      navigate(process.env.PUBLIC_URL+ '/MenuJuego');
+      navigate(process.env.PUBLIC_URL + '/MenuJuego');
     };
 
     const [geo, setGeo] = useState({total:"", bien:"", mal:"", porcentaje:""});
