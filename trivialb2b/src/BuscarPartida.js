@@ -7,52 +7,7 @@ import Transparente from'./Imagenes/Transparente.png';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Cookies from 'universal-cookie';
 
-
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/salas/lista-salas/";
-
-
-/*function Algo(){
-  console.log("Algo")
-  
-  const ws = new WebSocket("ws://51.142.118.71:8000" + "/ws/lobby/");
-}
-
-function Entrar(nombre, usuario, contraseña) {
-  console.log(nombre, usuario, contraseña);
-  useEffect(() => {
-    const ws  = new WebSocket("ws://51.142.118.71:8000" + "/ws/lobby/" +  nombre + "/?username=" + usuario + "&password=" + contraseña);
-    ws.onmessage = function(event) {
-      const data = JSON.parse(event.data);
-      try {
-        console.log("Mensaje del Backend:");
-        /*if (data.accion = "nuevo_usuario") {
-          jugadoresSala.push(data.username);
-        }
-        else if (data.accion = "usuarios_listos"){
-          setShow1(false)
-        }
-        else {
-          cookies.set('websocket_partida', data.websocket, {path: '/'})
-          navigate(process.env.PUBLIC_URL+ '/Tablero');
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    ws.onerror = function(event) {
-      console.error('Game socket error:', event);
-    };
-    
-    ws.onclose = function(event) {
-      console.error('Game socket closed unexpectedly');
-    }
-
-    return () => {
-      ws.current.close();
-    };
-  }, []);
-}*/
 
 const ModoClasico = () => {
   const [contraseña, setContraseña] = useState("");
@@ -141,27 +96,25 @@ const ModoClasico = () => {
     console.log("FuncionEntrar");
     //Entrar(sala.nombre, usuario, contraseña);
     console.log(sala.nombre, usuario, contraseña);
-    const ws  = new WebSocket("ws://51.142.118.71:8000" + "/ws/lobby/" +  sala.nombre + "/?username=" + usuario + "&password=" + contraseña);
-    ws.onopen = function(event) {
-        cookies.set('noCreador', 1, {path: '/'})
-        cookies.set('webSocketBuscar', ws, {path: '/'})
+    fetch(URL, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({ })
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+      if (data.OK == "True") {
         cookies.set('n_jugadores', sala.numJugadores, {path: '/'})
-        navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');  
-    };
-    ws.onerror = function(event) {
-      console.error('Game socket error:', event);
-    };
-    
-    ws.onclose = function(event) {
-      console.error('Game socket closed unexpectedly');
-    }
+        cookies.set('WebSocketEsperando', data.websocket, {path: '/'})
+        cookies.set('noCreador', 0, {path: '/'})
+        navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
+      }
+        
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
   }
-  /*
-  function funcionEntrar() {
-    console.log("FuncionEntrar");
-    Algo()
-    return <Entrar nombre={sala.nombre} usuarioSala={usuario} contraseñaSala ={contraseña} />;
-  }*/
 
 
   function jugadores() {

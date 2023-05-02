@@ -6,8 +6,6 @@ import Usuario from'./Imagenes/Usuario.png';
 import Tablero1 from'./Imagenes/Tablero1.png';
 import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-
 
 
 const EsperandoJugadores = () => {
@@ -33,7 +31,6 @@ const EsperandoJugadores = () => {
   const usuario = cookies.get('tokenUsuario');
   const websocket = cookies.get('WebSocketEsperando');
   const noCreador = cookies.get('noCreador');
-  const ws = cookies.get('webSocketBuscar');
   const contraseña = cookies.get('password_sala');
   const numJugadores = cookies.get('n_jugadores');
   let jRestantes = numJugadores;
@@ -41,109 +38,58 @@ const EsperandoJugadores = () => {
   console.log(websocket);
 
   const chatSocketRef = useRef(null);
-  
   useEffect(() => {
-    let indice = 0;
-    if (noCreador == 0) {
-      chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
-      chatSocketRef.current.onmessage = function(event) {
-        const data = JSON.parse(event.data)
-        try {
-          console.log(data)
-          if (data.accion = "actualizar_lista") {
-            jRestantes=jRestantes-1
-            if (numJugadores == 2) {
-              vectorJugadores2 = data.usernames.split(",");
-              console.log(vectorJugadores2)
-              setVectorJugadores(vectorJugadores2)
-              console.log(vectorJugadores)
-              setShow2(true)
-            }
-            else if (numJugadores == 4) {
-              vectorJugadores4 = data.usernames.split(",");
-              setVectorJugadores(vectorJugadores4)
-              setShow2(true)
-            } 
-            else if (numJugadores == 6) {
-              vectorJugadores6 = data.usernames.split(",");
-              setVectorJugadores(vectorJugadores6)
-              setShow2(true)
-            }
-          }
-          else if (data.accion = "empezar_partida"){
-            setShow1(false)
-          }
-          else {
-            cookies.set('websocket_partida', data.websocket, {path: '/'})
-            navigate(process.env.PUBLIC_URL+ '/Tablero');
-          }
-
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      chatSocketRef.current.onerror = function(event) {
-        console.error('Game socket error:', event);
-      };
-      
-      chatSocketRef.current.onclose = function(event) {
-        console.error('Game socket closed unexpectedly');
-      }
-    }
-    else {
-      ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
+    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+    chatSocketRef.current.onmessage = function(event) {
+      const data = JSON.parse(event.data)
+      try {
         console.log(data)
-        try {
-          if (data.accion = "actualizar_lista") {
-            jRestantes=jRestantes-1
-            if (numJugadores == 2) {
-              vectorJugadores2 = data.usernames.split(",");
-              console.log(vectorJugadores2)
-              setVectorJugadores(vectorJugadores2)
-              console.log(vectorJugadores)
-              setShow2(true)
-            }
-            else if (numJugadores == 4) {
-              vectorJugadores4 = data.usernames.split(",");
-              setVectorJugadores(vectorJugadores4)
-              setShow2(true)
-            } 
-            else if (numJugadores == 6) {
-              vectorJugadores6 = data.usernames.split(",");
-              setVectorJugadores(vectorJugadores6)
-              setShow2(true)
-            }
+        if (data.accion = "actualizar_lista") {
+          jRestantes=jRestantes-1
+          if (numJugadores == 2) {
+            vectorJugadores2 = data.usernames.split(",");
+            console.log(vectorJugadores2)
+            setVectorJugadores(vectorJugadores2)
+            console.log(vectorJugadores)
+            setShow2(true)
           }
-          else if (data.accion = "usuarios_listos"){
+          else if (numJugadores == 4) {
+            vectorJugadores4 = data.usernames.split(",");
+            setVectorJugadores(vectorJugadores4)
+            setShow2(true)
+          } 
+          else if (numJugadores == 6) {
+            vectorJugadores6 = data.usernames.split(",");
+            setVectorJugadores(vectorJugadores6)
+            setShow2(true)
+          }
+        }
+        else if (data.accion = "empezar_partida"){
+          if (noCreador){
             setShow1(false)
           }
-          else {
-            cookies.set('websocket_partida', data.websocket, {path: '/'})
-            navigate(process.env.PUBLIC_URL+ '/Tablero');
-          }
-
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      ws.onerror = function(event) {
-        console.error('Game socket error:', event);
-      };
-      
-      ws.onclose = function(event) {
-        console.error('Game socket closed unexpectedly');
-      }
-
-      return () => {
-        if (noCreador == 1) {
-          chatSocketRef.current.close();
+          cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
         }
         else {
-          chatSocketRef.current.close();
+          cookies.set('websocket_partida', data.websocket, {path: '/'})
+          navigate(process.env.PUBLIC_URL+ '/Tablero');
         }
-      };
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    chatSocketRef.current.onerror = function(event) {
+      console.error('Game socket error:', event);
+    };
+    
+    chatSocketRef.current.onclose = function(event) {
+      console.error('Game socket closed unexpectedly');
     }
+
+  return () => {
+      chatSocketRef.current.close();
+  };
   },[]);
   
 
@@ -161,14 +107,9 @@ const EsperandoJugadores = () => {
   function empezarPartida() {
     if (noCreador == 1){
       chatSocketRef.current(
-        JSON.stringify()
+        JSON.stringify({accion: "empezar"})
       );
-    }
-    else {
-      ws(
-        JSON.stringify({"accion": "empezar"})
-      );
-    }  
+    } 
   }
 
   
@@ -190,11 +131,9 @@ const EsperandoJugadores = () => {
               <a style={{color:"white", fontSize:"50px"}}>Esperando a {jRestantes} jugadores</a>
               {show2 ? (
                 <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
-                
                   {jugadores()}
                 </div>
                 ) : (
-                  
                   <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
                   {jugadores()}
                   </div>
