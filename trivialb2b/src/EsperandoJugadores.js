@@ -8,58 +8,144 @@ import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 
+
+
 const EsperandoJugadores = () => {
+
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(true);
-  const [show1, setShow1] = useState(true);
+  const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
 
   const navigate = useNavigate();
 
   const [jugadoresSala, setJugadoresSala] = useState([]);
+  const [vectorJugadores, setVectorJugadores ]  = useState([]);
 
-  const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
+  
+  let [vectorJugadores2, setVectorJugadores2 ] = useState(["", ""]);
+  let [vectorJugadores4, setVectorJugadores4 ] = useState(["", "", "", ""]);
+  let [vectorJugadores6, setVectorJugadores6 ] = useState(["", "", "", "", "", ""]);
+
 
   const cookies= new Cookies();
   const usuario = cookies.get('tokenUsuario');
   const websocket = cookies.get('WebSocketEsperando');
+  const noCreador = cookies.get('noCreador');
+  const ws = cookies.get('webSocketBuscar');
+  const contraseña = cookies.get('password_sala');
+  const numJugadores = cookies.get('n_jugadores');
+  let jRestantes = numJugadores;
+  
   console.log(websocket);
 
   const chatSocketRef = useRef(null);
+  
   useEffect(() => {
-    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?token=" + usuario);
- 
-    chatSocketRef.current.onmessage = function(event) {
-      const data = JSON.parse(event.data);
-      try {
-        console.log("Mensaje del Backend:");
-        if (data.accion = "nuevo_usuario") {
-          jugadoresSala.push(data.username);
+    let indice = 0;
+    if (noCreador == 0) {
+      chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+      chatSocketRef.current.onmessage = function(event) {
+        const data = JSON.parse(event.data)
+        try {
+          console.log(data)
+          if (data.accion = "actualizar_lista") {
+            jRestantes=jRestantes-1
+            if (numJugadores == 2) {
+              vectorJugadores2 = data.usernames.split(",");
+              console.log(vectorJugadores2)
+              setVectorJugadores(vectorJugadores2)
+              console.log(vectorJugadores)
+              setShow2(true)
+            }
+            else if (numJugadores == 4) {
+              vectorJugadores4 = data.usernames.split(",");
+              setVectorJugadores(vectorJugadores4)
+              setShow2(true)
+            } 
+            else if (numJugadores == 6) {
+              vectorJugadores6 = data.usernames.split(",");
+              setVectorJugadores(vectorJugadores6)
+              setShow2(true)
+            }
+          }
+          else if (data.accion = "empezar_partida"){
+            setShow1(false)
+          }
+          else {
+            cookies.set('websocket_partida', data.websocket, {path: '/'})
+            navigate(process.env.PUBLIC_URL+ '/Tablero');
+          }
+
+        } catch (err) {
+          console.log(err);
         }
-        else if (data.accion = "usuarios_listos"){
-          setShow1(false)
+      };
+      chatSocketRef.current.onerror = function(event) {
+        console.error('Game socket error:', event);
+      };
+      
+      chatSocketRef.current.onclose = function(event) {
+        console.error('Game socket closed unexpectedly');
+      }
+    }
+    else {
+      ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        console.log(data)
+        try {
+          if (data.accion = "actualizar_lista") {
+            jRestantes=jRestantes-1
+            if (numJugadores == 2) {
+              vectorJugadores2 = data.usernames.split(",");
+              console.log(vectorJugadores2)
+              setVectorJugadores(vectorJugadores2)
+              console.log(vectorJugadores)
+              setShow2(true)
+            }
+            else if (numJugadores == 4) {
+              vectorJugadores4 = data.usernames.split(",");
+              setVectorJugadores(vectorJugadores4)
+              setShow2(true)
+            } 
+            else if (numJugadores == 6) {
+              vectorJugadores6 = data.usernames.split(",");
+              setVectorJugadores(vectorJugadores6)
+              setShow2(true)
+            }
+          }
+          else if (data.accion = "usuarios_listos"){
+            setShow1(false)
+          }
+          else {
+            cookies.set('websocket_partida', data.websocket, {path: '/'})
+            navigate(process.env.PUBLIC_URL+ '/Tablero');
+          }
+
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      ws.onerror = function(event) {
+        console.error('Game socket error:', event);
+      };
+      
+      ws.onclose = function(event) {
+        console.error('Game socket closed unexpectedly');
+      }
+
+      return () => {
+        if (noCreador == 1) {
+          chatSocketRef.current.close();
         }
         else {
-          cookies.set('websocket_partida', data.websocket, {path: '/'})
-          navigate(process.env.PUBLIC_URL+ '/Tablero');
+          chatSocketRef.current.close();
         }
-
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    chatSocketRef.current.onerror = function(event) {
-      console.error('Game socket error:', event);
-    };
-    
-    chatSocketRef.current.onclose = function(event) {
-      console.error('Game socket closed unexpectedly');
+      };
     }
-
-    return () => {
-      chatSocketRef.current.close();
-    };
   },[]);
+  
 
   const handleChange = (e) => {
     setBody({
@@ -73,9 +159,16 @@ const EsperandoJugadores = () => {
   };       
 
   function empezarPartida() {
+    if (noCreador == 1){
       chatSocketRef.current(
         JSON.stringify()
       );
+    }
+    else {
+      ws(
+        JSON.stringify({"accion": "empezar"})
+      );
+    }  
   }
 
   
@@ -94,10 +187,18 @@ const EsperandoJugadores = () => {
         <div>
           <div className="App-CuadradoNegro" style={{ width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
             <div style={{marginTop: "3%"}}>                
-              <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
-              <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
-                {jugadores()}
-              </div>
+              <a style={{color:"white", fontSize:"50px"}}>Esperando a {jRestantes} jugadores</a>
+              {show2 ? (
+                <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
+                
+                  {jugadores()}
+                </div>
+                ) : (
+                  
+                  <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
+                  {jugadores()}
+                  </div>
+                )}
             </div>
           </div>
 

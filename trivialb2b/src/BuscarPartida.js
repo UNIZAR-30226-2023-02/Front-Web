@@ -17,7 +17,7 @@ const URL = "http://51.142.118.71:8000/api/salas/lista-salas/";
   
   const ws = new WebSocket("ws://51.142.118.71:8000" + "/ws/lobby/");
 }
-*/
+
 function Entrar(nombre, usuario, contraseña) {
   console.log(nombre, usuario, contraseña);
   useEffect(() => {
@@ -35,8 +35,7 @@ function Entrar(nombre, usuario, contraseña) {
         else {
           cookies.set('websocket_partida', data.websocket, {path: '/'})
           navigate(process.env.PUBLIC_URL+ '/Tablero');
-        }*/
-
+        }
       } catch (err) {
         console.log(err);
       }
@@ -53,7 +52,7 @@ function Entrar(nombre, usuario, contraseña) {
       ws.current.close();
     };
   }, []);
-}
+}*/
 
 const ModoClasico = () => {
   const [contraseña, setContraseña] = useState("");
@@ -140,41 +139,22 @@ const ModoClasico = () => {
 
   function funcionEntrar() {
     console.log("FuncionEntrar");
-    Entrar(sala.nombre, usuario, contraseña);
-    /*console.log(sala.nombre, usuario, contraseña);
-    useEffect(() => {
-      const ws  = new WebSocket("ws://51.142.118.71:8000" + "/ws/lobby/" +  sala.nombre + "/?username=" + usuario + "&password=" + contraseña);
-      ws.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        try {
-          console.log("Mensaje del Backend:");
-          if (data.accion = "nuevo_usuario") {
-            jugadoresSala.push(data.username);
-          }
-          else if (data.accion = "usuarios_listos"){
-            setShow1(false)
-          }
-          else {
-            cookies.set('websocket_partida', data.websocket, {path: '/'})
-            navigate(process.env.PUBLIC_URL+ '/Tablero');
-          }
-  
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      ws.onerror = function(event) {
-        console.error('Game socket error:', event);
-      };
-      
-      ws.onclose = function(event) {
-        console.error('Game socket closed unexpectedly');
-      }
-  
-      return () => {
-        ws.current.close();
-      };
-    }, []);*/
+    //Entrar(sala.nombre, usuario, contraseña);
+    console.log(sala.nombre, usuario, contraseña);
+    const ws  = new WebSocket("ws://51.142.118.71:8000" + "/ws/lobby/" +  sala.nombre + "/?username=" + usuario + "&password=" + contraseña);
+    ws.onopen = function(event) {
+        cookies.set('noCreador', 1, {path: '/'})
+        cookies.set('webSocketBuscar', ws, {path: '/'})
+        cookies.set('n_jugadores', sala.numJugadores, {path: '/'})
+        navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');  
+    };
+    ws.onerror = function(event) {
+      console.error('Game socket error:', event);
+    };
+    
+    ws.onclose = function(event) {
+      console.error('Game socket closed unexpectedly');
+    }
   }
   /*
   function funcionEntrar() {
@@ -212,8 +192,6 @@ const ModoClasico = () => {
   return (
     <div className="App">
       <div className = "App-header" > 
-
-
       {show ? (
         <div className="App-CuadradoAmarillo" style={{ width: "1730px", height: "780px", position: "absolute", top: "8%", left: "5%"}}>
           <div style={{marginTop:"10px"}}>

@@ -24,11 +24,11 @@ const ModoClasico = () => {
     
   const [body, setBody] = useState({ nombre_sala: "", tiempo_respuesta: "15", password_sala: "", n_jugadores: "2", tipo_partida: "Clasico" });
   const [errores, setErorres] = useState("");
-
+  
   const navigate = useNavigate();
   const cookies= new Cookies();
   const token = cookies.get('token');
-  
+
   const handleChange = (e) => {
     setBody({
       ...body,
@@ -55,10 +55,11 @@ const ModoClasico = () => {
           setErorres("")
           cookies.set('nombre_sala', body.nombre_sala, {path: '/'})
           cookies.set('tiempo_respuesta', body.tiempo_respuesta, {path: '/'})
-          cookies.set('password-sala', body.password_sala, {path: '/'})
+          cookies.set('password_sala', body.password_sala, {path: '/'})
           cookies.set('n_jugadores', body.n_jugadores, {path: '/'})
           cookies.set('tipo_partida', body.tipo_partida, {path: '/'})
           cookies.set('WebSocketEsperando', data.websocket, {path: '/'})
+          cookies.set('noCreador', 0, {path: '/'})
           navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
         }
         else {
@@ -123,10 +124,13 @@ const ModoClasico = () => {
 {/*onClick={setBody(value)}*/}
             <div className="App-CuadrosTextoDer" style={{marginRight: "1%"}} > 
               <label for="numeroJugadores" style={{color: "#174a67"}}> Nº de jugadores: </label>
-              <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}>
-                  <option value="dos">2</option>
-                  <option value="cuatro">4</option>
-                  <option value="seis">6</option>
+              <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}onChange={(event) => setBody({
+                ...body,
+                n_jugadores: event.target.value
+                })}>
+                  <option value="2">2</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
               </select> 
               <div style={{marginTop:"7%", marginLeft: "6%"}}>            
                   <CuadroTexto texto="*  Contraseña" label="password" nombre="password_sala" valor={body.password_sala} funcion={handleChange} />
