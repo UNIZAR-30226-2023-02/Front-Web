@@ -20,6 +20,7 @@ const EsperandoJugadores = () => {
 
   const [jugadoresSala, setJugadoresSala] = useState([]);
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
+  let [jRestantes, setjRestantes ]  = useState([]);
 
   
   let [vectorJugadores2, setVectorJugadores2 ] = useState(["", ""]);
@@ -33,7 +34,7 @@ const EsperandoJugadores = () => {
   const noCreador = cookies.get('noCreador');
   const contraseña = cookies.get('password_sala');
   const numJugadores = cookies.get('n_jugadores');
-  let jRestantes = numJugadores;
+  jRestantes = numJugadores;
   
   console.log(websocket);
 
@@ -46,6 +47,8 @@ const EsperandoJugadores = () => {
         console.log(data)
         if (data.accion = "actualizar_lista") {
           jRestantes=jRestantes-1
+          setjRestantes(jRestantes)
+          console.log(jRestantes)
           if (numJugadores == 2) {
             vectorJugadores2 = data.usernames.split(",");
             console.log(vectorJugadores2)
@@ -62,6 +65,12 @@ const EsperandoJugadores = () => {
             vectorJugadores6 = data.usernames.split(",");
             setVectorJugadores(vectorJugadores6)
             setShow2(true)
+          }
+          if (jRestantes == 0) {
+            if (noCreador){
+              setShow1(false)
+            }
+            cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
           }
         }
         else if (data.accion = "empezar_partida"){
@@ -88,6 +97,7 @@ const EsperandoJugadores = () => {
     }
 
   return () => {
+      console.log("Me salgo");
       chatSocketRef.current.close();
   };
   },[]);

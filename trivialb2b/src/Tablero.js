@@ -41,6 +41,7 @@ import Cruz from './Imagenes/Cruz.png';
 import ChatImg from './Imagenes/Chat.png';
 import B2B from './Imagenes/Logo.png';
 import Quesitos from './Imagenes/CrearPartida.png';
+import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000";
@@ -59,6 +60,28 @@ const Tablero = () => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
+
+  const [vectorJugadores, setVectorJugadores ]  = useState([]);
+
+
+  
+  const cookies= new Cookies();
+  const numJugadores = cookies.get('n_jugadores');
+  const token = cookies.get('token');
+  let usuario = cookies.get('tokenUsuario');
+
+  // let [vectorJugadores2, setVectorJugadores2 ] = useState([]);
+  // let [vectorJugadores4, setVectorJugadores4 ] = useState([]);
+  // let [vectorJugadores6, setVectorJugadores6 ] = useState([]);
+  
+  let tiempoPregunta = 0;
+  let tiempoElegirCasilla = 0;
+
+  let errorPartida = "";
+  let type, subtype, enunciado, r1,r2,r3,r4,rc, esCorrecta, quesito, pregunta, mensage_chat = "";
+  let valor_dado, casilla_elegida = 0;
+  let casillas_nuevas = [];
+  let msgIni = 0;
   
   //Mensaje a rellenar para el backend
   const [msg, setMsg] = useState({OK:"",jugador:"", type:"", subtype: "", valor_dado: "", casilla_elegida: "", casillas_nuevas: "", enunciado: "", r1: "", r2: "", r3: "", r4: "", rc: "", quesito: "", esCorrecta: "", mensage_chat: "", error: ""});
@@ -67,15 +90,17 @@ const Tablero = () => {
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
   // Vector Jugadores
-  const [vector1, setV1] = useState([
-    {nombre:"Jugador1", queso:Queso_azul, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"Jugador2", queso:Queso_rojo, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"Jugador3", queso:Queso_verde, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente},
-    {nombre:"Jugador4", queso:Queso_naranja, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"Jugador5", queso:Queso_amarillo, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"Jugador6", queso:Queso_rosa, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}
-  ]);
-  const vector2 = [{nombre:"", queso:Queso_azul}, {nombre:"", queso:Queso_rojo}, {nombre:"", queso:Queso_verde},{nombre:"", queso:Queso_naranja}, {nombre:"", queso:Queso_amarillo}, {nombre:"", queso:Queso_rosa}];
+ let [vector1, setV1] = useState([ 
+    {nombre:"", ficha:Queso_azul, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
+    {nombre:"", ficha:Queso_rojo, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
+    {nombre:"", ficha:Queso_verde, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente},
+  ])
+
+  let [vector2, setV2] = useState([
+    {nombre:"", ficha:Queso_naranja, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
+    {nombre:"", ficha:Queso_amarillo, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
+    {nombre:"", ficha:Queso_rosa, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}
+  ])
 
   const amarilla = [
       {l:"29%", t:"73.5%"},   {l:"37.9%", t:"76%"}, {l:"42.3%", t:"76%"},   {l:"48%", t:"76%"},   {l:"53.5%", t:"76%"}, {l:"59%", t:"76%"},     {l:"64.5%", t:"76%"}, 
@@ -180,14 +205,110 @@ const Tablero = () => {
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
-        console.log("Mensaje del Backend:");
+        console.log("Mensaje del Backend:")
         console.log(data)
-        vector2[0].nombre = data.jugador1
-        vector2[1].nombre = data.jugador2
-        vector2[2].nombre = data.jugador3
-        vector2[3].nombre = data.jugador4
-        vector2[4].nombre = data.jugador5
-        vector2[5].nombre = data.jugador6
+        if (msgIni==0) {
+          tiempoPregunta = data.tiempo_pregunta;
+          tiempoElegirCasilla = data.tiempo_pregunta;
+          errorPartida = data.error;
+          msgIni=1
+          if (numJugadores==2) {
+              // vectorJugadores2[0].nombre = data.jugador1;
+              // vectorJugadores2[0].ficha = data.ficha1;
+              // vectorJugadores2[1].nombre = data.jugador2;
+              // vectorJugadores2[1].ficha = data.ficha2;
+
+              vector1[0].nombre = data.jugador1;
+              vector1[0].ficha = data.ficha1;
+              vector2[1].nombre = data.jugador2;
+              vector2[1].ficha = data.ficha2;
+              
+          }
+          else if (numJugadores==4) {
+            // vectorJugadores4[0].nombre = data.jugador1;
+            // vectorJugadores4[0].ficha = data.ficha1;
+            // vectorJugadores4[1].nombre = data.jugador2;
+            // vectorJugadores4[1].ficha = data.ficha2;
+            // vectorJugadores4[2].nombre = data.jugador3;
+            // vectorJugadores4[2].ficha = data.ficha3;
+            // vectorJugadores4[3].nombre = data.jugador4;
+            // vectorJugadores4[3].ficha = data.ficha4;
+
+            vector1[0].nombre = data.jugador1;
+            vector1[0].ficha = data.ficha1;
+            vector1[1].nombre = data.jugador2;
+            vector1[1].ficha = data.ficha2;
+            vector2[2].nombre = data.jugador3;
+            vector2[2].ficha = data.ficha3;
+            vector2[3].nombre = data.jugador4;
+            vector2[3].ficha = data.ficha4;
+
+          }else {
+            // vectorJugadores6[0].nombre = data.jugador1;
+            // vectorJugadores6[0].ficha = data.ficha1;
+            // vectorJugadores6[1].nombre = data.jugador2;
+            // vectorJugadores6[1].ficha = data.ficha2;
+            // vectorJugadores6[2].nombre = data.jugador3;
+            // vectorJugadores6[2].ficha = data.ficha3;
+            // vectorJugadores6[3].nombre = data.jugador4;
+            // vectorJugadores6[3].ficha = data.ficha4;
+            // vectorJugadores6[4].nombre = data.jugador5;
+            // vectorJugadores6[4].ficha = data.ficha5;
+            // vectorJugadores6[5].nombre = data.jugador6;
+            // vectorJugadores6[5].ficha = data.ficha6;
+
+            vector1[0].nombre = data.jugador1;
+            vector1[0].ficha = data.ficha1;
+            vector1[1].nombre = data.jugador2;
+            vector1[1].ficha = data.ficha2;
+            vector1[2].nombre = data.jugador3;
+            vector1[2].ficha = data.ficha3;
+            vector2[3].nombre = data.jugador4;
+            vector2[3].ficha = data.ficha4;
+            vector2[4].nombre = data.jugador5;
+            vector2[4].ficha = data.ficha5;
+            vector2[5].nombre = data.jugador6;
+            vector2[5].ficha = data.ficha6;
+          }
+          //Logica del mensaje inicial
+          setV1(vector1)
+          setV2(vector2)
+
+        }
+        else {
+          //Logica mensaje general
+          switch(data.type) {
+            case "Respuesta":
+              switch(data.subtype) {
+                case "Dado_casillas":
+  
+                case "Pregunta":
+                  
+                default:
+                  
+              }
+            case "Accion":
+              switch(data.subtype) {
+                case "Dados":
+                  
+                default:
+                  
+              }
+            
+            case "Fin":
+
+
+            case "Actualizacion":
+
+
+            case "Actualizacion":
+              
+            
+            default:
+              
+          }
+            
+        }
         setV1(vector2)
         console.log(vector1)
       } catch (err) {
@@ -207,26 +328,26 @@ const Tablero = () => {
     };
   },[]);
 
-  const enviarMensaje = (valor) => {
+  const enviarMensaje = () => {
     chatSocketRef.current(
       JSON.stringify({
-        OK:"",
-        jugador:"",
-        type:"",
-        subtype: "",
-        valor_dado: "",
-        casilla_elegida: "",
-        casillas_nuevas: "",
-        enunciado: "",
-        r1: "",
-        r2: "",
-        r3: "",
-        r4: "",
-        rc: "",
-        quesito: "",
-        esCorrecta: "",
-        mensage_chat: "",
-        error: ""
+        OK:"true",
+        jugador:{usuario},
+        type:{type},
+        subtype: {subtype},
+        valor_dado: {valor_dado},
+        casilla_elegida: {casilla_elegida},
+        casillas_nuevas: {casillas_nuevas},
+        enunciado: {enunciado},
+        r1: {r1},
+        r2: {r2},
+        r3: {r3},
+        r4: {r4},
+        rc: {rc},
+        quesito: {quesito},
+        esCorrecta: {esCorrecta},
+        mensage_chat: {mensage_chat},
+        error: {errorPartida}
       })
     );
   }
@@ -507,12 +628,12 @@ const Tablero = () => {
   }
   
   /* --- JUGADORES IZQUIERDA --- */
-  function Jugadores1(props) {
-    return(
+  function Jugadores1() {
+    return vector1.map((props, indice) => (
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "3", top:"4%", left:"3%"}}>  
-        <div className='App-EsJugador' style={{top: props.top, left:"0%", width: "30%", height: "30%"}} >
+        <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"0%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={props.imagen} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -529,27 +650,33 @@ const Tablero = () => {
             </div>
         </div>
       </div>
-    );    
+    ));    
   }  
 
   /* --- JUGADORES DERECHA --- */
-  function Jugadores2(props) {
-    return (
+  function jugadores2() {
+    return vector1.map((props, indice) => (
         <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "3", top:"4%", left:"3%"}}>  
-            <div className='App-EsJugador' style={{top: props.top, left:"70%", width: "30%", height: "30%"}} >
-                <div style={{marginTop: "2%"}}>
-                    <img src={props.imagen} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
-                        <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
-                    <br></br>
-                </div>
-                <div style={{marginTop:"3%"}}>
-                    <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"70%", backgroundColor:"white"}} />
-                    <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"35%", backgroundColor:"none"}}/>
-                    <br></br>
-                </div>
+            <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"70%", width: "30%", height: "30%"}} >
+              <div style={{marginTop: "2%"}}>
+                  <img src={props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                      <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
+                  <br></br>
+              </div>
+              <div style={{marginTop:"3%"}}>
+                <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"5%", backgroundColor:"white"}} /><br></br>
+                <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.rojo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.azul} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.verde} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.amarillo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.rosa} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.naranja} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <br></br>
+              </div>
             </div>
         </div>
-    )
+    ));
   } 
 
   /* --- TABLERO --- */
@@ -625,12 +752,8 @@ const Tablero = () => {
             </div>
 
             <PosicionElementos/>
-            <Jugadores1 top="0%" imagen={vector1[0].queso} nombre={vector1[0].nombre} rojo={vector1[0].rojo} azul={vector1[0].azul} amarillo={vector1[0].amarillo} rosa={vector1[0].rosa} verde={vector1[0].verde} naranja={vector1[0].naranja}/>
-            <Jugadores1 top="30%" imagen={vector1[1].queso} nombre={vector1[1].nombre} rojo={vector1[1].rojo} azul={vector1[1].azul} amarillo={vector1[1].amarillo} rosa={vector1[1].rosa} verde={vector1[1].verde} naranja={vector1[1].naranja}/>
-            <Jugadores1 top="60%" imagen={vector1[2].queso} nombre={vector1[2].nombre} rojo={vector1[2].rojo} azul={vector1[2].azul} amarillo={vector1[2].amarillo} rosa={vector1[2].rosa} verde={vector1[2].verde} naranja={vector1[2].naranja}/>
-            <Jugadores2 top="0%" imagen={vector1[3].queso} nombre={vector1[3].nombre} rojo={vector1[3].rojo} azul={vector1[3].azul} amarillo={vector1[3].amarillo} rosa={vector1[3].rosa} verde={vector1[3].verde} naranja={vector1[3].naranja}/>
-            <Jugadores2 top="30%" imagen={vector1[4].queso} nombre={vector1[4].nombre} rojo={vector1[4].rojo} azul={vector1[4].azul} amarillo={vector1[4].amarillo} rosa={vector1[4].rosa} verde={vector1[4].verde} naranja={vector1[4].naranja}/>
-            <Jugadores2 top="60%" imagen={vector1[5].queso} nombre={vector1[5].nombre} rojo={vector1[5].rojo} azul={vector1[5].azul} amarillo={vector1[5].amarillo} rosa={vector1[5].rosa} verde={vector1[5].verde} naranja={vector1[5].naranja}/>
+            {Jugadores1()}
+            {jugadores2()}
             
 
             <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setShow1(!show1)}}>
