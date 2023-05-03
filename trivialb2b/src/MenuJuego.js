@@ -1,6 +1,6 @@
 import './Estilos/App.css';
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Amigos from'./Imagenes/Amigos.png';
 import BuscarPartida from'./Imagenes/BuscarPartida.png';
 import CrearPartida from'./Imagenes/CrearPartida.png';
@@ -8,6 +8,7 @@ import Tienda from'./Imagenes/Tienda.png';
 import Perfil from'./Imagenes/Perfil.png';
 import Logo from './Imagenes/Logo.png';
 import Estadisticas from './Estadisticas';
+
 
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
@@ -53,7 +54,7 @@ function Modo( props ) {
 
 
 const MenuJuego = () => {
-  
+  const location = useLocation();
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
 
@@ -70,7 +71,8 @@ const MenuJuego = () => {
     navigate(process.env.PUBLIC_URL + '/Tienda');
   };
   const onPerfil = async (event) => {
-    navigate(process.env.PUBLIC_URL + '/Perfil');
+    let cambiarDatos = false;
+    navigate(process.env.PUBLIC_URL + '/Perfil', {state: { cambiarDatos }});
   };
   const onHistorial = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Historial');

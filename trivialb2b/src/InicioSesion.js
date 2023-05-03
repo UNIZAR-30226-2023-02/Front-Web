@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Atras from "./Imagenes/Atras.png";
 import CryptoJS from 'crypto-js';
 import Cookies from 'universal-cookie';
+import { TextField } from "@mui/material";
 
 //const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
@@ -22,11 +23,6 @@ function Boton(props) {
     </div>
   )
 }
-
-/*
-const valorOriginal = 'hola mundo';
-const clave = 'mi clave secreta';
-const valorCifrado = CryptoJS.AES.encrypt(valorOriginal, clave).toString();*/
 
 const InicioSesion = ({ miVariable, setMiVariable }) => {
   const [body, setBody] = useState({ username: "", password: "" });
@@ -49,7 +45,6 @@ const InicioSesion = ({ miVariable, setMiVariable }) => {
   };
 
   const IniciarSesion = () => {
-    
     fetch(URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -91,9 +86,10 @@ const InicioSesion = ({ miVariable, setMiVariable }) => {
           
           <Boton texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} onchange={handleChange}/>
           </form>
-          <div style={{top:"62%", position:"absolute", fontSize:"25px"}}>
-            <font color="red" > {errores}</font>
+          <div style={{top:"62%", position:"absolute", fontSize:"33px"}}>
+            <span style={{color:"red"}}>{errores}</span>
           </div>
+
         <br></br>
         <button className="App-boton" style= {{top: "70%", left: "auto", position:"absolute"}} onClick={() => IniciarSesion()} >
           Iniciar Sesion

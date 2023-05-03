@@ -1,23 +1,98 @@
-import React, { useState } from "react";
+import React, { useState , useEffect, useRef } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
 import Usuario from'./Imagenes/Usuario.png';
 import Tablero1 from'./Imagenes/Tablero1.png';
+import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+
 
 const EsperandoJugadores = () => {
+
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
   const [show, setShow] = useState(true);
-
-
-  const vectorJugadores = ["Acher", "Miguel", "pablo", "Luis"];
-
+  const [show1, setShow1] = useState(false);
+  const [show2, setShow2] = useState(false);
 
   const navigate = useNavigate();
+
+  const [jugadoresSala, setJugadoresSala] = useState([]);
+  const [vectorJugadores, setVectorJugadores ]  = useState([]);
+
+  
+  let [vectorJugadores2, setVectorJugadores2 ] = useState(["", ""]);
+  let [vectorJugadores4, setVectorJugadores4 ] = useState(["", "", "", ""]);
+  let [vectorJugadores6, setVectorJugadores6 ] = useState(["", "", "", "", "", ""]);
+
+
+  const cookies= new Cookies();
+  const usuario = cookies.get('tokenUsuario');
+  const websocket = cookies.get('WebSocketEsperando');
+  const noCreador = cookies.get('noCreador');
+  const contraseña = cookies.get('password_sala');
+  const numJugadores = cookies.get('n_jugadores');
+  let jRestantes = numJugadores;
+  
+  console.log(websocket);
+
+  const chatSocketRef = useRef(null);
+  useEffect(() => {
+    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+    chatSocketRef.current.onmessage = function(event) {
+      const data = JSON.parse(event.data)
+      try {
+        console.log(data)
+        if (data.accion = "actualizar_lista") {
+          jRestantes=jRestantes-1
+          if (numJugadores == 2) {
+            vectorJugadores2 = data.usernames.split(",");
+            console.log(vectorJugadores2)
+            setVectorJugadores(vectorJugadores2)
+            console.log(vectorJugadores)
+            setShow2(true)
+          }
+          else if (numJugadores == 4) {
+            vectorJugadores4 = data.usernames.split(",");
+            setVectorJugadores(vectorJugadores4)
+            setShow2(true)
+          } 
+          else if (numJugadores == 6) {
+            vectorJugadores6 = data.usernames.split(",");
+            setVectorJugadores(vectorJugadores6)
+            setShow2(true)
+          }
+        }
+        else if (data.accion = "empezar_partida"){
+          if (noCreador){
+            setShow1(false)
+          }
+          cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
+        }
+        else {
+          cookies.set('websocket_partida', data.websocket, {path: '/'})
+          navigate(process.env.PUBLIC_URL+ '/Tablero');
+        }
+
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    chatSocketRef.current.onerror = function(event) {
+      console.error('Game socket error:', event);
+    };
+    
+    chatSocketRef.current.onclose = function(event) {
+      console.error('Game socket closed unexpectedly');
+    }
+
+  return () => {
+      chatSocketRef.current.close();
+  };
+  },[]);
+  
+
   const handleChange = (e) => {
     setBody({
       ...body,
@@ -28,6 +103,14 @@ const EsperandoJugadores = () => {
   const abandonar = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };       
+
+  function empezarPartida() {
+    if (noCreador == 1){
+      chatSocketRef.current(
+        JSON.stringify({accion: "empezar"})
+      );
+    } 
+  }
 
   
   function jugadores() {
@@ -40,36 +123,40 @@ const EsperandoJugadores = () => {
   }
 
   return (
-    
     <div className="App">
-
       {show ? (
         <div>
           <div className="App-CuadradoNegro" style={{ width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
             <div style={{marginTop: "3%"}}>                
-              <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
-              <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
-                {jugadores()}
-              </div>
-                <button className="App-boton" style= {{marginTop:"5%"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
+              <a style={{color:"white", fontSize:"50px"}}>Esperando a {jRestantes} jugadores</a>
+              {show2 ? (
+                <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
+                  {jugadores()}
+                </div>
+                ) : (
+                  <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
+                  {jugadores()}
+                  </div>
+                )}
             </div>
           </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
+
+
+          {show1 ? (
+            <div>
+              <button className="App-botonConfirmar" style= {{position: "absolute", top: "64%", left: "30%", zIndex: "5"}} onClick={() =>  empezarPartida()} > Empezar partida </button>
+              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "50%", zIndex: "5"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
+            </div>
+          ) : (
+              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "41%", zIndex: "3"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
+          )}
         </div>
+
       ) : (
         <div>
           <div className="App-CuadradoNegro" style={{filter: 'blur(5px)', width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
             <div style={{marginTop: "3%"}}>                
-              <a style={{color:"white", fontSize:"50px"}}>Esperando Jugadores </a>
+              <a style={{color:"white", fontSize:"50px"}}> Esperando Jugadores </a>
               <div style={{display:"flex", marginTop:"50px",  placeContent:"center"}}>
                 {jugadores()}
               </div>
@@ -90,18 +177,13 @@ const EsperandoJugadores = () => {
                   </div>
                 </div>
               </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
-          <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
-            <div style={{ position: "absolute", zIndex: "2", height:"100%", width:"55%",  filter: 'blur(5px)'}}>
-              <img src={Tablero1} style={{height:"100%", width:"100%"}}/> 
-            </div> 
-          </div>
         </div>
         )}
+        <div className="App-header" style={{ zIndex: "1",  filter: 'blur(5px)'}}>    
+            <div style={{ position: "absolute", zIndex: "2", height:"98%", width:"55%",  filter: 'blur(5px)'}}>
+              <img src={Tablero1} style={{height:"98%", width:"98%"}}/> 
+            </div> 
+          </div>
     </div>
   );
 };

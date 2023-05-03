@@ -110,13 +110,24 @@
 
 .App-boton {
   color: #232323;
-  border-radius: 50px;
+  border-radius: 10px;
   border: none;
   padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
   background-color: #c7c3c3;
-  box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
+  box-shadow: 8px 8px 4px rgba(0, 0, 1.2, 1.25);
+}
+
+.App-boton:hover {
+  color: #232323;
+  border-radius: 10px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 40px;
+  cursor: pointer;
+  background-color: #8b8888;
+  box-shadow: 5px 5px 2px rgba(0, 0, 1.2, 1.25);
 }
 
 .App-botonSinS {
@@ -126,39 +137,52 @@
   padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
-  background-color: #c7c3c3;
+  background-color: #f5bcbc;
 }
 
 .App-botonAzul {
   color: #ffffff;
-  border-radius: 50px;
+  border-radius: 10px;
   border: none;
   padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
   background-color: rgb(0, 80, 155);
-  box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
+  box-shadow: 5px 5px 2px rgba(0, 0, 1.2, 1.25);
+}
+.App-botonAzul:hover {
+  background-color: rgb(0, 52, 100);
+  box-shadow: 4px 4px 1px rgba(0, 0, 1.2, 1.25);
 }
 
 .App-botonCancelar {
   color: #ffffff;
-  border-radius: 50px;
+  border-radius: 10px;
   border: none;
   padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
   background-color: rgb(134, 9, 9);
-  box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
+  box-shadow: 8px 8px 4px rgba(0, 0, 1.2, 1.25);
 }
+.App-botonCancelar:hover {
+  background-color: rgb(97, 6, 6);
+  box-shadow: 5px 5px 2px rgba(0, 0, 1.2, 1.25);
+}
+
 .App-botonConfirmar {
   color: #ffffff;
-  border-radius: 50px;
+  border-radius: 10px;
   border: none;
   padding: 10px 20px;
   font-size: 40px;
   cursor: pointer;
   background-color: rgb(7, 83, 17);
-  box-shadow: 10px 10px 5px rgba(0, 0, 1.2, 1.25);
+  box-shadow: 8px 8px 4px rgba(0, 0, 1.2, 1.25);
+}
+.App-botonConfirmar:hover {
+  background-color: rgb(7, 66, 15);
+  box-shadow: 5px 5px 2px rgba(0, 0, 1.2, 1.25);
 }
 
 .App-textoBlanco {
@@ -287,7 +311,7 @@
 }
 
 .App-CuadradoNegro{
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(29, 29, 29);
   left: 10%;
   border-radius: 50px;
 }
@@ -342,7 +366,7 @@
   flex: 0 0 auto;
   width: 24%;
   scroll-snap-align: start;
-  background-color: #000000;
+  background-color:rgb(29, 29, 29);
   border: "2px solid white";
   letter-spacing: none;
   margin-right: 0;

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/login/";
+const URL = "http://51.142.118.71:8000/api/salas/crear/";
 
 function CuadroTexto(props) {
 return (
@@ -21,11 +22,13 @@ return (
 
 const ModoClasico = () => {
     
-  const [body, setBody] = useState({ salaNombre: "", time: "", numJugadores: "", password: ""});
+  const [body, setBody] = useState({ nombre_sala: "", tiempo_respuesta: "15", password_sala: "", n_jugadores: "2", tipo_partida: "Clasico" });
   const [errores, setErorres] = useState("");
-
-  const navigate = useNavigate();
   
+  const navigate = useNavigate();
+  const cookies= new Cookies();
+  const token = cookies.get('token');
+
   const handleChange = (e) => {
     setBody({
       ...body,
@@ -39,40 +42,45 @@ const ModoClasico = () => {
 
   const onSubmit = () => {
     console.log(body);
-    navigate(process.env.PUBLIC_URL + '/EsperandoJugadores');
-    /*
     fetch(URL, {
       method: "POST",
+      headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
-      //.then((data) => console.log(data))
-      
+
       .then((data) => { 
         console.log(data)
         if (data.OK == "True"){
           setErorres("")
-          navigate(process.env.PUBLIC_URL+'/MenuPrincipal');
+          cookies.set('nombre_sala', body.nombre_sala, {path: '/'})
+          cookies.set('tiempo_respuesta', body.tiempo_respuesta, {path: '/'})
+          cookies.set('password_sala', body.password_sala, {path: '/'})
+          cookies.set('n_jugadores', body.n_jugadores, {path: '/'})
+          cookies.set('tipo_partida', body.tipo_partida, {path: '/'})
+          cookies.set('WebSocketEsperando', data.websocket, {path: '/'})
+          cookies.set('noCreador', 1, {path: '/'})
+          navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
         }
         else {
-          if (data.error_username !== "") {
-            setErorres("Error name");
+          if (data.error_nombre_sala !== "") {
+            setErorres("Error con el nombre de la sala");
           }
-          else if (data.error_password !== ""){
-            setErorres("Error password");
+          else if (data.error_tipo_sala !== ""){
+            setErorres("Error tipo sala");
           }
-          else if (data.error_confirm_password !== ""){
-            setErorres("Error confirm password");
+          else if (data.error_tipo_partida !== ""){
+            setErorres("Error tipo partida");
           }
-          else if (data.error_fecha_nac !== ""){
-            setErorres("Error fecha nac");
+          else if (data.error_n_jugadores !== ""){
+            setErorres("Error en el número de jugadores");
           }
-          else if (data.error_correo !== ""){
-            setErorres("Error correo");
+          else if (data.error_tiempo_respuesta !== ""){
+            setErorres("Error tiempo respuesta");
           }
         }
       })
-      .catch((error) => console.error(error));*/
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -96,12 +104,16 @@ const ModoClasico = () => {
 
             <div className="App-CuadrosTextoIzq" > 
               <div style={{marginLeft: "3%"}}>
-              <CuadroTexto texto="Nombre de la sala" label="salaNombre" nombre="salaNombre" valor={body.salaNombre} funcion={handleChange} />
+              <CuadroTexto texto="Nombre de la sala" label="nombre_sala" nombre="nombre_sala" valor={body.nombre_sala} funcion={handleChange} />
               </div>
               <div style={{marginTop:"7%"}}>
-                <label for="tiempoRespuesta" style={{color: "#174a67"}}> Tiempo de respuesta </label>
-                <select name="tiempoRespuesta" id="tiempoRespuesta" className="App-textoNegro" style={{width:"530px", height:"70px" }}>
-                    <option value="10">10 segundos</option>
+                <label for="tiempoRespuesta" style={{color: "#174a67"}} > Tiempo de respuesta </label>
+                <select name="tiempoRespuesta" id="tiempoRespuesta" className="App-textoNegro" style={{width:"530px", height:"70px" }}   
+                onChange={(event) => setBody({
+                ...body,
+                tiempo_respuesta: event.target.value
+                })}>
+                    <option value="10" >10 segundos</option>
                     <option value="15">15 segundos</option>
                     <option value="20">20 segundos</option>
                     <option value="25">25 segundos</option>
@@ -109,16 +121,19 @@ const ModoClasico = () => {
                 </select> 
                 </div>
             </div>
-
+{/*onClick={setBody(value)}*/}
             <div className="App-CuadrosTextoDer" style={{marginRight: "1%"}} > 
               <label for="numeroJugadores" style={{color: "#174a67"}}> Nº de jugadores: </label>
-              <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}>
-                  <option value="dos">2</option>
-                  <option value="cuatro">4</option>
-                  <option value="seis">6</option>
+              <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}onChange={(event) => setBody({
+                ...body,
+                n_jugadores: event.target.value
+                })}>
+                  <option value="2">2</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
               </select> 
               <div style={{marginTop:"7%", marginLeft: "6%"}}>            
-                  <CuadroTexto texto="*  Contraseña" label="password" nombre="password" valor={body.password} funcion={handleChange} />
+                  <CuadroTexto texto="*  Contraseña" label="password" nombre="password_sala" valor={body.password_sala} funcion={handleChange} />
               </div>
             </div>
 
