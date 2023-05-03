@@ -45,7 +45,7 @@ const EsperandoJugadores = () => {
       const data = JSON.parse(event.data)
       try {
         console.log(data)
-        if (data.accion = "actualizar_lista") {
+        if (data.accion == "actualizar_lista") {
           jRestantes=jRestantes-1
           setjRestantes(jRestantes)
           console.log(jRestantes)
@@ -66,22 +66,13 @@ const EsperandoJugadores = () => {
             setVectorJugadores(vectorJugadores6)
             setShow2(true)
           }
-          if (jRestantes == 0) {
-            if (noCreador){
-              setShow1(false)
-            }
-            cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
-          }
         }
-        else if (data.accion = "empezar_partida"){
-          if (noCreador){
-            setShow1(false)
-          }
+        else if (data.accion == "empezar_partida") {
+          console.log("selal")
           cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
-        }
-        else {
-          cookies.set('websocket_partida', data.websocket, {path: '/'})
+          chatSocketRef.current.close();
           navigate(process.env.PUBLIC_URL+ '/Tablero');
+          
         }
 
       } catch (err) {
@@ -89,39 +80,21 @@ const EsperandoJugadores = () => {
       }
     };
     chatSocketRef.current.onerror = function(event) {
-      console.error('Game socket error:', event);
+      console.error('Socket error:', event);
     };
     
     chatSocketRef.current.onclose = function(event) {
-      console.error('Game socket closed unexpectedly');
+      console.error('El socket de esperando en la sala se ha cerrado');
     }
 
   return () => {
-      console.log("Me salgo");
       chatSocketRef.current.close();
   };
   },[]);
-  
-
-  const handleChange = (e) => {
-    setBody({
-      ...body,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const abandonar = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };       
-
-  function empezarPartida() {
-    if (noCreador == 1){
-      chatSocketRef.current(
-        JSON.stringify({accion: "empezar"})
-      );
-    } 
-  }
-
   
   function jugadores() {
     return vectorJugadores.map((elemento) => (
@@ -150,16 +123,7 @@ const EsperandoJugadores = () => {
                 )}
             </div>
           </div>
-
-
-          {show1 ? (
-            <div>
-              <button className="App-botonConfirmar" style= {{position: "absolute", top: "64%", left: "30%", zIndex: "5"}} onClick={() =>  empezarPartida()} > Empezar partida </button>
-              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "50%", zIndex: "5"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
-            </div>
-          ) : (
-              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "41%", zIndex: "3"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
-          )}
+          <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "50%", zIndex: "5"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
         </div>
 
       ) : (

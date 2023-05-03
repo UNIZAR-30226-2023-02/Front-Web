@@ -69,6 +69,8 @@ const Tablero = () => {
   const numJugadores = cookies.get('n_jugadores');
   const token = cookies.get('token');
   let usuario = cookies.get('tokenUsuario');
+  const contraseña = cookies.get('password_sala');
+  const websocket = cookies.get('WebSocketTablero');
 
   // let [vectorJugadores2, setVectorJugadores2 ] = useState([]);
   // let [vectorJugadores4, setVectorJugadores4 ] = useState([]);
@@ -196,11 +198,8 @@ const Tablero = () => {
 
   /* --- SOCKET --- */
   const chatSocketRef = useRef(null);
-
   useEffect(() => {
-    chatSocketRef.current = new WebSocket(
-      `ws://51.142.118.71:8000/ws/partida/1/`
-    );
+    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
 
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
@@ -281,7 +280,7 @@ const Tablero = () => {
             case "Respuesta":
               switch(data.subtype) {
                 case "Dado_casillas":
-  
+                  valor_dado = data.valor_dado
                 case "Pregunta":
                   
                 default:
@@ -369,12 +368,10 @@ const Tablero = () => {
     setTimeout(() => {
       setCubeStyle({
         ...cubeStyle,
-        transition: `transform ${time}s` });
+        transition: `transform ${time}s` 
+      });
 
-      const randomValue = Math.floor((Math.random() * 6) + 1);
-      console.log(`randomValue: ${randomValue}`);
-
-      switch(randomValue) {
+      switch(valor_dado) {
         case 1:
           setCubeStyle({
             ...cubeStyle,
