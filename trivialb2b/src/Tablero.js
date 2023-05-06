@@ -62,6 +62,9 @@ const Tablero = () => {
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
   let [jugadorActual, setJugadorActual] = useState(0);
+  let [casillaSeleccionada, setCasillaSeleccionada] = useState("");
+  let [vectorJugadorTurno, setVectorJugadorTurno] = useState("");
+  let [indiceJugadorTurno, setIndiceJugadorTurno] = useState("");
 
 
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
@@ -77,6 +80,8 @@ const Tablero = () => {
   let tiempoPregunta = 0;
   let tiempoElegirCasilla = 0;
 
+  let tablero = "";
+
   let errorPartida = "";
   let type, subtype, enunciado, r1,r2,r3,r4,rc, esCorrecta, quesito, pregunta, mensage_chat = "";
   let valor_dado, casilla_elegida = 0;
@@ -85,13 +90,15 @@ const Tablero = () => {
   
   //Mensaje a rellenar para el backend
   const [msg, setMsg] = useState({OK:"",jugador:"", type:"", subtype: "", valor_dado: "", casilla_elegida: "", casillas_nuevas: [], enunciado: "", r1: "", r2: "", r3: "", r4: "", rc: "", quesito: "", esCorrecta: "", mensage_chat: "", error: ""});
-
   //Sobra (modificrlo con los datos que nos pasa el backend)
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
   // Vector Jugadores
-  let [vector1, setV1] = useState([ {nombre:"", ficha:"", casilla:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
-  let [vector2, setV2] = useState([ {nombre:"", ficha:"", casilla:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
+  let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+  let [vector2, setV2] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+
+  const posv1 = [{top:"5%", left:"22%"},{top:"25%", left:"22%"},{top:"45%", left:"22%"}]
+  const posv2 = [{top:"5%", left:"52%"},{top:"25%", left:"52%"},{top:"45%", left:"52%"}]
 
   let vparp = [
     "", "", "", "", "", "", "", "",
@@ -105,7 +112,7 @@ const Tablero = () => {
     "", "", "", "", "", "", "", "",
   ];
 
-  const amarilla = [
+  const amarillo = [
       {l:"29%", t:"73.5%"},   {l:"37.9%", t:"76%"}, {l:"42.3%", t:"76%"},   {l:"48%", t:"76%"},   {l:"53.5%", t:"76%"}, {l:"59%", t:"76%"},     {l:"64.5%", t:"76%"}, 
       {l:"71.5%", t:"75%"},   {l:"77%", t:"69%"},   {l:"79.5%", t:"65.5%"}, {l:"82%", t:"61%"},   {l:"85%", t:"56.5%"}, {l:"88%", t:"51.5%"},   {l:"90.5%", t:"47%"},
       {l:"93%", t:"35.5%"},   {l:"93%", t:"31.5%"}, {l:"89.5%", t:"28%"},   {l:"87%", t:"23%"},   {l:"84%", t:"18%"},   {l:"81.5%", t:"13.5%"}, {l:"78.5%", t:"9%"},
@@ -120,7 +127,7 @@ const Tablero = () => {
       {l:"37.5%", t:"7%"},    {l:"41%", t:"12%"},     {l:"44%", t:"17.5%"},   {l:"47%", t:"22.5%"},   {l:"49.5%", t:"28%"},
       {l:"15%", t:"41.5%"},   {l:"21%", t:"41.5%"},   {l:"27%", t:"41.5%"},   {l:"33%", t:"41.5%"},   {l:"39.5%", t:"41.5%"}, {l:"59%", t:"39%"}
   ];
-  const roja = [
+  const rojo = [
       {l:"34%", t:"76%"},  {l:"39.6%", t:"76%"}, {l:"45%", t:"76%"},     {l:"50.5%", t:"76%"},   {l:"56%", t:"76%"},     {l:"61.5%", t:"76%"}, {l:"67%", t:"76%"},
       {l:"76%", t:"73%"},  {l:"79%", t:"68%"},   {l:"81.5%", t:"64.5%"}, {l:"84%", t:"59.5%"},   {l:"87%", t:"54.5%"},   {l:"90%", t:"50%"},   {l:"92%", t:"45.5%"},
       {l:"93%", t:"42%"},  {l:"90.5%", t:"31%"}, {l:"87.5%", t:"26%"},   {l:"85%", t:"21.5%"},   {l:"82%", t:"16.5%"},   {l:"79.5%", t:"12%"}, {l:"77%", t:"7.5%"},
@@ -196,6 +203,8 @@ const Tablero = () => {
       {l:"17.5%", t:"35.5%"}, {l:"23.5%", t:"35.5%"}, {l:"29.5%", t:"35.5%"}, {l:"35.5%", t:"35.5%"}, {l:"42%", t:"35.5%"}, {l:"56%", t:"33%"} 
   ];
 
+  const posiciones1 = [amarillo, rojo, azul]
+  const posiciones2 = [rosa, verde, naranja]
 
   /* --- SOCKET --- */
   const chatSocketRef = useRef(null);
@@ -209,20 +218,43 @@ const Tablero = () => {
         console.log(data)
         if (msgIni==0) {
           tiempoPregunta = data.tiempo_pregunta;
-          tiempoElegirCasilla = data.tiempo_pregunta;
+          tiempoElegirCasilla = data.tiempo_elegir_casilla;
           errorPartida = data.error;
           msgIni=1
-          if (numJugadores==2) {
-            let j1 = String(data.jugador1)
+          //if (numJugadores==2) {
+            
+          let jugadores = data.jugadores
+          let jugadorVector
+          console.log(jugadores)
+          jugadores.forEach(jugadorVector, indice => {
+            if (indice < (jugadores.length/2)) {
+              vector1.push(jugadorVector)
+              if (vector1[indice].nombre == usuario) {
+                tablero = vector1[indice].tablero 
+                jugadorActual = vector1[indice].turno
+              }
+            }
+            else {
+              vector2.push(jugadorVector)
+            }
+          });
+          setV1(vector1)
+          setV2(vector2)
+          console.log(vector1)
+          console.log(vector2)
+          console.log(tablero)
+          console.log(jugadorActual)
+
+            /*let j1 = String(data.jugador1)
             let j2 = String(data.jugador2)
             vector1[0].nombre = j1
             //vector1[0].ficha = data.ficha1;
             vector1[0].casilla = 72;
             vector2[0].nombre = j2
             //vector2[0].ficha = data.ficha2;
-            vector2[0].casilla = 72;
-          }
-          else if (numJugadores==4) {
+            vector2[0].casilla = 72;*/
+          //}
+          /*else if (numJugadores==4) {
             //Jugadores
             let j1 = String(data.jugador1)
             let j2 = String(data.jugador2)
@@ -256,8 +288,6 @@ const Tablero = () => {
             vector2[1].azul = Transparente
             vector2[1].casilla = 72
             vector2[0].casilla = 72
-
-
           }else {
             console.log(numJugadores)
             let j1 = String(data.jugador1)
@@ -318,13 +348,11 @@ const Tablero = () => {
             vector2[2].verde = Transparente
             vector2[2].naranja = Transparente
             vector2[2].azul = Transparente
-          }
+          }*/
           //Logica del mensaje inicial
-          setV1(vector1)
-          setV2(vector2)
           setShow4(!show4)
           setShow4(!show4)
-          console.log(usuario + " " +  vector1[0].nombre)
+          //console.log(usuario + " " +  vector1[0].nombre)
           if (usuario == vector1[0].nombre) {
             console.log("turno")
             setJugadorActual(1)
@@ -340,6 +368,19 @@ const Tablero = () => {
           else {
             console.log("cambiaJugadorActual a 0")
             setJugadorActual(0)
+          }
+          //Actualizamos la persona que tiene el turno y en que vector está
+          for (let i = 0; i < vector1.length; i++) {
+            if (vector1[i].nombre == data.jugador){
+              setIndiceJugadorTurno(i)
+              setVectorJugadorTurno("vector1")
+            }
+          }
+          for (let i = 0; i < vector2.length; i++) {
+            if (vector2[i].nombre == data.jugador){
+              setIndiceJugadorTurno(i)
+              setVectorJugadorTurno("vector2")
+            }
           }
           //Logica mensaje general
           console.log(data.type)
@@ -361,14 +402,33 @@ const Tablero = () => {
                   setShow4(!show4)
                   setShow4(!show4)
 
-                case "Pregunta":
+                case "Pregunta":                 
+                  enunciado = data.enunciado
+                  r1 = data.r1
+                  r2 = data.r2
+                  r3 = data.r3
+                  r4 = data.r4
+                  rc = data.rc
+                  quesito = data.quesito
                   
+                  //Actualizamos la ficha del jugador que está jugando en todas las pantallas
+                  if (vectorJugadorTurno == "vector1"){
+                    vector1[indiceJugadorTurno].posicion = data.casilla_elegida
+                  }
+                  else {
+                    vector2[indiceJugadorTurno].posicion = data.casilla_elegida
+                  }
+                  setShow4(!show4)
+                  setShow4(!show4)
+
+                  //Mostrar la pregunta a todos
+                  setShow(true)
               }
             case "Accion":
               switch(data.subtype) {
                 case "Dados":
-
-                
+                  setShow4(!show4)
+                  setShow4(!show4)
               }
             
             case "Fin":
@@ -704,29 +764,93 @@ const Tablero = () => {
   }*/
 
   /* --- LANZAR DADO --- */
-  function PosicionElementos () {
-    return (
-        <div style={{ position:"absolute", top:"5%", left:"22%", height:"26.5%", width:"9%"}}>
-            <div style={{position:"absolute", left:"19%", top:"5%"}}>
-                {RelojJugada()}
-            </div >
-            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
-              console.log(jugadorActual)
-              if (jugadorActual==1){
-                //Peticion para que nos envien el dado y las casillas
-                type = "Peticion"
-                subtype = "Tirar_dado"
-                console.log("Envio Tirar_dado")
-                enviarMensaje()
-              } else {
-                console.log("Esperando a que pulse el dado el jugador que le toca")
-              }
-            }}>
-                <Dado/>
+  function PosicionElementos() {
+    for (let i = 0; i < vector1.length; i++) {
+      if(vector1[i].turno == 1) {
+        setVectorJugadorTurno("vector1")
+        setIndiceJugadorTurno(i)
+        return (
+            <div style={{ position:"absolute", top:posv1[i].top, left:posv1[i].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
+                <div style={{position:"absolute", left:"19%", top:"5%"}}>
+                    {RelojJugada()}
+                </div >
+                <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
+                  console.log(jugadorActual)
+                  if (jugadorActual==1){
+                    //Peticion para que nos envien el dado y las casillas
+                    type = "Peticion"
+                    subtype = "Tirar_dado"
+                    console.log("Envio Tirar_dado")
+                    enviarMensaje()
+                  } else {
+                    console.log("Esperando a que pulse el dado el jugador que le toca")
+                  }
+                }}>
+                    <Dado/>
+                </div>
             </div>
-        </div>
-    )
+        )
+      }
+      else {
+        return (
+          <div></div>
+        )
+      }
+    }
+    for (let i = 0; i < vector1.length; i++) {
+      if(vector2[i].turno == 1) {
+        setVectorJugadorTurno("vector2")
+        setIndiceJugadorTurno(i)
+        return (
+            <div style={{ position:"absolute", top:posv2[i].top, left:posv2[i].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
+                <div style={{position:"absolute", left:"19%", top:"5%"}}>
+                    {RelojJugada()}
+                </div >
+                <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
+                  console.log(jugadorActual)
+                  if (jugadorActual==1){
+                    //Peticion para que nos envien el dado y las casillas
+                    type = "Peticion"
+                    subtype = "Tirar_dado"
+                    console.log("Envio Tirar_dado")
+                    enviarMensaje()
+                  } else {
+                    console.log("Esperando a que pulse el dado el jugador que le toca")
+                  }
+                }}>
+                    <Dado/>
+                </div>
+            </div>
+        )
+      }
+      else {
+        return (
+          <div></div>
+        )
+      }
+    }
   }
+
+  function moverFicha(props) {
+    if (vectorJugadorTurno == "vector1"){
+      vector1[indiceJugadorTurno].posicion = props
+    }
+    else {
+      vector2[indiceJugadorTurno].posicion = props
+    }
+    
+    type = "Peticion"
+    subtype = "Movimiento_casilla"
+    casilla_elegida = casillaSeleccionada
+    console.log("Envio Mover casilla")
+    enviarMensaje()
+  }
+
+  function quesitos(props) {
+    return props.map((elemento, indice) => (
+      <img src={elemento} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+    ));
+  }      
   
   /* --- JUGADORES IZQUIERDA --- */
   function jugadores1() {
@@ -741,12 +865,14 @@ const Tablero = () => {
             <div style={{marginTop:"3%"}}>
                 <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"5%", backgroundColor:"white"}} /><br></br>
                 <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.rojo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                {/*<img src={props.rojo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.azul} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.verde} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.amarillo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.rosa} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.naranja} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.naranja} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>*/
+                quesitos(props.quesitos)
+                }
                 <br></br>
             </div>
         </div>
@@ -767,12 +893,14 @@ const Tablero = () => {
               <div style={{marginTop:"3%"}}>
                 <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"5%", backgroundColor:"white"}} /><br></br>
                 <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.rojo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                {/*<img src={props.rojo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.azul} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.verde} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.amarillo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
                 <img src={props.rosa} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.naranja} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+                <img src={props.naranja} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>*/
+                quesitos(props.quesitos)
+                }
                 <br></br>
               </div>
             </div>
@@ -780,37 +908,60 @@ const Tablero = () => {
     ));
   } 
 
+  function fichas1() {
+    return vector1.map((props, indice) => (
+      <img style={{ position:"absolute", left:posiciones1[indice][props.posicion].l, top:posiciones1[indice][props.posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={props.ficha}/>
+  ));
+  }
+
+  function fichas2() {
+    return vector2.map((props, indice) => (
+      <img style={{ position:"absolute", left:posiciones2[indice][props.posicion].l, top:posiciones2[indice][props.posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={props.ficha}/>
+  ));
+  }
+
   /* --- TABLERO --- */
   function Linea(props) {
     return(
         <div style={{position:"absolute", height: props.height, width: props.width, top: props.top, left: props.left , zIndex: "1", transform: props.transform}}>
-            <button className={props.v6} style={{ backgroundColor: props.c1, height: "100%", width: props.width1}} onClick={() => { vaciarCasillas() }}>  </button>
-            <button className={props.v5} style={{ backgroundColor: props.c2, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v4} style={{ backgroundColor: props.c3, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v3} style={{ backgroundColor: props.c4, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v2} style={{ backgroundColor: props.c5, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v1} style={{ backgroundColor: props.c6, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={vparp[props.v6]} style={{ backgroundColor: props.c1, height: "100%", width: props.width1}} onClick={() => { if (jugadorActual==1){ vaciarCasillas(); setCasillaSeleccionada(props.v6); moverFicha(props.v6) } }}>  </button>
+            <button className={vparp[props.v5]} style={{ backgroundColor: props.c2, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => { if (jugadorActual==1){ vaciarCasillas(); setCasillaSeleccionada(props.v5); moverFicha(props.v6) }}}>  </button>
+            <button className={vparp[props.v4]} style={{ backgroundColor: props.c3, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => { if (jugadorActual==1){ vaciarCasillas(); setCasillaSeleccionada(props.v4); moverFicha(props.v6) }}}>  </button>
+            <button className={vparp[props.v3]} style={{ backgroundColor: props.c4, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => { if (jugadorActual==1){ vaciarCasillas(); setCasillaSeleccionada(props.v3); moverFicha(props.v6) }}}>  </button>
+            <button className={vparp[props.v2]} style={{ backgroundColor: props.c5, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => { if (jugadorActual==1){ vaciarCasillas(); setCasillaSeleccionada(props.v2); moverFicha(props.v6) }}}>  </button>
+            <button className={vparp[props.v1]} style={{ backgroundColor: props.c6, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => { if (jugadorActual==1){ vaciarCasillas(); setCasillaSeleccionada(props.v1); moverFicha(props.v6) }}}>  </button>
         </div>
     );
+  }
+
+  //Verificación de la respuesta
+  function esCorrectaRespuesta(num) {
+    if (num == rc) {
+      esCorrecta = "true"
     }
+    else {
+      esCorrecta = "false"
+    }
+    //Enviamos el mensaje "Actualización"
+    type = "Actualizacon"
+    enviarMensaje()
+  }
 
 
   /* --- PREGUNTA --- */
   function Respuesta(props) {
-      return (
-      <div  style= {{width:props.width, height:props.height, top: props.top, left: props.left, position:"absolute", border: "3px solid black", borderRadius:props.border, backgroundColor:props.color}}>
-          <div style={{marginTop:props.marginTop}}>
-              <a style={{fontSize:props.size}}>
-                  {props.letra} {props.respuesta}
-              </a>
-          </div>
-      </div>
-      );
+    return (
+    <div  style= {{width:props.width, height:props.height, top: props.top, left: props.left, position:"absolute", border: "3px solid black", borderRadius:props.border, backgroundColor:props.color}} onClick={() => {if (jugadorActual==1){esCorrectaRespuesta(props.num)}}}>
+        <div style={{marginTop:props.marginTop}}>
+            <a style={{fontSize:props.size}}>
+                {props.letra} {props.respuesta}
+            </a>
+        </div>
+    </div>
+    );
   }
-    
 
   return (
-    
     <div className="App">
       <header className="App-headerJuego" style={{zIndex: "1"}}> 
         {show4 ? (
@@ -819,28 +970,20 @@ const Tablero = () => {
               </div>       
               <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"700px", top:"9%", left:"30%"}} src={URL + "/static/images/objetos/10.png"}>
                   {/* --- TABLERO --- */}  
-                  <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1="blue" c2="white" c3="red" c4="yellow" c5="white" c6="orange" width1="15%" transform="rotate(180deg)" v1={vparp[1]} v2={vparp[2]} v3={vparp[3]} v4={vparp[4]} v5={vparp[5]} v6={vparp[6]}/> 
-                  <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1="red" c2="white" c3="green" c4="orange" c5="white" c6="blue" width1="15%" transform="rotate(120deg)" v1={vparp[8]} v2={vparp[9]} v3={vparp[10]} v4={vparp[11]} v5={vparp[12]} v6={vparp[13]}/>  
-                  <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1="green" c2="white" c3="pink" c4="blue" c5="white" c6="red" width1="15%" transform="rotate(60deg)" v1={vparp[15]} v2={vparp[16]} v3={vparp[17]} v4={vparp[18]} v5={vparp[19]} v6={vparp[20]}/> 
-                  <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1="pink" c2="white" c3="yellow" c4="red" c5="white" c6="green" width1="15%" transform="" v1={vparp[22]} v2={vparp[23]} v3={vparp[24]} v4={vparp[25]} v5={vparp[26]} v6={vparp[27]}/>  
-                  <Linea height="10.5%" width="37%" top="14%" left="0%" c1="yellow" c2="white" c3="orange" c4="green" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)" v1={vparp[29]} v2={vparp[30]} v3={vparp[31]} v4={vparp[32]} v5={vparp[32]} v6={vparp[33]}/>
-                  <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1="orange" c2="white" c3="blue" c4="pink" c5="white" c6="yellow" width1="15%" transform="rotate(-120deg)" v1={vparp[36]} v2={vparp[37]} v3={vparp[38]} v4={vparp[39]} v5={vparp[40]} v6={vparp[41]}/> 
-
-                  
-                  <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2="orange" c3="yellow" c4="blue" c5="red" c6="pink" width1="25%" transform="rotate(-60deg)" v1={vparp[46]} v2={vparp[45]} v3={vparp[44]} v4={vparp[43]} v5={vparp[42]} v6=""/> 
-                  <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2="blue" c3="orange" c4="red" c5="green" c6="yellow" width1="25%" transform="rotate(-120deg)" v1={vparp[51]} v2={vparp[50]} v3={vparp[49]} v4={vparp[48]} v5={vparp[47]} v6=""/> 
-                  <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2="red" c3="blue" c4="green" c5="pink" c6="orange" width1="25%" transform="scaleX(-1)" v1={vparp[56]} v2={vparp[55]} v3={vparp[54]} v4={vparp[53]} v5={vparp[52]} v6=""/> 
-                  <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2="green" c3="red" c4="pink" c5="yellow" c6="blue" width1="25%" transform="rotate(+120deg)" v1={vparp[61]} v2={vparp[60]} v3={vparp[59]} v4={vparp[58]} v5={vparp[57]} v6="" /> 
-                  <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2="pink" c3="green" c4="yellow" c5="orange" c6="red" width1="25%" transform="rotate(+60deg)" v1={vparp[66]} v2={vparp[65]} v3={vparp[64]} v4={vparp[63]} v5={vparp[62]} v6=""/> 
-                  <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2="yellow" c3="pink" c4="orange" c5="blue" c6="green" width1="25%" transform="0" v1={vparp[71]} v2={vparp[70]} v3={vparp[69]} v4={vparp[68]} v5={vparp[67]} v6=""/>
+                  <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1="blue" c2="white" c3="red" c4="yellow" c5="white" c6="orange" width1="15%" transform="rotate(180deg)" v1={1} v2={2} v3={3} v4={4} v5={5} v6={6}/> 
+                  <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1="red" c2="white" c3="green" c4="orange" c5="white" c6="blue" width1="15%" transform="rotate(120deg)" v1={8} v2={9} v3={10} v4={11} v5={12} v6={13}/>  
+                  <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1="green" c2="white" c3="pink" c4="blue" c5="white" c6="red" width1="15%" transform="rotate(60deg)" v1={15} v2={16} v3={17} v4={18} v5={19} v6={20}/> 
+                  <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1="pink" c2="white" c3="yellow" c4="red" c5="white" c6="green" width1="15%" transform="" v1={22} v2={23} v3={24} v4={25} v5={26} v6={27}/>  
+                  <Linea height="10.5%" width="37%" top="14%" left="0%" c1="yellow" c2="white" c3="orange" c4="green" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)" v1={29} v2={30} v3={31} v4={32} v5={32} v6={33}/>
+                  <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1="orange" c2="white" c3="blue" c4="pink" c5="white" c6="yellow" width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/> 
                   
                   
-                  
-                   
-                  
-                  
-                   
-                   
+                  <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2="orange" c3="yellow" c4="blue" c5="red" c6="pink" width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
+                  <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2="blue" c3="orange" c4="red" c5="green" c6="yellow" width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
+                  <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2="red" c3="blue" c4="green" c5="pink" c6="orange" width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
+                  <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2="green" c3="red" c4="pink" c5="yellow" c6="blue" width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
+                  <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2="pink" c3="green" c4="yellow" c5="orange" c6="red" width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
+                  <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2="yellow" c3="pink" c4="orange" c5="blue" c6="green" width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
                   
                    
                   
@@ -850,25 +993,30 @@ const Tablero = () => {
                   <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-179deg)", left:"50.9%", height:"41%", width:"50%", top:"57.8%", zIndex: "2"}} src={Esquina_rosa}/>
                   <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(241deg)", left:"6%", height:"41%", width:"50%", top:"57.8%", zIndex: "2"}} src={Esquina_verde}/>
                   <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(302deg)", left:"-15.7%", height:"41%", width:"50%", top:"19%", zIndex: "2"}} src={Esquina_roja}/>
-                  
+
                   <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0"}}>
                       <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
                   </div>
 
                   {/* --- FICHAS --- */}  
-
-                  <img style={{ position:"absolute", left:amarilla[1].l, top:amarilla[1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_amarilla}/>
-                  <img style={{ position:"absolute", left:roja    [1].l, top:roja    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_roja}/> 
-                  <img style={{ position:"absolute", left:azul    [1].l, top:azul    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_azul}/>
-                  <img style={{ position:"absolute", left:rosa    [1].l, top:rosa    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_rosa}/>
-                  <img style={{ position:"absolute", left:verde   [1].l, top:verde   [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_verde}/>
-                  <img style={{ position:"absolute", left:naranja [1].l, top:naranja [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
+                  {fichas1()}
+                  {fichas2()}
                   
+                  {/*
+                  <img style={{ position:"absolute", left:amarilla[vector1[0].posicion].l, top:amarilla[vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector1[0].ficha}/>
+                  <img style={{ position:"absolute", left:roja    [vector1[1].posicion].l, top:roja    [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector1[1].ficha}/> 
+                  <img style={{ position:"absolute", left:azul    [vector1[2].posicion].l, top:azul    [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector1[2].ficha}/>
+                  <img style={{ position:"absolute", left:rosa    [vector2[0].posicion].l, top:rosa    [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector2[0].ficha}/>
+                  <img style={{ position:"absolute", left:verde   [vector2[1].posicion].l, top:verde   [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector2[1].ficha}/>
+                  <img style={{ position:"absolute", left:naranja [vector2[2].posicion].l, top:naranja [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector2[2].ficha}/>
+                  */}
+                    
               </div>
 
               <PosicionElementos/>
               {jugadores1()}
               {jugadores2()}
+              
 
               <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setShow1(!show1)}}>
                   Pausar Partida
@@ -881,12 +1029,12 @@ const Tablero = () => {
               {/* --- PREGUNTA --- */}  
               {show ? (
               <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", borderRadius: "40px 40px 0px 0px", zIndex:"6", borderRadius:"50%"}}>
-                  <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px"respuesta="Entretenimiento" border= "40px 40px 0px 0px" marginTop="0%" color="orange"/>
-                  <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={body} border= "0px 0px 0px 0px" marginTop="1.2%" color="orange"/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={vector1[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={vector1[2].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={vector2[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={vector2[2].nombre} border= "0px 0px 0px 0px"marginTop="4%" color="white"/>
+                  <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px" respuesta="Entretenimiento" border= "40px 40px 0px 0px" marginTop="0%" color="orange"/>
+                  <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={enunciado} border= "0px 0px 0px 0px" marginTop="1.2%" color="orange" />
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={r1} border= "0px 0px 0px 0px" marginTop="4%" color="white" num="1"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={r2} border= "0px 0px 0px 0px" marginTop="4%" color="white" num="2"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={r3} border= "0px 0px 0px 0px" marginTop="4%" color="white" num="3"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={r4} border= "0px 0px 0px 0px"marginTop="4%" color="white" num="4"/>
 
                   <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:"orange"}} >
                       <br></br><br></br><br></br>
