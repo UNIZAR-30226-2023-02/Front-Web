@@ -89,8 +89,8 @@ const Tablero = () => {
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
   // Vector Jugadores
-  let [vector1, setV1] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
-  let [vector2, setV2] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
+  let [vector1, setV1] = useState([ {nombre:"", ficha:"", casilla:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
+  let [vector2, setV2] = useState([ {nombre:"", ficha:"", casilla:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
 
   let vparp = [
     "", "", "", "", "", "", "", "",
@@ -262,8 +262,10 @@ const Tablero = () => {
             let j2 = String(data.jugador2)
             vector1[0].nombre = j1
             //vector1[0].ficha = data.ficha1;
+            vector1[0].casilla = 72;
             vector2[0].nombre = j2
             //vector2[0].ficha = data.ficha2;
+            vector2[0].casilla = 72;
           }
           else if (numJugadores==4) {
             //Jugadores
@@ -287,6 +289,8 @@ const Tablero = () => {
             vector1[1].verde = Transparente
             vector1[1].naranja = Transparente
             vector1[1].azul = Transparente
+            vector1[1].casilla = 72
+            vector1[0].casilla = 72
 
             //Quesitos jugador 4
             vector2[1].amarillo = Transparente
@@ -295,7 +299,8 @@ const Tablero = () => {
             vector2[1].verde = Transparente
             vector2[1].naranja = Transparente
             vector2[1].azul = Transparente
-
+            vector2[1].casilla = 72
+            vector2[0].casilla = 72
 
 
           }else {
@@ -327,6 +332,10 @@ const Tablero = () => {
             vector1[1].naranja = Transparente
             vector1[1].azul = Transparente
 
+            vector1[2].casilla = 72
+            vector1[1].casilla = 72
+            vector1[0].casilla = 72
+
             //Quesitos jugador 5
             vector2[1].amarillo = Transparente
             vector2[1].rojo = Transparente
@@ -334,6 +343,10 @@ const Tablero = () => {
             vector2[1].verde = Transparente
             vector2[1].naranja = Transparente
             vector2[1].azul = Transparente
+            
+            vector2[2].casilla = 72
+            vector2[1].casilla = 72
+            vector2[0].casilla = 72
 
             //Quesitos jugador 3
             vector1[2].amarillo = Transparente
@@ -379,10 +392,12 @@ const Tablero = () => {
               switch(data.subtype) {
                 case "Dado_casillas":
                   valor_dado = data.valor_dado
-                  data.casillas_nuevas.forEach(element => {
+                  console.log(data.casilla_nueva)
+                  let casillas = data.casillas_nuevas.split(",");
+                  console.log(casillas)
+                  casillas.forEach(element => {
                     vparp[element] = "parpadea"
                   });
-                  console.log(vparp)
 
                 case "Pregunta":
                   
