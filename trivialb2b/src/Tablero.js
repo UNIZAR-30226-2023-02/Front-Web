@@ -61,8 +61,9 @@ const Tablero = () => {
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
+  let [jugadorActual, setJugadorActual] = useState(0);
 
-  let jugadorActual = 0;
+
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
 
   const cookies= new Cookies();
@@ -198,54 +199,9 @@ const Tablero = () => {
 
   /* --- SOCKET --- */
   const chatSocketRef = useRef(null);
+  chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
   useEffect(() => {
-    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
-
-    const enviarMensaje = () => {
-      console.log("Enviar mensaje al backend 1 ")
-      console.log(JSON.stringify({
-        OK:"true",
-        jugador:usuario,
-        type:type,
-        subtype: subtype,
-        valor_dado: valor_dado,
-        casilla_elegida: casilla_elegida,
-        casillas_nuevas: casillas_nuevas,
-        enunciado: enunciado,
-        r1: r1,
-        r2: r2,
-        r3: r3,
-        r4: r4,
-        rc: rc,
-        quesito: quesito,
-        esCorrecta: esCorrecta,
-        mensage_chat: mensage_chat,
-        error: errorPartida
-      }))
-      console.log("Enviar mensaje al backend 2")
-      chatSocketRef.current.send(
-        JSON.stringify({
-          OK:"true",
-          jugador:usuario,
-          type:type,
-          subtype: subtype,
-          valor_dado: valor_dado,
-          casilla_elegida: casilla_elegida,
-          casillas_nuevas: casillas_nuevas,
-          enunciado: enunciado,
-          r1: r1,
-          r2: r2,
-          r3: r3,
-          r4: r4,
-          rc: rc,
-          quesito: quesito,
-          esCorrecta: esCorrecta,
-          mensage_chat: mensage_chat,
-          error: errorPartida
-        })
-      );
-    }
-
+    
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
@@ -257,7 +213,6 @@ const Tablero = () => {
           errorPartida = data.error;
           msgIni=1
           if (numJugadores==2) {
-            console.log(numJugadores)
             let j1 = String(data.jugador1)
             let j2 = String(data.jugador2)
             vector1[0].nombre = j1
@@ -368,21 +323,23 @@ const Tablero = () => {
           setV1(vector1)
           setV2(vector2)
           setShow4(!show4)
-          
+          setShow4(!show4)
+          console.log(usuario + " " +  vector1[0].nombre)
           if (usuario == vector1[0].nombre) {
-            jugadorActual = 1
-            type = "Peticion"
-            subtype = "Tirar_dado"
-            console.log("Envio Tirar_dado")
-            enviarMensaje()
+            console.log("turno")
+            setJugadorActual(1)
+            setShow4(!show4)
+            setShow4(!show4)
           }
         }
         else {
           if (data.jugador == usuario){
-            jugadorActual = 1
+            console.log("cambiaJugadorActual a 1")
+            setJugadorActual(1)
           }
           else {
-            jugadorActual = 0
+            console.log("cambiaJugadorActual a 0")
+            setJugadorActual(0)
           }
           //Logica mensaje general
           console.log(data.type)
@@ -398,20 +355,20 @@ const Tablero = () => {
                   casillas.forEach(element => {
                     vparp[element] = "parpadea"
                   });
+                  console.log("Activamos el parpadea"+ vparp)
+                  pulsarDado()
+                  setIsRunning(false) 
+                  setShow4(!show4)
+                  setShow4(!show4)
 
                 case "Pregunta":
                   
-
-
-                default:
-                  console.log("default")
               }
             case "Accion":
               switch(data.subtype) {
                 case "Dados":
-                  
-                default:
-                  console.log("default")
+
+                
               }
             
             case "Fin":
@@ -419,9 +376,8 @@ const Tablero = () => {
 
             case "Chat":
               
-        
-            default:
-              console.log("default")
+
+      
           } 
           
         }
@@ -442,6 +398,51 @@ const Tablero = () => {
     };
   },[]);
 
+  const enviarMensaje = () => {
+    console.log("Enviar mensaje al backend 1 ")
+    console.log(JSON.stringify({
+      OK:"true",
+      jugador:usuario,
+      type:type,
+      subtype: subtype,
+      valor_dado: valor_dado,
+      casilla_elegida: casilla_elegida,
+      casillas_nuevas: casillas_nuevas,
+      enunciado: enunciado,
+      r1: r1,
+      r2: r2,
+      r3: r3,
+      r4: r4,
+      rc: rc,
+      quesito: quesito,
+      esCorrecta: esCorrecta,
+      mensage_chat: mensage_chat,
+      error: errorPartida
+    }))
+
+    console.log("Enviar mensaje al backend 2")
+    chatSocketRef.current.send(
+      JSON.stringify({
+        OK:"true",
+        jugador:usuario,
+        type:type,
+        subtype: subtype,
+        valor_dado: valor_dado,
+        casilla_elegida: casilla_elegida,
+        casillas_nuevas: casillas_nuevas,
+        enunciado: enunciado,
+        r1: r1,
+        r2: r2,
+        r3: r3,
+        r4: r4,
+        rc: rc,
+        quesito: quesito,
+        esCorrecta: esCorrecta,
+        mensage_chat: mensage_chat,
+        error: errorPartida
+      })
+    );
+  }
 
   /* --- DADO --- */
   const [cubeStyle, setCubeStyle] = useState({
@@ -616,7 +617,6 @@ const Tablero = () => {
               size={100}
   
               onComplete={() => {console.log("La cuenta regresiva ha finalizado");
-                                // Detiene el reloj
           }}
           >
               {({ remainingTime }) => remainingTime}
@@ -703,16 +703,25 @@ const Tablero = () => {
     );
   }*/
 
-
-  /* --- TURNO --- */
-  //Jugador1[5,22], Jugador2[33, 22], Jugador3[60.5, 22], Jugador4[5, 69], Jugador5[33, 69], Jugador6[60.5, 69]
+  /* --- LANZAR DADO --- */
   function PosicionElementos () {
     return (
         <div style={{ position:"absolute", top:"5%", left:"22%", height:"26.5%", width:"9%"}}>
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
             </div >
-            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {console.log("Enviar mensaje backend"); pulsarDado() ;  setIsRunning(false)}}>
+            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
+              console.log(jugadorActual)
+              if (jugadorActual==1){
+                //Peticion para que nos envien el dado y las casillas
+                type = "Peticion"
+                subtype = "Tirar_dado"
+                console.log("Envio Tirar_dado")
+                enviarMensaje()
+              } else {
+                console.log("Esperando a que pulse el dado el jugador que le toca")
+              }
+            }}>
                 <Dado/>
             </div>
         </div>
@@ -775,12 +784,12 @@ const Tablero = () => {
   function Linea(props) {
     return(
         <div style={{position:"absolute", height: props.height, width: props.width, top: props.top, left: props.left , zIndex: "1", transform: props.transform}}>
-            <button className={props.v1} style={{ backgroundColor: props.c1, height: "100%", width: props.width1}} onClick={() => { vaciarCasillas() }}>  </button>
-            <button className={props.v2} style={{ backgroundColor: props.c2, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v3} style={{ backgroundColor: props.c3, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v4} style={{ backgroundColor: props.c4, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v5} style={{ backgroundColor: props.c5, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
-            <button className={props.v6} style={{ backgroundColor: props.c6, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v6} style={{ backgroundColor: props.c1, height: "100%", width: props.width1}} onClick={() => { vaciarCasillas() }}>  </button>
+            <button className={props.v5} style={{ backgroundColor: props.c2, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v4} style={{ backgroundColor: props.c3, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v3} style={{ backgroundColor: props.c4, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v2} style={{ backgroundColor: props.c5, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v1} style={{ backgroundColor: props.c6, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
         </div>
     );
     }
@@ -804,137 +813,145 @@ const Tablero = () => {
     
     <div className="App">
       <header className="App-headerJuego" style={{zIndex: "1"}}> 
-            <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"714px", top:"2%", left:"31%",borderRadius:"5%", backgroundColor:"white"}} ><img src={URL + "/static/images/objetos/10.png"} style={{width:"100%",marginTop:"0%"} }/>
-            </div>       
-            <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"700px", top:"9%", left:"30%"}} src={URL + "/static/images/objetos/10.png"}>
-                {/* --- TABLERO --- */}  
-                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2="yellow" c3="pink" c4="orange" c5="blue" c6="green" width1="25%" transform="0" v1={vparp[0]} v2={vparp[1]} v3={vparp[2]} v4={vparp[3]} v5={vparp[4]} v6={vparp[5]}/>
-                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2="pink" c3="green" c4="yellow" c5="orange" c6="red" width1="25%" transform="rotate(+60deg)" v1={vparp[6]} v2={vparp[7]} v3={vparp[8]} v4={vparp[9]} v5={vparp[10]} v6={vparp[11]}/> 
-                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2="green" c3="red" c4="pink" c5="yellow" c6="blue" width1="25%" transform="rotate(+120deg)"/> 
-                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2="red" c3="blue" c4="green" c5="pink" c6="orange" width1="25%" transform="scaleX(-1)"/>  
-                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2="blue" c3="orange" c4="red" c5="green" c6="yellow" width1="25%" transform="rotate(-120deg)"/> 
-                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2="orange" c3="yellow" c4="blue" c5="red" c6="pink" width1="25%" transform="rotate(-60deg)"/> 
-                <Linea height="10.5%" width="37%" top="14%" left="0%" c1="yellow" c2="white" c3="orange" c4="green" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)"/>  
-                <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1="pink" c2="white" c3="yellow" c4="red" c5="white" c6="green" width1="15%" transform=""/>  
-                <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1="green" c2="white" c3="pink" c4="blue" c5="white" c6="red" width1="15%" transform="rotate(60deg)"/>  
-                <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1="red" c2="white" c3="green" c4="orange" c5="white" c6="blue" width1="15%" transform="rotate(120deg)"/>  
-                <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1="blue" c2="white" c3="red" c4="yellow" c5="white" c6="orange" width1="15%" transform="rotate(180deg)"/>  
-                <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1="orange" c2="white" c3="blue" c4="pink" c5="white" c6="yellow" width1="15%" transform="rotate(-120deg)"/>  
-                
-                <img style={{ position:"absolute", transform: "rotate(-2deg)", left:"4.9%", height:"41%", width:"53%", top:"-19.2%", zIndex: "2"}} src={Esquina_azul}/>
-                <img style={{ position:"absolute", transform: "rotate(+62deg)", left:"51%", height:"41%", width:"50%", top:"-18.89%", zIndex: "2"}} src={Esquina_naranja}/>
-                <img style={{ position:"absolute", transform: "rotate(+122deg)", left:"73.2%", height:"41%", width:"50%", top:"20%", zIndex: "2"}} src={Esquina_amarilla}/>
-                <img style={{ position:"absolute", transform: "rotate(-179deg)", left:"50.9%", height:"41%", width:"50%", top:"57.8%", zIndex: "2"}} src={Esquina_rosa}/>
-                <img style={{ position:"absolute", transform: "rotate(241deg)", left:"6%", height:"41%", width:"50%", top:"57.8%", zIndex: "2"}} src={Esquina_verde}/>
-                <img style={{ position:"absolute", transform: "rotate(302deg)", left:"-15.7%", height:"41%", width:"50%", top:"19%", zIndex: "2"}} src={Esquina_roja}/>
-                
-                <div  style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0"}}>
-                    <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
-                </div>
+        {show4 ? (
+          <div>
+              <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"714px", top:"2%", left:"31%",borderRadius:"5%", backgroundColor:"white"}} ><img src={URL + "/static/images/objetos/10.png"} style={{width:"100%",marginTop:"0%"} }/>
+              </div>       
+              <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"700px", top:"9%", left:"30%"}} src={URL + "/static/images/objetos/10.png"}>
+                  {/* --- TABLERO --- */}  
+                  <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1="blue" c2="white" c3="red" c4="yellow" c5="white" c6="orange" width1="15%" transform="rotate(180deg)" v1={vparp[1]} v2={vparp[2]} v3={vparp[3]} v4={vparp[4]} v5={vparp[5]} v6={vparp[6]}/> 
+                  <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1="red" c2="white" c3="green" c4="orange" c5="white" c6="blue" width1="15%" transform="rotate(120deg)" v1={vparp[8]} v2={vparp[9]} v3={vparp[10]} v4={vparp[11]} v5={vparp[12]} v6={vparp[13]}/>  
+                  <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1="green" c2="white" c3="pink" c4="blue" c5="white" c6="red" width1="15%" transform="rotate(60deg)" v1={vparp[15]} v2={vparp[16]} v3={vparp[17]} v4={vparp[18]} v5={vparp[19]} v6={vparp[20]}/> 
+                  <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1="pink" c2="white" c3="yellow" c4="red" c5="white" c6="green" width1="15%" transform="" v1={vparp[22]} v2={vparp[23]} v3={vparp[24]} v4={vparp[25]} v5={vparp[26]} v6={vparp[27]}/>  
+                  <Linea height="10.5%" width="37%" top="14%" left="0%" c1="yellow" c2="white" c3="orange" c4="green" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)" v1={vparp[29]} v2={vparp[30]} v3={vparp[31]} v4={vparp[32]} v5={vparp[32]} v6={vparp[33]}/>
+                  <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1="orange" c2="white" c3="blue" c4="pink" c5="white" c6="yellow" width1="15%" transform="rotate(-120deg)" v1={vparp[36]} v2={vparp[37]} v3={vparp[38]} v4={vparp[39]} v5={vparp[40]} v6={vparp[41]}/> 
 
-                {/* --- FICHAS --- */}  
+                  
+                  <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2="orange" c3="yellow" c4="blue" c5="red" c6="pink" width1="25%" transform="rotate(-60deg)" v1={vparp[46]} v2={vparp[45]} v3={vparp[44]} v4={vparp[43]} v5={vparp[42]} v6=""/> 
+                  <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2="blue" c3="orange" c4="red" c5="green" c6="yellow" width1="25%" transform="rotate(-120deg)" v1={vparp[51]} v2={vparp[50]} v3={vparp[49]} v4={vparp[48]} v5={vparp[47]} v6=""/> 
+                  <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2="red" c3="blue" c4="green" c5="pink" c6="orange" width1="25%" transform="scaleX(-1)" v1={vparp[56]} v2={vparp[55]} v3={vparp[54]} v4={vparp[53]} v5={vparp[52]} v6=""/> 
+                  <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2="green" c3="red" c4="pink" c5="yellow" c6="blue" width1="25%" transform="rotate(+120deg)" v1={vparp[61]} v2={vparp[60]} v3={vparp[59]} v4={vparp[58]} v5={vparp[57]} v6="" /> 
+                  <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2="pink" c3="green" c4="yellow" c5="orange" c6="red" width1="25%" transform="rotate(+60deg)" v1={vparp[66]} v2={vparp[65]} v3={vparp[64]} v4={vparp[63]} v5={vparp[62]} v6=""/> 
+                  <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2="yellow" c3="pink" c4="orange" c5="blue" c6="green" width1="25%" transform="0" v1={vparp[71]} v2={vparp[70]} v3={vparp[69]} v4={vparp[68]} v5={vparp[67]} v6=""/>
+                  
+                  
+                  
+                   
+                  
+                  
+                   
+                   
+                  
+                   
+                  
+                  <img className={vparp[28]} style={{ position:"absolute", transform: "rotate(-2deg)", left:"4.9%", height:"41%", width:"53%", top:"-19.2%", zIndex: "2"}} src={Esquina_azul}/>
+                  <img className={vparp[21]} style={{ position:"absolute", transform: "rotate(+62deg)", left:"51%", height:"41%", width:"50%", top:"-18.89%", zIndex: "2"}} src={Esquina_naranja}/>
+                  <img className={vparp[14]} style={{ position:"absolute", transform: "rotate(+122deg)", left:"73.2%", height:"41%", width:"50%", top:"20%", zIndex: "2"}} src={Esquina_amarilla}/>
+                  <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-179deg)", left:"50.9%", height:"41%", width:"50%", top:"57.8%", zIndex: "2"}} src={Esquina_rosa}/>
+                  <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(241deg)", left:"6%", height:"41%", width:"50%", top:"57.8%", zIndex: "2"}} src={Esquina_verde}/>
+                  <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(302deg)", left:"-15.7%", height:"41%", width:"50%", top:"19%", zIndex: "2"}} src={Esquina_roja}/>
+                  
+                  <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0"}}>
+                      <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
+                  </div>
 
-                <img style={{ position:"absolute", left:amarilla[1].l, top:amarilla[1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_amarilla}/>
-                <img style={{ position:"absolute", left:roja    [1].l, top:roja    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_roja}/> 
-                <img style={{ position:"absolute", left:azul    [1].l, top:azul    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_azul}/>
-                <img style={{ position:"absolute", left:rosa    [1].l, top:rosa    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_rosa}/>
-                <img style={{ position:"absolute", left:verde   [1].l, top:verde   [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_verde}/>
-                <img style={{ position:"absolute", left:naranja [1].l, top:naranja [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
-                
-            </div>
-            {show4 ? (
-              <div>
-                <PosicionElementos/>
-                {jugadores1()}
-                {jugadores2()}
+                  {/* --- FICHAS --- */}  
+
+                  <img style={{ position:"absolute", left:amarilla[1].l, top:amarilla[1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_amarilla}/>
+                  <img style={{ position:"absolute", left:roja    [1].l, top:roja    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_roja}/> 
+                  <img style={{ position:"absolute", left:azul    [1].l, top:azul    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_azul}/>
+                  <img style={{ position:"absolute", left:rosa    [1].l, top:rosa    [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_rosa}/>
+                  <img style={{ position:"absolute", left:verde   [1].l, top:verde   [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_verde}/>
+                  <img style={{ position:"absolute", left:naranja [1].l, top:naranja [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
+                  
               </div>
-            ) : (
-              <div>
-                <PosicionElementos/>
-                {jugadores1()}
-                {jugadores2()}
+
+              <PosicionElementos/>
+              {jugadores1()}
+              {jugadores2()}
+
+              <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setShow1(!show1)}}>
+                  Pausar Partida
+              </button>
+              <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {setShow2(!show2)}}>
+                  Abandonar Partida
+              </button>
+              <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => { setShow3(true)}}/>
+
+              {/* --- PREGUNTA --- */}  
+              {show ? (
+              <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", borderRadius: "40px 40px 0px 0px", zIndex:"6", borderRadius:"50%"}}>
+                  <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px"respuesta="Entretenimiento" border= "40px 40px 0px 0px" marginTop="0%" color="orange"/>
+                  <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={body} border= "0px 0px 0px 0px" marginTop="1.2%" color="orange"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={vector1[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={vector1[2].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={vector2[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={vector2[2].nombre} border= "0px 0px 0px 0px"marginTop="4%" color="white"/>
+
+                  <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:"orange"}} >
+                      <br></br><br></br><br></br>
+                          <a style={{fontSize:"30px"}}>
+                          Tiempo para responder
+                      </a>
+                      <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
+                          {RelojRespuesta()}
+                      </div>
+                  </div>
               </div>
-            )}
-            
+              ) : (
+                  <div/>
+              )}
 
-            <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setShow1(!show1)}}>
-                Pausar Partida
-            </button>
-            <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {setShow2(!show2)}}>
-                Abandonar Partida
-            </button>
-            <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => { setShow3(true)}}/>
+              {/* --- PAUSAR --- */}  
+              {show1 ? (
+              <div className="App-CuadradoNegro"  style= {{width:"40%", height:"55%", top: "20%", left: "30%", position:"absolute", zIndex:"6"}}>
+                  <br></br>
+                  <br></br>
+                  <a style={{color:"white",fontSize:"40px"}}>
+                      Partida Pausada
+                  </a>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <a style={{color:"white",fontSize:"25px"}}>
+                  Pulsa el botón para reanudar la partida, antes de que se acabe le tiempo, si no abandonarás la partida.
+                  </a>
+                  <div style= {{top: "50%", left: "44%", position:"absolute"}}>
+                      {RelojPausa()}
+                  </div>
+                  <button className="App-boton" style= {{top: "80%", left: "33%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow1(!show1)}}>
+                      Reanudar Partida
+                  </button>
+              </div>
+              ) : (
+              <div/>
+              )}
 
-            {/* --- PREGUNTA --- */}  
-            {show ? (
-            <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", borderRadius: "40px 40px 0px 0px", zIndex:"6", borderRadius:"50%"}}>
-                <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px"respuesta="Entretenimiento" border= "40px 40px 0px 0px" marginTop="0%" color="orange"/>
-                <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={body} border= "0px 0px 0px 0px" marginTop="1.2%" color="orange"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={vector1[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={vector1[2].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={vector2[0].nombre} border= "0px 0px 0px 0px" marginTop="4%" color="white"/>
-                <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={vector2[2].nombre} border= "0px 0px 0px 0px"marginTop="4%" color="white"/>
-
-                <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:"orange"}} >
-                    <br></br><br></br><br></br>
-                        <a style={{fontSize:"30px"}}>
-                        Tiempo para responder
-                    </a>
-                    <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
-                        {RelojRespuesta()}
-                    </div>
+              {/* --- ABANDONAR --- */}  
+              {show2 ? (
+              <div className="App-CuadradoNegro"  style= {{width:"35%", height:"40%", top: "25%", left: "32.5%", position:"absolute", zIndex:"6", backgroundColor: "#000000"}}>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <a style={{color:"white",fontSize:"30px"}}>
+                  ¿Estas seguro de que quieres abandonar la partida?
+                  </a>
+                  <button className="App-botonCancelar" style= {{width:"20%", height:"15%",top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)}}>
+                      No
+                  </button>
+                  <button className="App-botonConfirmar" style= {{width:"20%", height:"15%",top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => {navigate(process.env.PUBLIC_URL+ '/MenuJuego');}}>
+                      Si
+                  </button>
+              </div>
+              ) : (
+              <div/>
+              )}
+          </div>
+              ) : (
+                <div >
                 </div>
-            </div>
-            ) : (
-                <div/>
             )}
-
-            {/* --- PAUSAR --- */}  
-            {show1 ? (
-            <div className="App-CuadradoNegro"  style= {{width:"40%", height:"55%", top: "20%", left: "30%", position:"absolute", zIndex:"6"}}>
-                <br></br>
-                <br></br>
-                <a style={{color:"white",fontSize:"40px"}}>
-                    Partida Pausada
-                </a>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <a style={{color:"white",fontSize:"25px"}}>
-                Pulsa el botón para reanudar la partida, antes de que se acabe le tiempo, si no abandonarás la partida.
-                </a>
-                <div style= {{top: "50%", left: "44%", position:"absolute"}}>
-                    {RelojPausa()}
-                </div>
-                <button className="App-boton" style= {{top: "80%", left: "33%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow1(!show1)}}>
-                    Reanudar Partida
-                </button>
-            </div>
-            ) : (
-            <div/>
-            )}
-
-            {/* --- ABANDONAR --- */}  
-            {show2 ? (
-            <div className="App-CuadradoNegro"  style= {{width:"35%", height:"40%", top: "25%", left: "32.5%", position:"absolute", zIndex:"6", backgroundColor: "#000000"}}>
-                <br></br>
-                <br></br>
-                <br></br>
-                <a style={{color:"white",fontSize:"30px"}}>
-                ¿Estas seguro de que quieres abandonar la partida?
-                </a>
-                <button className="App-botonCancelar" style= {{width:"20%", height:"15%",top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)}}>
-                    No
-                </button>
-                <button className="App-botonConfirmar" style= {{width:"20%", height:"15%",top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => {navigate(process.env.PUBLIC_URL+ '/MenuJuego');}}>
-                    Si
-                </button>
-            </div>
-            ) : (
-            <div/>
-            )}
-
         </header>
     </div> 
   );
