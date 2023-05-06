@@ -61,7 +61,7 @@ const ModoClasico = () => {
           cookies.set('n_jugadores', body.n_jugadores, {path: '/'})
           cookies.set('tipo_partida', body.tipo_partida, {path: '/'})
           cookies.set('WebSocketEsperando', data.websocket, {path: '/'})
-          cookies.set('noCreador', 1, {path: '/'})
+          cookies.set('noCreador', 0, {path: '/'})
           navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
         }
         else {

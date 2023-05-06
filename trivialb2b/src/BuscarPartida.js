@@ -108,6 +108,7 @@ const ModoClasico = () => {
       .then((data) => {console.log(data)
       if (data.OK == "True") {
         cookies.set('n_jugadores', sala.numJugadores, {path: '/'})
+        cookies.set('noCreador', 1, {path: '/'})
         cookies.set('WebSocketEsperando', data.ws, {path: '/'})
         navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
       }

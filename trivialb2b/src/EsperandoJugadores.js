@@ -32,7 +32,7 @@ const EsperandoJugadores = () => {
   const usuario = cookies.get('tokenUsuario');
   console.log(usuario)
   const websocket = cookies.get('WebSocketEsperando');
-  const noCreador = cookies.get('noCreador');
+  let noCreador = cookies.get('noCreador');
   const contraseña = cookies.get('password_sala');
   const numJugadores = cookies.get('n_jugadores');
   jRestantes = numJugadores;
@@ -41,7 +41,12 @@ const EsperandoJugadores = () => {
 
   const chatSocketRef = useRef(null);
   useEffect(() => {
-    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+    if (noCreador == 1) {
+      chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket);
+    }
+    else{
+      chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+    }
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data)
       try {
