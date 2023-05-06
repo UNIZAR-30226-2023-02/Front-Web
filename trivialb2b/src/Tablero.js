@@ -202,7 +202,7 @@ const Tablero = () => {
     chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
 
     const enviarMensaje = () => {
-      console.log("Enviar mensaje backend")
+      console.log("Enviar mensaje al backend 1 ")
       console.log(JSON.stringify({
         OK:"true",
         jugador:usuario,
@@ -222,7 +222,7 @@ const Tablero = () => {
         mensage_chat: mensage_chat,
         error: errorPartida
       }))
-      console.log("Enviar mensaje backend")
+      console.log("Enviar mensaje al backend 2")
       chatSocketRef.current.send(
         JSON.stringify({
           OK:"true",
