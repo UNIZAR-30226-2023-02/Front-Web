@@ -700,7 +700,7 @@ const Tablero = () => {
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
             </div >
-            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {if (jugadorActual == 1) {console.log("Enviar mensaje backend"); pulsarDado() ;  setIsRunning(false)}}}>
+            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {console.log("Enviar mensaje backend"); pulsarDado() ;  setIsRunning(false)}}>
                 <Dado/>
             </div>
         </div>
