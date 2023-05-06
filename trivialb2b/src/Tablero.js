@@ -60,6 +60,7 @@ const Tablero = () => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
+  const [show4, setShow4] = useState(false);
 
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
 
@@ -92,17 +93,12 @@ const Tablero = () => {
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
   // Vector Jugadores
- let [vector1, setV1] = useState([ 
-    {nombre:"", ficha:Queso_azul, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"", ficha:Queso_rojo, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"", ficha:Queso_verde, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente},
-  ])
+  let [vector1, setV1] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
+  let [vector2, setV2] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
 
-  let [vector2, setV2] = useState([
-    {nombre:"", ficha:Queso_naranja, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"", ficha:Queso_amarillo, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}, 
-    {nombre:"", ficha:Queso_rosa, rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente}
-  ])
+    // Vector Jugadores
+    let [ve1, setVe1] = useState([])
+    let [ve2, setVe2] = useState([])
 
   const amarilla = [
       {l:"29%", t:"73.5%"},   {l:"37.9%", t:"76%"}, {l:"42.3%", t:"76%"},   {l:"48%", t:"76%"},   {l:"53.5%", t:"76%"}, {l:"59%", t:"76%"},     {l:"64.5%", t:"76%"}, 
@@ -207,71 +203,106 @@ const Tablero = () => {
         console.log("Mensaje del Backend:")
         console.log(data)
         if (msgIni==0) {
+          console.log(typeof(String(data.jugador1)))
           tiempoPregunta = data.tiempo_pregunta;
           tiempoElegirCasilla = data.tiempo_pregunta;
           errorPartida = data.error;
           msgIni=1
           if (numJugadores==2) {
-              // vectorJugadores2[0].nombre = data.jugador1;
-              // vectorJugadores2[0].ficha = data.ficha1;
-              // vectorJugadores2[1].nombre = data.jugador2;
-              // vectorJugadores2[1].ficha = data.ficha2;
-
-              vector1[0].nombre = data.jugador1;
-              vector1[0].ficha = data.ficha1;
-              vector2[1].nombre = data.jugador2;
-              vector2[1].ficha = data.ficha2;
-              
+            console.log(numJugadores)
+            vector1[0].nombre = data.jugador1;
+            //vector1[0].ficha = data.ficha1;
+            vector2[1].nombre = data.jugador2;
+            //vector2[1].ficha = data.ficha2;
+            console.log(ve1)
+            console.log(ve2)
           }
           else if (numJugadores==4) {
-            // vectorJugadores4[0].nombre = data.jugador1;
-            // vectorJugadores4[0].ficha = data.ficha1;
-            // vectorJugadores4[1].nombre = data.jugador2;
-            // vectorJugadores4[1].ficha = data.ficha2;
-            // vectorJugadores4[2].nombre = data.jugador3;
-            // vectorJugadores4[2].ficha = data.ficha3;
-            // vectorJugadores4[3].nombre = data.jugador4;
-            // vectorJugadores4[3].ficha = data.ficha4;
-
+            console.log(numJugadores)
+            //Jugadores
             vector1[0].nombre = data.jugador1;
             vector1[0].ficha = data.ficha1;
             vector1[1].nombre = data.jugador2;
             vector1[1].ficha = data.ficha2;
-            vector2[2].nombre = data.jugador3;
-            vector2[2].ficha = data.ficha3;
-            vector2[3].nombre = data.jugador4;
-            vector2[3].ficha = data.ficha4;
+            vector2[0].nombre = data.jugador3;
+            vector2[0].ficha = data.ficha3;
+            vector2[1].nombre = data.jugador4;
+            vector2[1].ficha = data.ficha4;
+
+            //Quesitos jugador 2
+            vector1[1].amarillo = Transparente
+            vector1[1].rojo = Transparente
+            vector1[1].rosa = Transparente
+            vector1[1].verde = Transparente
+            vector1[1].naranja = Transparente
+            vector1[1].azul = Transparente
+
+            //Quesitos jugador 4
+            vector2[1].amarillo = Transparente
+            vector2[1].rojo = Transparente
+            vector2[1].rosa = Transparente
+            vector2[1].verde = Transparente
+            vector2[1].naranja = Transparente
+            vector2[1].azul = Transparente
+
+
 
           }else {
-            // vectorJugadores6[0].nombre = data.jugador1;
-            // vectorJugadores6[0].ficha = data.ficha1;
-            // vectorJugadores6[1].nombre = data.jugador2;
-            // vectorJugadores6[1].ficha = data.ficha2;
-            // vectorJugadores6[2].nombre = data.jugador3;
-            // vectorJugadores6[2].ficha = data.ficha3;
-            // vectorJugadores6[3].nombre = data.jugador4;
-            // vectorJugadores6[3].ficha = data.ficha4;
-            // vectorJugadores6[4].nombre = data.jugador5;
-            // vectorJugadores6[4].ficha = data.ficha5;
-            // vectorJugadores6[5].nombre = data.jugador6;
-            // vectorJugadores6[5].ficha = data.ficha6;
-
+            console.log(numJugadores)
             vector1[0].nombre = data.jugador1;
             vector1[0].ficha = data.ficha1;
             vector1[1].nombre = data.jugador2;
             vector1[1].ficha = data.ficha2;
             vector1[2].nombre = data.jugador3;
             vector1[2].ficha = data.ficha3;
-            vector2[3].nombre = data.jugador4;
-            vector2[3].ficha = data.ficha4;
-            vector2[4].nombre = data.jugador5;
-            vector2[4].ficha = data.ficha5;
-            vector2[5].nombre = data.jugador6;
-            vector2[5].ficha = data.ficha6;
+            vector2[0].nombre = data.jugador4;
+            vector2[0].ficha = data.ficha4;
+            vector2[1].nombre = data.jugador5;
+            vector2[1].ficha = data.ficha5;
+            vector2[2].nombre = data.jugador6;
+            vector2[2].ficha = data.ficha6;
+
+            //Quesitos jugador 2
+            vector1[1].amarillo = Transparente
+            vector1[1].rojo = Transparente
+            vector1[1].rosa = Transparente
+            vector1[1].verde = Transparente
+            vector1[1].naranja = Transparente
+            vector1[1].azul = Transparente
+
+            //Quesitos jugador 5
+            vector2[1].amarillo = Transparente
+            vector2[1].rojo = Transparente
+            vector2[1].rosa = Transparente
+            vector2[1].verde = Transparente
+            vector2[1].naranja = Transparente
+            vector2[1].azul = Transparente
+
+            //Quesitos jugador 3
+            vector1[2].amarillo = Transparente
+            vector1[2].rojo = Transparente
+            vector1[2].rosa = Transparente
+            vector1[2].verde = Transparente
+            vector1[2].naranja = Transparente
+            vector1[2].azul = Transparente
+
+            //Quesitos jugador 6
+            vector2[2].amarillo = Transparente
+            vector2[2].rojo = Transparente
+            vector2[2].rosa = Transparente
+            vector2[2].verde = Transparente
+            vector2[2].naranja = Transparente
+            vector2[2].azul = Transparente
           }
           //Logica del mensaje inicial
           setV1(vector1)
           setV2(vector2)
+          console.log("Vectores")
+          console.log(ve1)
+          console.log(ve2)
+          //console.log(vector1)
+          //console.log(vector2)
+          setShow4(!show4)
 
         }
         else {
@@ -305,11 +336,11 @@ const Tablero = () => {
             
             default:
               
-          }
-            
+          } 
+          
         }
-        setV1(vector2)
         console.log(vector1)
+        console.log(vector2)
       } catch (err) {
         console.log(err);
       }
@@ -625,9 +656,9 @@ const Tablero = () => {
   }
   
   /* --- JUGADORES IZQUIERDA --- */
-  function Jugadores1() {
+  function jugadores1() {
     return vector1.map((props, indice) => (
-      <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "3", top:"4%", left:"3%"}}>  
+      <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "3", top:`4%`, left:"3%"}}>  
         <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"0%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
                 <img src={props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
@@ -747,16 +778,25 @@ const Tablero = () => {
                 <img style={{ position:"absolute", left:naranja [1].l, top:naranja [1].t, height:"3%", width:"3%", zIndex: "3"}} src={Ficha_naranja}/>
                 
             </div>
-
-            <PosicionElementos/>
-            {Jugadores1()}
-            {jugadores2()}
+            {show4 ? (
+              <div>
+                <PosicionElementos/>
+                {jugadores1()}
+                {jugadores2()}
+              </div>
+            ) : (
+              <div>
+                <PosicionElementos/>
+                {jugadores1()}
+                {jugadores2()}
+              </div>
+            )}
             
 
             <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setShow1(!show1)}}>
                 Pausar Partida
             </button>
-            <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {setShow2(!show2)}}>
+            <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {vector1[0].nombre="pepe";console.log(vector1);setShow2(!show2)}}>
                 Abandonar Partida
             </button>
             <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => { setShow3(true)}}/>
@@ -823,7 +863,7 @@ const Tablero = () => {
                 <button className="App-botonCancelar" style= {{width:"20%", height:"15%",top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)}}>
                     No
                 </button>
-                <button className="App-botonConfirmar" style= {{width:"20%", height:"15%",top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow(!show)}}>
+                <button className="App-botonConfirmar" style= {{width:"20%", height:"15%",top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => {navigate(process.env.PUBLIC_URL+ '/MenuJuego');}}>
                     Si
                 </button>
             </div>
