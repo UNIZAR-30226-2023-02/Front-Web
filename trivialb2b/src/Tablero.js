@@ -73,10 +73,6 @@ const Tablero = () => {
   const contraseña = cookies.get('password_sala');
   const websocket = cookies.get('WebSocketTablero');
 
-  // let [vectorJugadores2, setVectorJugadores2 ] = useState([]);
-  // let [vectorJugadores4, setVectorJugadores4 ] = useState([]);
-  // let [vectorJugadores6, setVectorJugadores6 ] = useState([]);
-  
   let tiempoPregunta = 0;
   let tiempoElegirCasilla = 0;
 
@@ -209,22 +205,22 @@ const Tablero = () => {
       console.log("Enviar mensaje backend")
       console.log(JSON.stringify({
         OK:"true",
-        jugador:{usuario},
-        type:{type},
-        subtype: {subtype},
-        valor_dado: {valor_dado},
-        casilla_elegida: {casilla_elegida},
-        casillas_nuevas: {casillas_nuevas},
-        enunciado: {enunciado},
-        r1: {r1},
-        r2: {r2},
-        r3: {r3},
-        r4: {r4},
-        rc: {rc},
-        quesito: {quesito},
-        esCorrecta: {esCorrecta},
-        mensage_chat: {mensage_chat},
-        error: {errorPartida}
+        jugador:usuario,
+        type:type,
+        subtype: subtype,
+        valor_dado: valor_dado,
+        casilla_elegida: casilla_elegida,
+        casillas_nuevas: casillas_nuevas,
+        enunciado: enunciado,
+        r1: r1,
+        r2: r2,
+        r3: r3,
+        r4: r4,
+        rc: rc,
+        quesito: quesito,
+        esCorrecta: esCorrecta,
+        mensage_chat: mensage_chat,
+        error: errorPartida
       }))
       
       chatSocketRef.current.send(
@@ -489,6 +485,7 @@ const Tablero = () => {
     }, time * 10);
   }
 
+  //Función que se ejecuta cuando se selecciona la casilla
   function vaciarCasillas() {
     vparp.forEach(element => {
       vparp[element] = ""
