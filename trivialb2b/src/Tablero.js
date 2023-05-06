@@ -88,7 +88,7 @@ const Tablero = () => {
   let msgIni = 0;
   
   //Mensaje a rellenar para el backend
-  const [msg, setMsg] = useState({OK:"",jugador:"", type:"", subtype: "", valor_dado: "", casilla_elegida: "", casillas_nuevas: "", enunciado: "", r1: "", r2: "", r3: "", r4: "", rc: "", quesito: "", esCorrecta: "", mensage_chat: "", error: ""});
+  const [msg, setMsg] = useState({OK:"",jugador:"", type:"", subtype: "", valor_dado: "", casilla_elegida: "", casillas_nuevas: [], enunciado: "", r1: "", r2: "", r3: "", r4: "", rc: "", quesito: "", esCorrecta: "", mensage_chat: "", error: ""});
 
   //Sobra (modificrlo con los datos que nos pasa el backend)
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
@@ -96,6 +96,18 @@ const Tablero = () => {
   // Vector Jugadores
   let [vector1, setV1] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
   let [vector2, setV2] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
+
+  let vparp = [
+    "", "", "", "", "", "", "", "",
+    "", "", "", "", "", "", "", "", 
+    "", "", "", "", "", "", "", "", 
+    "", "", "", "", "", "", "", "", 
+    "", "", "", "", "", "", "", "",
+    "", "", "", "", "", "", "", "", 
+    "", "", "", "", "", "", "", "", 
+    "", "", "", "", "", "", "", "",
+    "", "", "", "", "", "", "", "",
+  ];
 
   const amarilla = [
       {l:"29%", t:"73.5%"},   {l:"37.9%", t:"76%"}, {l:"42.3%", t:"76%"},   {l:"48%", t:"76%"},   {l:"53.5%", t:"76%"}, {l:"59%", t:"76%"},     {l:"64.5%", t:"76%"}, 
@@ -193,6 +205,30 @@ const Tablero = () => {
   const chatSocketRef = useRef(null);
   useEffect(() => {
     chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+
+    const enviarMensaje = () => {
+      chatSocketRef.current(
+        JSON.stringify({
+          OK:"true",
+          jugador:{usuario},
+          type:{type},
+          subtype: {subtype},
+          valor_dado: {valor_dado},
+          casilla_elegida: {casilla_elegida},
+          casillas_nuevas: {casillas_nuevas},
+          enunciado: {enunciado},
+          r1: {r1},
+          r2: {r2},
+          r3: {r3},
+          r4: {r4},
+          rc: {rc},
+          quesito: {quesito},
+          esCorrecta: {esCorrecta},
+          mensage_chat: {mensage_chat},
+          error: {errorPartida}
+        })
+      );
+    }
 
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
@@ -304,39 +340,51 @@ const Tablero = () => {
           setV1(vector1)
           setV2(vector2)
           setShow4(!show4)
-
+          
+          if (usuario == vector1[0].nombre) {
+          type = "Peticion"
+          subtype = "Tirar_dado"
+          console.log("Envio Tirar_dado")
+          enviarMensaje()
+          }
         }
         else {
           //Logica mensaje general
+          console.log(data.type)
+          console.log(data.subtype)
           switch(data.type) {
             case "Respuesta":
               switch(data.subtype) {
                 case "Dado_casillas":
                   valor_dado = data.valor_dado
+                  data.casillas_nuevas.forEach(element => {
+                    vparp[element] = "parpadea"
+                  });
+                  console.log(vparp)
+
                 case "Pregunta":
                   
+
+
                 default:
-                  
+                  console.log("default")
               }
             case "Accion":
               switch(data.subtype) {
                 case "Dados":
                   
                 default:
-                  
+                  console.log("default")
               }
             
             case "Fin":
 
 
-            case "Actualizacion":
-
-
-            case "Actualizacion":
+            case "Chat":
               
             
             default:
-              
+              console.log("default")
           } 
           
         }
@@ -358,30 +406,6 @@ const Tablero = () => {
       chatSocketRef.current.close();
     };
   },[]);
-
-  const enviarMensaje = () => {
-    chatSocketRef.current(
-      JSON.stringify({
-        OK:"true",
-        jugador:{usuario},
-        type:{type},
-        subtype: {subtype},
-        valor_dado: {valor_dado},
-        casilla_elegida: {casilla_elegida},
-        casillas_nuevas: {casillas_nuevas},
-        enunciado: {enunciado},
-        r1: {r1},
-        r2: {r2},
-        r3: {r3},
-        r4: {r4},
-        rc: {rc},
-        quesito: {quesito},
-        esCorrecta: {esCorrecta},
-        mensage_chat: {mensage_chat},
-        error: {errorPartida}
-      })
-    );
-  }
 
 
   /* --- DADO --- */
@@ -444,6 +468,13 @@ const Tablero = () => {
       
     }, time * 10);
   }
+
+  function vaciarCasillas() {
+    vparp.forEach(element => {
+      vparp[element] = ""
+    });
+  }
+
 
   function Dado() {
     return (
@@ -712,12 +743,12 @@ const Tablero = () => {
   function Linea(props) {
     return(
         <div style={{position:"absolute", height: props.height, width: props.width, top: props.top, left: props.left , zIndex: "1", transform: props.transform}}>
-            <button className="" style={{ backgroundColor: props.c1, height: "100%", width: props.width1}} onClick={() => {setShow(true)}}>  </button>
-            <button className="" style={{ backgroundColor: props.c2, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
-            <button className="" style={{ backgroundColor: props.c3, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
-            <button className="" style={{ backgroundColor: props.c4, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
-            <button className="" style={{ backgroundColor: props.c5, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
-            <button className="" style={{ backgroundColor: props.c6, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {setShow(true)}}>  </button>
+            <button className={props.v1} style={{ backgroundColor: props.c1, height: "100%", width: props.width1}} onClick={() => { vaciarCasillas() }}>  </button>
+            <button className={props.v2} style={{ backgroundColor: props.c2, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v3} style={{ backgroundColor: props.c3, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v4} style={{ backgroundColor: props.c4, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v5} style={{ backgroundColor: props.c5, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
+            <button className={props.v6} style={{ backgroundColor: props.c6, height: "100%", width:"15%", cursor:"pointer"}} onClick={() => {vaciarCasillas()}}>  </button>
         </div>
     );
     }
@@ -745,8 +776,8 @@ const Tablero = () => {
             </div>       
             <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"700px", top:"9%", left:"30%"}} src={URL + "/static/images/objetos/10.png"}>
                 {/* --- TABLERO --- */}  
-                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2="yellow" c3="pink" c4="orange" c5="blue" c6="green" width1="25%" transform="0"/>
-                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2="pink" c3="green" c4="yellow" c5="orange" c6="red" width1="25%" transform="rotate(+60deg)"/> 
+                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2="yellow" c3="pink" c4="orange" c5="blue" c6="green" width1="25%" transform="0" v1={vparp[0]} v2={vparp[1]} v3={vparp[2]} v4={vparp[3]} v5={vparp[4]} v6={vparp[5]}/>
+                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2="pink" c3="green" c4="yellow" c5="orange" c6="red" width1="25%" transform="rotate(+60deg)" v1={vparp[6]} v2={vparp[7]} v3={vparp[8]} v4={vparp[9]} v5={vparp[10]} v6={vparp[11]}/> 
                 <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2="green" c3="red" c4="pink" c5="yellow" c6="blue" width1="25%" transform="rotate(+120deg)"/> 
                 <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2="red" c3="blue" c4="green" c5="pink" c6="orange" width1="25%" transform="scaleX(-1)"/>  
                 <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2="blue" c3="orange" c4="red" c5="green" c6="yellow" width1="25%" transform="rotate(-120deg)"/> 
@@ -868,12 +899,6 @@ const Tablero = () => {
                     Si
                 </button>
             </div>
-            ) : (
-            <div/>
-            )}
-
-            {show3 ? (
-              <div/>
             ) : (
             <div/>
             )}
