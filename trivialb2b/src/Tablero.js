@@ -62,10 +62,9 @@ const Tablero = () => {
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
 
+  let jugadorActual = 0;
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
 
-
-  
   const cookies= new Cookies();
   const numJugadores = cookies.get('n_jugadores');
   const token = cookies.get('token');
@@ -342,13 +341,20 @@ const Tablero = () => {
           setShow4(!show4)
           
           if (usuario == vector1[0].nombre) {
-          type = "Peticion"
-          subtype = "Tirar_dado"
-          console.log("Envio Tirar_dado")
-          enviarMensaje()
+            jugadorActual = 1
+            type = "Peticion"
+            subtype = "Tirar_dado"
+            console.log("Envio Tirar_dado")
+            enviarMensaje()
           }
         }
         else {
+          if (data.jugador == usuario){
+            jugadorActual = 1
+          }
+          else {
+            jugadorActual = 0
+          }
           //Logica mensaje general
           console.log(data.type)
           console.log(data.subtype)
@@ -680,7 +686,7 @@ const Tablero = () => {
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
             </div >
-            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => pulsarDado() &&  setIsRunning(false)}>
+            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {if (jugadorActual == 1) {pulsarDado() &&  setIsRunning(false)}}}>
                 <Dado/>
             </div>
         </div>
