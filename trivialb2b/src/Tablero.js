@@ -222,26 +222,26 @@ const Tablero = () => {
         mensage_chat: mensage_chat,
         error: errorPartida
       }))
-      
+      console.log("Enviar mensaje backend")
       chatSocketRef.current.send(
         JSON.stringify({
           OK:"true",
-          jugador:{usuario},
-          type:{type},
-          subtype: {subtype},
-          valor_dado: {valor_dado},
-          casilla_elegida: {casilla_elegida},
-          casillas_nuevas: {casillas_nuevas},
-          enunciado: {enunciado},
-          r1: {r1},
-          r2: {r2},
-          r3: {r3},
-          r4: {r4},
-          rc: {rc},
-          quesito: {quesito},
-          esCorrecta: {esCorrecta},
-          mensage_chat: {mensage_chat},
-          error: {errorPartida}
+          jugador:usuario,
+          type:type,
+          subtype: subtype,
+          valor_dado: valor_dado,
+          casilla_elegida: casilla_elegida,
+          casillas_nuevas: casillas_nuevas,
+          enunciado: enunciado,
+          r1: r1,
+          r2: r2,
+          r3: r3,
+          r4: r4,
+          rc: rc,
+          quesito: quesito,
+          esCorrecta: esCorrecta,
+          mensage_chat: mensage_chat,
+          error: errorPartida
         })
       );
     }
