@@ -206,6 +206,26 @@ const Tablero = () => {
     chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
 
     const enviarMensaje = () => {
+      console.log("Enviar mensaje backend")
+      console.log(JSON.stringify({
+        OK:"true",
+        jugador:{usuario},
+        type:{type},
+        subtype: {subtype},
+        valor_dado: {valor_dado},
+        casilla_elegida: {casilla_elegida},
+        casillas_nuevas: {casillas_nuevas},
+        enunciado: {enunciado},
+        r1: {r1},
+        r2: {r2},
+        r3: {r3},
+        r4: {r4},
+        rc: {rc},
+        quesito: {quesito},
+        esCorrecta: {esCorrecta},
+        mensage_chat: {mensage_chat},
+        error: {errorPartida}
+      }))
       chatSocketRef.current.send(
         JSON.stringify({
           OK:"true",
@@ -388,7 +408,7 @@ const Tablero = () => {
 
             case "Chat":
               
-            
+        
             default:
               console.log("default")
           } 
@@ -403,11 +423,9 @@ const Tablero = () => {
     chatSocketRef.current.onerror = function(event) {
       console.error('Game socket error:', event);
     };
-    
     chatSocketRef.current.onclose = function(event) {
       console.error('Game socket closed unexpectedly');
     }
-
     return () => {
       chatSocketRef.current.close();
     };
@@ -419,20 +437,17 @@ const Tablero = () => {
     transform: 'translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)'
   });
   const time = 4;
-
   const pulsarDado = () => {
     setCubeStyle({
       ...cubeStyle,
       transition: '',
       transform: 'translateY(400px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)'
     });
-
     setTimeout(() => {
       setCubeStyle({
         ...cubeStyle,
         transition: `transform ${time}s` 
       });
-
       switch(valor_dado) {
         case 1:
           setCubeStyle({
@@ -471,7 +486,6 @@ const Tablero = () => {
           });
           break;
       };
-      
     }, time * 10);
   }
 
