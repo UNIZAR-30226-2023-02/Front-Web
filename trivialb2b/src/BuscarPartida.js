@@ -43,6 +43,7 @@ const ModoClasico = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
   const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
   
   useEffect(() => {
     fetch(URL, {

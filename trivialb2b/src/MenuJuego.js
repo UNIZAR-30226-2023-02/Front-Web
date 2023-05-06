@@ -8,6 +8,7 @@ import Tienda from'./Imagenes/Tienda.png';
 import Perfil from'./Imagenes/Perfil.png';
 import Logo from './Imagenes/Logo.png';
 import Estadisticas from './Estadisticas';
+import Cookies from 'universal-cookie';
 
 
 
@@ -54,6 +55,9 @@ function Modo( props ) {
 
 
 const MenuJuego = () => {
+  const cookies= new Cookies();
+  const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
   const location = useLocation();
   const navigate = useNavigate();
   const [show, setShow] = useState(true);

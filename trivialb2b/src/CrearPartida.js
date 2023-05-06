@@ -7,9 +7,12 @@ import Tematica from'./Imagenes/Tematica.png';
 import Perfil from'./Imagenes/Perfil.png';
 import Logo from './Imagenes/Logo.png';
 import Atras from "./Imagenes/Atras.png";
+import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
+
+
 
 function CeldaDesplegable( props ) {
   return (
@@ -51,6 +54,9 @@ function CeldaDesplegable( props ) {
  }
 
 const CrearPartida = () => {
+  const cookies= new Cookies();
+  const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
 
   const navigate = useNavigate();
   const [show, setShow] = useState(true);

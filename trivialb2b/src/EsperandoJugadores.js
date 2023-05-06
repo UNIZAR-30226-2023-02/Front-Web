@@ -30,6 +30,7 @@ const EsperandoJugadores = () => {
 
   const cookies= new Cookies();
   const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
   const websocket = cookies.get('WebSocketEsperando');
   const noCreador = cookies.get('noCreador');
   const contraseña = cookies.get('password_sala');

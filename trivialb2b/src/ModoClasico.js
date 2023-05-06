@@ -28,6 +28,8 @@ const ModoClasico = () => {
   const navigate = useNavigate();
   const cookies= new Cookies();
   const token = cookies.get('token');
+  const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
 
   const handleChange = (e) => {
     setBody({

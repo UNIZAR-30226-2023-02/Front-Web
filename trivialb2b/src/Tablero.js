@@ -70,6 +70,7 @@ const Tablero = () => {
   const numJugadores = cookies.get('n_jugadores');
   const token = cookies.get('token');
   let usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
   const contraseña = cookies.get('password_sala');
   const websocket = cookies.get('WebSocketTablero');
 
@@ -95,10 +96,6 @@ const Tablero = () => {
   // Vector Jugadores
   let [vector1, setV1] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
   let [vector2, setV2] = useState([ {nombre:"", ficha:"", rojo:Transparente, amarillo:Transparente, azul:Transparente, rosa:Transparente, verde:Transparente, naranja:Transparente} ])
-
-    // Vector Jugadores
-    let [ve1, setVe1] = useState([])
-    let [ve2, setVe2] = useState([])
 
   const amarilla = [
       {l:"29%", t:"73.5%"},   {l:"37.9%", t:"76%"}, {l:"42.3%", t:"76%"},   {l:"48%", t:"76%"},   {l:"53.5%", t:"76%"}, {l:"59%", t:"76%"},     {l:"64.5%", t:"76%"}, 
@@ -203,31 +200,34 @@ const Tablero = () => {
         console.log("Mensaje del Backend:")
         console.log(data)
         if (msgIni==0) {
-          console.log(typeof(String(data.jugador1)))
           tiempoPregunta = data.tiempo_pregunta;
           tiempoElegirCasilla = data.tiempo_pregunta;
           errorPartida = data.error;
           msgIni=1
           if (numJugadores==2) {
             console.log(numJugadores)
-            vector1[0].nombre = data.jugador1;
+            let j1 = String(data.jugador1)
+            let j2 = String(data.jugador2)
+            vector1[0].nombre = j1
             //vector1[0].ficha = data.ficha1;
-            vector2[1].nombre = data.jugador2;
-            //vector2[1].ficha = data.ficha2;
-            console.log(ve1)
-            console.log(ve2)
+            vector2[0].nombre = j2
+            //vector2[0].ficha = data.ficha2;
           }
           else if (numJugadores==4) {
             console.log(numJugadores)
             //Jugadores
-            vector1[0].nombre = data.jugador1;
-            vector1[0].ficha = data.ficha1;
-            vector1[1].nombre = data.jugador2;
-            vector1[1].ficha = data.ficha2;
-            vector2[0].nombre = data.jugador3;
-            vector2[0].ficha = data.ficha3;
-            vector2[1].nombre = data.jugador4;
-            vector2[1].ficha = data.ficha4;
+            let j1 = String(data.jugador1)
+            let j2 = String(data.jugador2)
+            let j3 = String(data.jugador3)
+            let j4 = String(data.jugador4)
+            vector1[0].nombre = j1;
+            //vector1[0].ficha = data.ficha1;
+            vector1[1].nombre = j2;
+            //vector1[1].ficha = data.ficha2;
+            vector2[0].nombre = j3;
+            //vector2[0].ficha = data.ficha3;
+            vector2[1].nombre = j4;
+            //vector2[1].ficha = data.ficha4;
 
             //Quesitos jugador 2
             vector1[1].amarillo = Transparente
@@ -249,18 +249,24 @@ const Tablero = () => {
 
           }else {
             console.log(numJugadores)
-            vector1[0].nombre = data.jugador1;
-            vector1[0].ficha = data.ficha1;
-            vector1[1].nombre = data.jugador2;
-            vector1[1].ficha = data.ficha2;
-            vector1[2].nombre = data.jugador3;
-            vector1[2].ficha = data.ficha3;
-            vector2[0].nombre = data.jugador4;
-            vector2[0].ficha = data.ficha4;
-            vector2[1].nombre = data.jugador5;
-            vector2[1].ficha = data.ficha5;
-            vector2[2].nombre = data.jugador6;
-            vector2[2].ficha = data.ficha6;
+            let j1 = String(data.jugador1)
+            let j2 = String(data.jugador2)
+            let j3 = String(data.jugador3)
+            let j4 = String(data.jugador4)
+            let j5 = String(data.jugador1)
+            let j6 = String(data.jugador2)
+            vector1[0].nombre = j1;
+            //vector1[0].ficha = data.ficha1;
+            vector1[1].nombre = j2;
+            //vector1[1].ficha = data.ficha2;
+            vector1[2].nombre = j3;
+            //vector1[2].ficha = data.ficha3;
+            vector2[0].nombre = j4;
+            //vector2[0].ficha = data.ficha4;
+            vector2[1].nombre = j5;
+            //vector2[1].ficha = data.ficha5;
+            vector2[2].nombre = j6;
+            //vector2[2].ficha = data.ficha6;
 
             //Quesitos jugador 2
             vector1[1].amarillo = Transparente
@@ -297,11 +303,6 @@ const Tablero = () => {
           //Logica del mensaje inicial
           setV1(vector1)
           setV2(vector2)
-          console.log("Vectores")
-          console.log(ve1)
-          console.log(ve2)
-          //console.log(vector1)
-          //console.log(vector2)
           setShow4(!show4)
 
         }
@@ -683,7 +684,7 @@ const Tablero = () => {
 
   /* --- JUGADORES DERECHA --- */
   function jugadores2() {
-    return vector1.map((props, indice) => (
+    return vector2.map((props, indice) => (
         <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "3", top:"4%", left:"3%"}}>  
             <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"70%", width: "30%", height: "30%"}} >
               <div style={{marginTop: "2%"}}>
@@ -796,7 +797,7 @@ const Tablero = () => {
             <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setShow1(!show1)}}>
                 Pausar Partida
             </button>
-            <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {vector1[0].nombre="pepe";console.log(vector1);setShow2(!show2)}}>
+            <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {setShow2(!show2)}}>
                 Abandonar Partida
             </button>
             <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => { setShow3(true)}}/>

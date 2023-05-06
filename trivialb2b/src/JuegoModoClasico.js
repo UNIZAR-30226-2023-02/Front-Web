@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
 import Cristiano from'./Imagenes/Cristiano.jpg';
 import Tablero1 from'./Imagenes/Tablero1.png';
+import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 //const URL = "http://51.142.118.71:8000/api/usuarios/login/";
@@ -15,6 +16,10 @@ const JuegoModoClasico = () => {
   const [show, setShow] = useState(true);
 
   const vectorJugadores = ["Acher", "Miguel", "Pablo", "Luis"];
+
+  const cookies= new Cookies();
+  const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
 
   const navigate = useNavigate();
   const handleChange = (e) => {
