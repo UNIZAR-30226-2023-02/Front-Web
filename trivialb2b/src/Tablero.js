@@ -226,6 +226,7 @@ const Tablero = () => {
         mensage_chat: {mensage_chat},
         error: {errorPartida}
       }))
+      
       chatSocketRef.current.send(
         JSON.stringify({
           OK:"true",
@@ -269,7 +270,6 @@ const Tablero = () => {
             //vector2[0].ficha = data.ficha2;
           }
           else if (numJugadores==4) {
-            console.log(numJugadores)
             //Jugadores
             let j1 = String(data.jugador1)
             let j2 = String(data.jugador2)
@@ -700,7 +700,7 @@ const Tablero = () => {
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
             </div >
-            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {if (jugadorActual == 1) {pulsarDado() &&  setIsRunning(false)}}}>
+            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {if (jugadorActual == 1) { pulsarDado() &&  setIsRunning(false)}}}>
                 <Dado/>
             </div>
         </div>
