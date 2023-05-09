@@ -296,21 +296,26 @@ const Tablero = () => {
           //Actualizamos la persona que tiene el turno y en que vector está
           for (let i = 0; i < vector1.length; i++) {
             if (vector1[i].turno == "1"){
-              setIndiceJugadorTurno(i)
-              setVectorJugadorTurno("vector1")
+              let ind = i
+              let vec = "vector1"
+              setIndiceJugadorTurno(ind)
+              setVectorJugadorTurno(vec)
             }
           }
           for (let i = 0; i < vector2.length; i++) {
             if (vector2[i].turno == "1"){
-              setIndiceJugadorTurno(i)
-              setVectorJugadorTurno("vector2")
+              let ind = i
+              let vec = "vector2"
+              setIndiceJugadorTurno(ind)
+              setVectorJugadorTurno(vec)
             }
           }
-          console.log(indiceJugadorTurno)
-          console.log(vectorJugadorTurno)
+
           //Logica del mensaje inicial
           setShow4(!show4)
           setShow4(!show4)
+          console.log(indiceJugadorTurno)
+          console.log(vectorJugadorTurno)
         }
         else {
           if (data.jugador == usuario){
@@ -323,6 +328,7 @@ const Tablero = () => {
           }
           //Actualizamos la persona que tiene el turno y en que vector está
           for (let i = 0; i < vector1.length; i++) {
+            console.log(vector1[i].nombre + " " + data.jugador)
             if (vector1[i].nombre == data.jugador){
               console.log(vector1[i].nombre)
               setIndiceJugadorTurno(i)
@@ -336,10 +342,10 @@ const Tablero = () => {
               setVectorJugadorTurno("vector2")
             }
           }
+          setShow4(!show4)
+          setShow4(!show4)
           console.log(indiceJugadorTurno)
           console.log(vectorJugadorTurno)
-          setShow4(!show4)
-          setShow4(!show4)
           //Logica mensaje general
           console.log(data.type)
           console.log(data.subtype)
@@ -389,6 +395,7 @@ const Tablero = () => {
                   setShow(true)
                   break
               }
+              break
             case "Accion":
               switch(data.subtype) {
                 case "Dados":
@@ -398,7 +405,7 @@ const Tablero = () => {
                   setShow4(!show4)
                   break
               }
-            
+              break
             case "Fin":
               break
 
@@ -422,9 +429,10 @@ const Tablero = () => {
                   setShow4(!show4)
                   break
               }
-              
+            break  
             case "Actualizacion":
-              //Comprbamos si el jugador al que le tocaba a respondido bien y ha ganado un quesito
+              console.log("Entramos a actualizar")
+              //Comprbamos si el jugador al que le tocaba ha respondido bien y ha ganado un quesito
               if(data.quesito == true && data.esCorrecta == "true"){
                 console.log("Entramos en temática: " + tematicaPregunta)
                 switch(data.tematica) {
@@ -456,18 +464,23 @@ const Tablero = () => {
                 else {
                   vector2[indiceJugadorTurno].quesitos.push(varAux)
                 }
+                setV1(vector1)
+                setV2(vector2)
+                console.log(vector1)
+                console.log(vector2)
               }
-              setV1(vector1)
-              setV2(vector2)
-              console.log(vector1)
-              console.log(vector2)
+
               if (data.esCorrecta == "true"){
                 aux2[data.r1-1] = "green"
               }
               else {
                 aux2[data.r1-1] = "red"
               }
+              console.log(aux2)
               setColorPregunta(aux2)
+              setShow(!show)
+              setShow(!show)
+              console.log(colorPregunta)
               vaciarCasillas()
               setShow3(true)
               setShow4(!show4)
@@ -980,7 +993,6 @@ const Tablero = () => {
     }
     setesCorrecta(esCorrecta)
     if(quesito == true && esCorrecta == "true"){
-      console.log("Entramos en temática: " + tematicaPregunta)
       switch(tematicaPregunta) {
         case "Ciencia":
           varAux = QuesoVerde
@@ -1012,7 +1024,9 @@ const Tablero = () => {
     setV1(vector1)
     setV2(vector2)
     setContestada(true)
+    console.log(colorPregunta)
     setColorPregunta(colorPregunta)
+    console.log(colorPregunta)
     setesCorrecta(esCorrecta)
     setShow3(true)
     //Enviamos el mensaje "Actualización"
@@ -1112,7 +1126,7 @@ const Tablero = () => {
                   <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_verde} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
                   <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_roja} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
 
-                  <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0"}}>
+                  <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0" }} onClick={() => { if (jugadorActual==1 && (vparp[72] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(72); moverFicha(72) }}}>
                       <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
                   </div>
 
