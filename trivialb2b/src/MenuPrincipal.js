@@ -1,5 +1,6 @@
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 
 function Boton (props) {
@@ -11,7 +12,9 @@ function Boton (props) {
 }
 
 const MenuPrincipal = () => {
-
+  const cookies= new Cookies();
+  const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
   const navigate = useNavigate();
 
   const IniciarSesion = async (event) => {

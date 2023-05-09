@@ -20,6 +20,7 @@ const EsperandoJugadores = () => {
 
   const [jugadoresSala, setJugadoresSala] = useState([]);
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
+  let [jRestantes, setjRestantes ]  = useState([]);
 
   
   let [vectorJugadores2, setVectorJugadores2 ] = useState(["", ""]);
@@ -29,23 +30,31 @@ const EsperandoJugadores = () => {
 
   const cookies= new Cookies();
   const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
   const websocket = cookies.get('WebSocketEsperando');
-  const noCreador = cookies.get('noCreador');
+  let noCreador = cookies.get('noCreador');
   const contraseña = cookies.get('password_sala');
   const numJugadores = cookies.get('n_jugadores');
-  let jRestantes = numJugadores;
+  jRestantes = numJugadores;
   
   console.log(websocket);
 
   const chatSocketRef = useRef(null);
   useEffect(() => {
-    chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+    if (noCreador == 1) {
+      chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket);
+    }
+    else{
+      chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
+    }
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data)
       try {
         console.log(data)
-        if (data.accion = "actualizar_lista") {
+        if (data.accion == "actualizar_lista") {
           jRestantes=jRestantes-1
+          setjRestantes(jRestantes)
+          console.log(jRestantes)
           if (numJugadores == 2) {
             vectorJugadores2 = data.usernames.split(",");
             console.log(vectorJugadores2)
@@ -64,15 +73,12 @@ const EsperandoJugadores = () => {
             setShow2(true)
           }
         }
-        else if (data.accion = "empezar_partida"){
-          if (noCreador){
-            setShow1(false)
-          }
+        else if (data.accion == "empezar_partida") {
+          console.log("selal")
           cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
-        }
-        else {
-          cookies.set('websocket_partida', data.websocket, {path: '/'})
+          chatSocketRef.current.close();
           navigate(process.env.PUBLIC_URL+ '/Tablero');
+          
         }
 
       } catch (err) {
@@ -80,38 +86,21 @@ const EsperandoJugadores = () => {
       }
     };
     chatSocketRef.current.onerror = function(event) {
-      console.error('Game socket error:', event);
+      console.error('Socket error:', event);
     };
     
     chatSocketRef.current.onclose = function(event) {
-      console.error('Game socket closed unexpectedly');
+      console.error('El socket de esperando en la sala se ha cerrado');
     }
 
   return () => {
       chatSocketRef.current.close();
   };
   },[]);
-  
-
-  const handleChange = (e) => {
-    setBody({
-      ...body,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const abandonar = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };       
-
-  function empezarPartida() {
-    if (noCreador == 1){
-      chatSocketRef.current(
-        JSON.stringify({accion: "empezar"})
-      );
-    } 
-  }
-
   
   function jugadores() {
     return vectorJugadores.map((elemento) => (
@@ -140,16 +129,7 @@ const EsperandoJugadores = () => {
                 )}
             </div>
           </div>
-
-
-          {show1 ? (
-            <div>
-              <button className="App-botonConfirmar" style= {{position: "absolute", top: "64%", left: "30%", zIndex: "5"}} onClick={() =>  empezarPartida()} > Empezar partida </button>
-              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "50%", zIndex: "5"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
-            </div>
-          ) : (
-              <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "41%", zIndex: "3"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
-          )}
+          <button className="App-botonCancelar" style= {{position: "absolute", top: "64%", left: "50%", zIndex: "5"}} onClick={() => setShow(!show) } > Abandonar Sala </button>
         </div>
 
       ) : (

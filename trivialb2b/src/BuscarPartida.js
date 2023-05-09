@@ -8,6 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Cookies from 'universal-cookie';
 
 const URL = "http://51.142.118.71:8000/api/salas/lista-salas/";
+const URL2 = "http://51.142.118.71:8000/api/salas/validar/";
 
 const ModoClasico = () => {
   const [contraseña, setContraseña] = useState("");
@@ -42,6 +43,7 @@ const ModoClasico = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
   const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
   
   useEffect(() => {
     fetch(URL, {
@@ -96,18 +98,22 @@ const ModoClasico = () => {
     console.log("FuncionEntrar");
     //Entrar(sala.nombre, usuario, contraseña);
     console.log(sala.nombre, usuario, contraseña);
-    fetch(URL, {
+    fetch(URL2, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({ })
+      body: JSON.stringify({"nombre_sala": sala.nombre, "password_sala": contraseña })
     })
+
       .then((response) => response.json())
       .then((data) => {console.log(data)
       if (data.OK == "True") {
         cookies.set('n_jugadores', sala.numJugadores, {path: '/'})
-        cookies.set('WebSocketEsperando', data.websocket, {path: '/'})
-        cookies.set('noCreador', 0, {path: '/'})
+        cookies.set('noCreador', 1, {path: '/'})
+        cookies.set('WebSocketEsperando', data.ws, {path: '/'})
         navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
+      }
+      else {
+        //Gestión de error error_sala
       }
         
     })

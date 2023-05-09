@@ -28,6 +28,8 @@ const ModoClasico = () => {
   const navigate = useNavigate();
   const cookies= new Cookies();
   const token = cookies.get('token');
+  const usuario = cookies.get('tokenUsuario');
+  console.log(usuario)
 
   const handleChange = (e) => {
     setBody({
@@ -59,7 +61,7 @@ const ModoClasico = () => {
           cookies.set('n_jugadores', body.n_jugadores, {path: '/'})
           cookies.set('tipo_partida', body.tipo_partida, {path: '/'})
           cookies.set('WebSocketEsperando', data.websocket, {path: '/'})
-          cookies.set('noCreador', 1, {path: '/'})
+          cookies.set('noCreador', 0, {path: '/'})
           navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
         }
         else {
@@ -140,7 +142,7 @@ const ModoClasico = () => {
           </form>
 
           <div style={{fontSize:"23px", color:"red", position:"absolute", left:"45%", top:"65%"}}>
-            <a  > Mensaje de error{errores}</a>
+            <a  > {errores}</a>
           </div>
 
           <div style={{fontSize:"23px", color:"black", position:"absolute", left:"36%", top:"73%"}}> 
