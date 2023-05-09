@@ -47,13 +47,6 @@ import Cookies from 'universal-cookie';
 const URL = "http://51.142.118.71:8000";
 //const URL = "http://85be-146-158-156-138.ngrok-free.app/";
 
-async function sleep(tiempo) {
-  console.log('Inicio');
-  await new Promise(resolve => setTimeout(resolve, tiempo));
-  console.log('Fin');
-}
-
-
 
 const Tablero = () => {
 
@@ -85,6 +78,7 @@ const Tablero = () => {
   let [casillas, setCasillas] = useState("")
   let [esCorrecta, setesCorrecta] = useState(0)
   let [colorTematica, setColorTematica] = useState("")
+  let [varAux, setVarAux] = useState("") 
   
 
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
@@ -92,7 +86,6 @@ const Tablero = () => {
   const cookies= new Cookies();
   const numJugadores = cookies.get('n_jugadores');
   let usuario = cookies.get('tokenUsuario');
-  console.log(usuario)
   const contraseña = cookies.get('password_sala');
   const websocket = cookies.get('WebSocketTablero');
 
@@ -102,9 +95,9 @@ const Tablero = () => {
   let casillas_nuevas = [];
   let msgIni = 0;
 
+  let [contestada, setContestada] = useState(false)
 
-
-  let [colorPregunta, setColorPregunta] = useState(["white", "white", "white", "white"])
+  let [colorPregunta, setColorPregunta] = useState("white", "white", "white", "white")
   let aux2 = ["white", "white", "white", "white"]
   
   let [jugadorPrueba, setJugadorPrueba] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
@@ -250,6 +243,8 @@ const Tablero = () => {
         console.log("Mensaje del Backend:")
         console.log(data)
         if (msgIni==0) {
+
+
           tiempoPregunta = data.tiempo_pregunta;
           tiempoElegirCasilla = data.tiempo_elegir_casilla;
           errorPartida = data.error;
@@ -298,7 +293,21 @@ const Tablero = () => {
           console.log(jugadorActual)
           console.log(vector1)
           console.log(vector2)
-
+          //Actualizamos la persona que tiene el turno y en que vector está
+          for (let i = 0; i < vector1.length; i++) {
+            if (vector1[i].turno == "1"){
+              setIndiceJugadorTurno(i)
+              setVectorJugadorTurno("vector1")
+            }
+          }
+          for (let i = 0; i < vector2.length; i++) {
+            if (vector2[i].turno == "1"){
+              setIndiceJugadorTurno(i)
+              setVectorJugadorTurno("vector2")
+            }
+          }
+          console.log(indiceJugadorTurno)
+          console.log(vectorJugadorTurno)
           //Logica del mensaje inicial
           setShow4(!show4)
           setShow4(!show4)
@@ -315,16 +324,20 @@ const Tablero = () => {
           //Actualizamos la persona que tiene el turno y en que vector está
           for (let i = 0; i < vector1.length; i++) {
             if (vector1[i].nombre == data.jugador){
+              console.log(vector1[i].nombre)
               setIndiceJugadorTurno(i)
               setVectorJugadorTurno("vector1")
             }
           }
           for (let i = 0; i < vector2.length; i++) {
             if (vector2[i].nombre == data.jugador){
+              console.log(vector2[i].nombre)
               setIndiceJugadorTurno(i)
               setVectorJugadorTurno("vector2")
             }
           }
+          console.log(indiceJugadorTurno)
+          console.log(vectorJugadorTurno)
           setShow4(!show4)
           setShow4(!show4)
           //Logica mensaje general
@@ -339,9 +352,7 @@ const Tablero = () => {
                     element = ""
                   });
                   setCasillas(aux)
-                  console.log(casillas)
                   casillas = data.casillas_nuevas.split(",");
-                  console.log(casillas)
                   casillas.forEach(element => {
                     aux[element] = "parpadea"
                   });
@@ -352,8 +363,7 @@ const Tablero = () => {
                   setShow4(!show4)
                   break
 
-                case "Pregunta":          
-                console.log("Entramos en pregunta")       
+                case "Pregunta":               
                   enunciado = data.enunciado
                   r1 = data.r1
                   r2 = data.r2
@@ -382,8 +392,7 @@ const Tablero = () => {
             case "Accion":
               switch(data.subtype) {
                 case "Dados":
-                  setShow(false)
-                  vaciarRespuestas()
+                  //vaciarRespuestas()
                   vaciarCasillas()
                   setShow4(!show4)
                   setShow4(!show4)
@@ -401,8 +410,6 @@ const Tablero = () => {
                 case "Tirar_dado":
                   break
                 case "Movimiento_casilla":
-                  //Actualizamos la ficha del jugador que está jugando en todas las pantallas
-                  console.log(vectorJugadorTurno + " " + indiceJugadorTurno)
                   if (vectorJugadorTurno == "vector1"){
                     vector1[indiceJugadorTurno].posicion = data.casilla_elegida
                   }
@@ -417,18 +424,56 @@ const Tablero = () => {
               }
               
             case "Actualizacion":
+              //Comprbamos si el jugador al que le tocaba a respondido bien y ha ganado un quesito
+              if(data.quesito == true && data.esCorrecta == "true"){
+                console.log("Entramos en temática: " + tematicaPregunta)
+                switch(data.tematica) {
+                  case "Ciencia":
+                    varAux = QuesoVerde
+                  break
+                  case "Arte":
+                    varAux = QuesoRojo
+                  break
+                  case "Deportes":
+                    varAux = QuesoNaranja
+                  break
+                  case "Entretenimiento":
+                    varAux = QuesoRosa
+                  break
+                  case "Geografia":
+                    varAux = QuesoAzul
+                  break
+                  case "Historia":
+                    varAux = QuesoAmarillo
+                  break
+                }
+                //miramos a quen le toca el turno y actualizamos los vector
+                setVarAux(varAux)
+                console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+                if (vectorJugadorTurno == "vector1"){
+                  vector1[indiceJugadorTurno].quesitos.push(varAux)
+                }
+                else {
+                  vector2[indiceJugadorTurno].quesitos.push(varAux)
+                }
+              }
+              setV1(vector1)
+              setV2(vector2)
+              console.log(vector1)
+              console.log(vector2)
               if (data.esCorrecta == "true"){
-                colorPregunta[data.r1] = "true"
+                aux2[data.r1-1] = "green"
               }
               else {
-                colorPregunta[data.r1] = "false"
+                aux2[data.r1-1] = "red"
               }
-              setColorPregunta(colorPregunta)
+              setColorPregunta(aux2)
               vaciarCasillas()
+              setShow3(true)
+              setShow4(!show4)
+              setShow4(!show4)
               break
           } 
-          console.log(vector1)
-          console.log(vector2)
         }
         console.log("Sale del autómata")
       } catch (err) {
@@ -457,6 +502,7 @@ const Tablero = () => {
       casilla_elegida: casilla_elegida,
       casillas_nuevas: casillas_nuevas,
       enunciado: enunciado,
+      tematica: tematicaPregunta,
       r1: r1,
       r2: r2,
       r3: r3,
@@ -477,6 +523,7 @@ const Tablero = () => {
         casilla_elegida: casilla_elegida,
         casillas_nuevas: casillas_nuevas,
         enunciado: enunciado,
+        tematica: tematicaPregunta,
         r1: r1,
         r2: r2,
         r3: r3,
@@ -550,22 +597,23 @@ const Tablero = () => {
 
   //Función que se ejecuta cuando se selecciona la casilla
   function vaciarCasillas() {
-    console.log("Vaciar casillas")
     for (let i = 0; i < aux.length; i++) {
       aux[i] = "";
     }
     setVprap(aux)
-    console.log("Cambiamos el Vprarp a:" + vparp)
   }
 
     //Función que se ejecuta cuando se selecciona la casilla
-    function vaciarRespuestas() {
-      console.log("Vaciar respuestas")
-      for (let i = 0; i < aux.length; i++) {
-        aux2[i] = "white";
-      }
-      setColorPregunta(aux2)
+  function vaciarRespuestas() {
+    console.log(colorPregunta)
+    console.log(aux2)
+    for (let i = 0; i < 4; i++) {
+      aux2[i] = "white";
     }
+    setColorPregunta(aux2)
+    console.log(colorPregunta)
+    console.log(aux2)
+  }
 
   function Dado() {
     return (
@@ -763,59 +811,53 @@ const Tablero = () => {
 
   /* --- LANZAR DADO --- */
   function PosicionElementos() {
-    for (let i = 0; i < vector1.length; i++) {
-      if(vector1[i].turno == 1) {
-        setVectorJugadorTurno("vector1")
-        setIndiceJugadorTurno(i)
-        return (
-            <div style={{ position:"absolute", top:posv1[i].top, left:posv1[i].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
-                <div style={{position:"absolute", left:"19%", top:"5%"}}>
-                    {RelojJugada()}
-                </div >
-                <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
-                  console.log(jugadorActual)
-                  if (jugadorActual==1){
-                    //Peticion para que nos envien el dado y las casillas
-                    type = "Peticion"
-                    subtype = "Tirar_dado"
-                    console.log("Envio Tirar_dado")
-                    enviarMensaje()
-                  } else {
-                    console.log("Esperando a que pulse el dado el jugador que le toca")
-                  }
-                }}>
-                    <Dado/>
-                </div>
+    if (vectorJugadorTurno == "vector1"){
+      console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+      return (
+        <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
+            <div style={{position:"absolute", left:"19%", top:"5%"}}>
+                {RelojJugada()}
+            </div >
+            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
+              console.log(jugadorActual)
+              if (jugadorActual==1){
+                //Peticion para que nos envien el dado y las casillas
+                type = "Peticion"
+                subtype = "Tirar_dado"
+                console.log("Envio Tirar_dado")
+                enviarMensaje()
+              } else {
+                console.log("Esperando a que pulse el dado el jugador que le toca")
+              }
+            }}>
+                <Dado/>
             </div>
-        )
-      }
+        </div>
+      )
     }
-    for (let i = 0; i < vector1.length; i++) {
-      if(vector2[i].turno == 1) {
-        setVectorJugadorTurno("vector2")
-        setIndiceJugadorTurno(i)
-        return (
-            <div style={{ position:"absolute", top:posv2[i].top, left:posv2[i].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
-                <div style={{position:"absolute", left:"19%", top:"5%"}}>
-                    {RelojJugada()}
-                </div >
-                <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
-                  console.log(jugadorActual)
-                  if (jugadorActual==1){
-                    //Peticion para que nos envien el dado y las casillas
-                    type = "Peticion"
-                    subtype = "Tirar_dado"
-                    console.log("Envio Tirar_dado")
-                    enviarMensaje()
-                  } else {
-                    console.log("Esperando a que pulse el dado el jugador que le toca")
-                  }
-                }}>
-                    <Dado/>
-                </div>
+    else {
+      console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+      return (
+        <div style={{ position:"absolute", top:posv2[indiceJugadorTurno].top, left:posv2[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
+            <div style={{position:"absolute", left:"19%", top:"5%"}}>
+                {RelojJugada()}
+            </div >
+            <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
+              console.log(jugadorActual)
+              if (jugadorActual==1){
+                //Peticion para que nos envien el dado y las casillas
+                type = "Peticion"
+                subtype = "Tirar_dado"
+                console.log("Envio Tirar_dado")
+                enviarMensaje()
+              } else {
+                console.log("Esperando a que pulse el dado el jugador que le toca")
+              }
+            }}>
+                <Dado/>
             </div>
-        )
-      }
+        </div>
+      )
     }
   }
 
@@ -897,15 +939,12 @@ const Tablero = () => {
   } 
 
   function fichas1() {
-    console.log(vector1)
-    console.log(vector2)
     return vector1.map((props, indice) => (
       <img style={{ position:"absolute", left:posiciones1[indice][props.posicion].l, top:posiciones1[indice][props.posicion].t, height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
   ));
   }
 
   function fichas2() {
-
     return vector2.map((props, indice) => (
       <img style={{ position:"absolute", left:posiciones2[indice][props.posicion].l, top:posiciones2[indice][props.posicion].t, height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
   ));
@@ -927,20 +966,58 @@ const Tablero = () => {
 
   //Verificación de la respuesta
   function esCorrectaRespuesta(num) {
-    if ((num + 1) == rc) {
+    let a = num + 1
+    console.log(a)
+    console.log(rc)
+    if (a == rc) {
       colorPregunta[num] = "green"
       esCorrecta = "true"
     }
     else {
       colorPregunta[num] = "red"
       esCorrecta = "false"
+
     }
+    setesCorrecta(esCorrecta)
+    if(quesito == true && esCorrecta == "true"){
+      console.log("Entramos en temática: " + tematicaPregunta)
+      switch(tematicaPregunta) {
+        case "Ciencia":
+          varAux = QuesoVerde
+        break
+        case "Arte":
+          varAux = QuesoRojo
+        break
+        case "Deportes":
+          varAux = QuesoNaranja
+        break
+        case "Entretenimiento":
+          varAux = QuesoRosa
+        break
+        case "Geografia":
+          varAux = QuesoAzul
+        break
+        case "Historia":
+          varAux = QuesoAmarillo
+        break
+      }
+      setVarAux(varAux)
+      if (vectorJugadorTurno == "vector1"){
+        vector1[indiceJugadorTurno].quesitos.push(varAux)
+      }
+      else {
+        vector2[indiceJugadorTurno].quesitos.push(varAux)
+      }
+    }
+    setV1(vector1)
+    setV2(vector2)
+    setContestada(true)
     setColorPregunta(colorPregunta)
     setesCorrecta(esCorrecta)
-    sleep(5000)
+    setShow3(true)
     //Enviamos el mensaje "Actualización"
     enunciado = ""
-    r1 = num
+    r1 = num + 1
     r2 = ""
     r3 = ""
     r4 = ""
@@ -977,9 +1054,8 @@ const Tablero = () => {
 
   /* --- PREGUNTA --- */
   function Respuesta(props) {
-    //if (esCorrecta == "true"){
       return (
-      <div  style= {{width:props.width, height:props.height, top: props.top, left: props.left, position:"absolute", border: "3px solid black", borderRadius:props.border, backgroundColor:props.color, cursor:"pointer"}} onClick={() => {if (jugadorActual==1){esCorrectaRespuesta(props.num)}}}>
+      <div  style= {{width:props.width, height:props.height, top: props.top, left: props.left, position:"absolute", border: "3px solid black", borderRadius:props.border, backgroundColor:props.color, cursor:"pointer"}} onClick={() => {if (jugadorActual==1 && !contestada){esCorrectaRespuesta(props.num)}}}>
           <div style={{marginTop:props.marginTop}}>
               <a style={{fontSize:props.size}}>
                   {props.letra} {props.respuesta}
@@ -987,21 +1063,9 @@ const Tablero = () => {
           </div>
       </div>
       );
-   /* }
-    else {
-      return (
-        <div  style= {{width:props.width, height:props.height, top: props.top, left: props.left, position:"absolute", border: "3px solid black", borderRadius:props.border, backgroundColor:props.color, cursor:"pointer"}} onClick={() => {if (jugadorActual==1){esCorrectaRespuesta(props.num)}}}>
-            <div style={{marginTop:props.marginTop}}>
-                <a style={{fontSize:props.size}}>
-                    {props.letra} {props.respuesta}
-                </a>
-            </div>
-        </div>
-        );
-    }*/
   }
 
-
+  /* --- MENSAJE POR PANTALLA --- */
   function mensajePantalla(props) {
     if (vectorJugadorTurno == "vector1"){
       return (
@@ -1086,10 +1150,10 @@ const Tablero = () => {
               <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", zIndex:"6", backgroundColor: "rgba(0, 0, 0, 0)", border:"none"}}>
                   <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px" respuesta={tematicaPregunta} border= "40px 40px 0px 0px" marginTop="0%" color={colorTematica}/>
                   <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={enunciado} border= "0px 0px 0px 0px" marginTop="1.2%" color={colorTematica} res=""/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={r1} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[0]} num="0"/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={r2} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[1]} num="1"/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={r3} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[2]} num="2"/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={r4} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[3]} num="3"/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={r1} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[0]} num={0}/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={r2} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[1]} num={1}/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={r3} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[2]} num={2}/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={r4} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[3]} num={3}/>
 
                   <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:colorTematica}} >
                       <br></br><br></br><br></br>
@@ -1099,6 +1163,13 @@ const Tablero = () => {
                       <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
                           {RelojRespuesta()}
                       </div>
+                      {show3 ? (
+                      <button className="App-boton" style= {{top: "80%", left: "43%", position:"absolute", zIndex:"6"}} onClick={() => {setShow(false); setShow3(false); setContestada(false);vaciarRespuestas()}}>
+                          Cerrar Pregunta
+                      </button>
+                      ) : (
+                          <div/>
+                      )}
                   </div>
               </div>
               ) : (
