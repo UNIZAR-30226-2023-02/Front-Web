@@ -61,8 +61,8 @@ const Tablero = () => {
   const [show4, setShow4] = useState(false);
   let [jugadorActual, setJugadorActual] = useState(0);
   let [casillaSeleccionada, setCasillaSeleccionada] = useState("");
-  let [vectorJugadorTurno, setVectorJugadorTurno] = useState("vector1");
-  let [indiceJugadorTurno, setIndiceJugadorTurno] = useState(0);
+  let [vectorJugadorTurno, setVectorJugadorTurno] = useState("");
+  let [indiceJugadorTurno, setIndiceJugadorTurno] = useState("");
   let [tablero, setTablero] = useState("");
   let [r1, setR1] = useState("");
   let [r2, setR2] = useState("");
@@ -72,16 +72,34 @@ const Tablero = () => {
   let [quesito, setQuesito] = useState("");
   let [enunciado, setEnunciado] = useState("");
   let [pregunta, setPregunta] = useState("");
+  let [partidaPausada, setPartidaPausada] = useState(false)
+
+  //Tiempos de los usaurios
   let [tiempoPregunta, setTiempoPregunta] = useState(0);
-  let [tiempoElegirCasilla, setTiempoElegirCasilla] = useState(0)
+  let [tiempoElegirCasilla, setTiempoElegirCasilla] = useState(0);
+  let [tiempoPausa, setTiempoPausa] = useState(10);
+  let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(5);
+  let [tiempoLanzarDado, setTiempoLanzarDado] = useState();
+
+  //Variables usadas para activar los relojes
+  let [isRunningJugada, setIsRunningJugada] = useState(true);
+  let [isRunningRespuesta, setIsRunningRespuesta] = useState(false);
+  let [isRunningCerrarPregunta, setIsRunningCerrarPregunta] = useState(false);
+  let [isRunningPausa, setIsRunningPausa] = useState(false);
+
   let [tematicaPregunta, setTematicaPregunta] = useState("")
   let [casillas, setCasillas] = useState("")
-  let [esCorrecta, setesCorrecta] = useState(0)
+  let [esCorrecta, setEsCorrecta] = useState(0)
+  //Variable para guardar el color de la temática
   let [colorTematica, setColorTematica] = useState("")
+  //Variable utilizada para guardar el quesito
   let [varAux, setVarAux] = useState("") 
-  
+  //Variable que evita que un usuario pulse varias veces seguidas el dado
+  let [pulsadoDados, setPulsadoDados] = useState(0)
+  //Variable utilizada para evitar que un usuario que se le acaba de dar el turno pueda hacer cosas en la pantalla de pregunta del otro
+  let [contestada, setContestada] = useState(false)
 
-  const [vectorJugadores, setVectorJugadores ]  = useState([]);
+  let [vectorJugadores, setVectorJugadores ]  = useState([]);
 
   const cookies= new Cookies();
   const numJugadores = cookies.get('n_jugadores');
@@ -95,8 +113,6 @@ const Tablero = () => {
   let casillas_nuevas = [];
   let msgIni = 0;
 
-  let [contestada, setContestada] = useState(false)
-
   let [colorPregunta, setColorPregunta] = useState("white", "white", "white", "white")
   let aux2 = ["white", "white", "white", "white"]
   
@@ -107,13 +123,15 @@ const Tablero = () => {
   //Sobra (modificrlo con los datos que nos pasa el backend)
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
-  // Vector Jugadores
+  // Vector de los jugadores
   let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
   let [vector2, setV2] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
 
+  //Posiciones fijas para colocar los temporizadores y los quesitos para cadajugador
   const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"45%", left:"22%"}]
   const posv2 = [{top:"5%", left:"70%"},{top:"29%", left:"70%"},{top:"57%", left:"70%"}]
 
+  //Vector donde se encuentran las casillas que deben parpadear
   let [vparp, setVprap] = useState (
     "", "", "", "", "", "", "", "",
     "", "", "", "", "", "", "", "", 
@@ -126,6 +144,7 @@ const Tablero = () => {
     "", "", "", "", "", "", "", "",
   );  
 
+  //Vector auxiliar para vaciar las casillas que parpadean
   let aux = [
     "", "", "", "", "", "", "", "",
     "", "", "", "", "", "", "", "", 
@@ -242,253 +261,315 @@ const Tablero = () => {
       try {
         console.log("Mensaje del Backend:")
         console.log(data)
-        if (msgIni==0) {
-
-
-          tiempoPregunta = data.tiempo_pregunta;
-          tiempoElegirCasilla = data.tiempo_elegir_casilla;
-          errorPartida = data.error;
-          msgIni=1
-          //if (numJugadores==2) {
-          let jugadores = data.jugadores
-          let indice = 0
-          //let jugadorVector
-          jugadores.forEach(element => {
-            if (indice < (jugadores.length/2)) {
-              // let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
-              vector1[indice].nombre = element.jugador
-              vector1[indice].activo = element.activo
-              vector1[indice].ficha = element.ficha
-              vector1[indice].turno = element.turno
-              vector1[indice].posicion = element.posicion       
-              vector1[indice].quesitos = element.quesitos  
-              vector1[indice].tablero = element.tablero     
-              if (vector1[indice].nombre == usuario) {
-                tablero = vector1[indice].tablero 
-                jugadorActual = vector1[indice].turno
-              }
-            }
-            else {
-              if (indice == (jugadores.length/2)){
-                indice=0
-              }
-              vector2[indice].nombre = element.jugador
-              vector2[indice].activo = element.activo
-              vector2[indice].ficha = element.ficha
-              vector2[indice].turno = element.turno
-              vector2[indice].posicion = element.posicion       
-              vector2[indice].quesitos = element.quesitos  
-              vector2[indice].tablero = element.tablero     
-              if (vector2[indice].nombre == usuario) {
-                tablero = vector2[indice].tablero 
-                jugadorActual = vector2[indice].turno
-              }
-            }
-            indice = indice+1;
-          });
-          setV1(vector1)
-          setV2(vector2)
-          setJugadorActual(jugadorActual)
-          setTablero(tablero)
-          console.log(jugadorActual)
-          console.log(vector1)
-          console.log(vector2)
-          //Actualizamos la persona que tiene el turno y en que vector está
-          for (let i = 0; i < vector1.length; i++) {
-            if (vector1[i].turno == "1"){
-              let ind = i
-              let vec = "vector1"
-              setIndiceJugadorTurno(ind)
-              setVectorJugadorTurno(vec)
-            }
-          }
-          for (let i = 0; i < vector2.length; i++) {
-            if (vector2[i].turno == "1"){
-              let ind = i
-              let vec = "vector2"
-              setIndiceJugadorTurno(ind)
-              setVectorJugadorTurno(vec)
-            }
-          }
-
-          //Logica del mensaje inicial
-          setShow4(!show4)
-          setShow4(!show4)
-          console.log(indiceJugadorTurno)
-          console.log(vectorJugadorTurno)
+        if (String(data.type) == ""){
+          console.log("Mensaje vacio que no tratamos")
         }
         else {
-          if (data.jugador == usuario){
-            console.log("cambiaJugadorActual a 1")
-            setJugadorActual(1)
-          }
-          else {
-            console.log("cambiaJugadorActual a 0")
-            setJugadorActual(0)
-          }
-          //Actualizamos la persona que tiene el turno y en que vector está
-          for (let i = 0; i < vector1.length; i++) {
-            console.log(vector1[i].nombre + " " + data.jugador)
-            if (vector1[i].nombre == data.jugador){
-              console.log(vector1[i].nombre)
-              setIndiceJugadorTurno(i)
-              setVectorJugadorTurno("vector1")
-            }
-          }
-          for (let i = 0; i < vector2.length; i++) {
-            if (vector2[i].nombre == data.jugador){
-              console.log(vector2[i].nombre)
-              setIndiceJugadorTurno(i)
-              setVectorJugadorTurno("vector2")
-            }
-          }
-          setShow4(!show4)
-          setShow4(!show4)
-          console.log(indiceJugadorTurno)
-          console.log(vectorJugadorTurno)
-          //Logica mensaje general
-          console.log(data.type)
-          console.log(data.subtype)
-          switch(data.type) {
-            case "Respuesta":
-              switch(data.subtype) {
-                case "Dado_casillas":
-                  valor_dado = data.valor_dado
-                  aux.forEach(element => {
-                    element = ""
-                  });
-                  setCasillas(aux)
-                  casillas = data.casillas_nuevas.split(",");
-                  casillas.forEach(element => {
-                    aux[element] = "parpadea"
-                  });
-                  setVprap(aux)
-                  pulsarDado()
-                  setIsRunning(false) 
-                  setShow4(!show4)
-                  setShow4(!show4)
-                  break
-
-                case "Pregunta":               
-                  enunciado = data.enunciado
-                  r1 = data.r1
-                  r2 = data.r2
-                  r3 = data.r3
-                  r4 = data.r4
-                  rc = data.rc
-                  quesito = data.quesito
-                  tematicaPregunta = data.tematica
-                  fun_colorTematica(tematicaPregunta)
-                  setTematicaPregunta(tematicaPregunta)
-                  setR1(r1)
-                  setR2(r2)
-                  setR3(r3)
-                  setR4(r4)
-                  setRc(rc)
-                  setEnunciado(enunciado)
-                  setQuesito(quesito)
-                  vaciarRespuestas()
-                  setShow4(!show4)
-                  setShow4(!show4)
-
-                  //Mostrar la pregunta a todos
-                  setShow(true)
-                  break
-              }
-              break
-            case "Accion":
-              switch(data.subtype) {
-                case "Dados":
-                  //vaciarRespuestas()
-                  vaciarCasillas()
-                  setShow4(!show4)
-                  setShow4(!show4)
-                  break
-              }
-              break
-            case "Fin":
-              break
-
-            case "Chat":
-              break
-            
-            case "Peticion":
-              switch(data.subtype) {
-                case "Tirar_dado":
-                  break
-                case "Movimiento_casilla":
-                  if (vectorJugadorTurno == "vector1"){
-                    vector1[indiceJugadorTurno].posicion = data.casilla_elegida
-                  }
-                  else {
-                    vector2[indiceJugadorTurno].posicion = data.casilla_elegida
-                  }
-                  setV1(vector1)
-                  setV2(vector2)
-                  setShow4(!show4)
-                  setShow4(!show4)
-                  break
-              }
-            break  
-            case "Actualizacion":
-              console.log("Entramos a actualizar")
-              //Comprbamos si el jugador al que le tocaba ha respondido bien y ha ganado un quesito
-              if(data.quesito == true && data.esCorrecta == "true"){
-                console.log("Entramos en temática: " + tematicaPregunta)
-                switch(data.tematica) {
-                  case "Ciencia":
-                    varAux = QuesoVerde
-                  break
-                  case "Arte":
-                    varAux = QuesoRojo
-                  break
-                  case "Deportes":
-                    varAux = QuesoNaranja
-                  break
-                  case "Entretenimiento":
-                    varAux = QuesoRosa
-                  break
-                  case "Geografia":
-                    varAux = QuesoAzul
-                  break
-                  case "Historia":
-                    varAux = QuesoAmarillo
-                  break
+          if (msgIni==0) {
+            indiceJugadorTurno = 0
+            vectorJugadorTurno = "vector1"
+            setIndiceJugadorTurno(indiceJugadorTurno)
+            setVectorJugadorTurno(vectorJugadorTurno)
+            tiempoPregunta = data.tiempo_pregunta;
+            tiempoLanzarDado = data.tiempo_elegir_casilla;
+            setTiempoLanzarDado(tiempoLanzarDado)
+            setTiempoPregunta(tiempoPregunta)
+            errorPartida = data.error;
+            msgIni=1
+            //if (numJugadores==2) {
+            let jugadores = data.jugadores
+            let indice = 0
+            //let jugadorVector
+            jugadores.forEach(element => {
+              if (indice < (jugadores.length/2)) {
+                // let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+                vector1[indice].nombre = element.jugador
+                vector1[indice].activo = element.activo
+                vector1[indice].ficha = element.ficha
+                vector1[indice].turno = element.turno
+                vector1[indice].posicion = element.posicion       
+                vector1[indice].quesitos = element.quesitos  
+                vector1[indice].tablero = element.tablero     
+                if (vector1[indice].nombre == usuario) {
+                  tablero = vector1[indice].tablero 
+                  jugadorActual = vector1[indice].turno
                 }
-                //miramos a quen le toca el turno y actualizamos los vector
-                setVarAux(varAux)
-                console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
-                if (vectorJugadorTurno == "vector1"){
-                  vector1[indiceJugadorTurno].quesitos.push(varAux)
-                }
-                else {
-                  vector2[indiceJugadorTurno].quesitos.push(varAux)
-                }
-                setV1(vector1)
-                setV2(vector2)
-                console.log(vector1)
-                console.log(vector2)
-              }
-
-              if (data.esCorrecta == "true"){
-                aux2[data.r1-1] = "green"
               }
               else {
-                aux2[data.r1-1] = "red"
+                if (indice == (jugadores.length/2)){
+                  indice=0
+                }
+                vector2[indice].nombre = element.jugador
+                vector2[indice].activo = element.activo
+                vector2[indice].ficha = element.ficha
+                vector2[indice].turno = element.turno
+                vector2[indice].posicion = element.posicion       
+                vector2[indice].quesitos = element.quesitos  
+                vector2[indice].tablero = element.tablero     
+                if (vector2[indice].nombre == usuario) {
+                  tablero = vector2[indice].tablero 
+                  jugadorActual = vector2[indice].turno
+                }
               }
-              console.log(aux2)
-              setColorPregunta(aux2)
-              setShow(!show)
-              setShow(!show)
-              console.log(colorPregunta)
-              vaciarCasillas()
-              setShow3(true)
-              setShow4(!show4)
-              setShow4(!show4)
-              break
-          } 
+              indice = indice+1;
+            });
+            setV1(vector1)
+            setV2(vector2)
+            setJugadorActual(jugadorActual)
+            setTablero(tablero)
+            console.log(jugadorActual)
+            console.log(vector1)
+            console.log(vector2)
+            //Actualizamos la persona que tiene el turno y en que vector está
+            for (let i = 0; i < vector1.length; i++) {
+              if (vector1[i].turno == "1"){
+                indiceJugadorTurno = i
+                vectorJugadorTurno = "vector1"
+                setIndiceJugadorTurno(indiceJugadorTurno)
+                setVectorJugadorTurno(vectorJugadorTurno)
+              }
+            }
+            for (let i = 0; i < vector2.length; i++) {
+              if (vector2[i].turno == "1"){
+                indiceJugadorTurno = i
+                vectorJugadorTurno = "vector2"
+                setIndiceJugadorTurno(indiceJugadorTurno)
+                setVectorJugadorTurno(vectorJugadorTurno)
+              }
+            }
+
+            //Logica del mensaje inicial
+            setShow4(!show4)
+            setShow4(!show4)
+            console.log(indiceJugadorTurno)
+            console.log(vectorJugadorTurno)
+          }
+          else {
+            if (data.jugador == usuario){
+              setJugadorActual(1)
+            }
+            else {
+              setJugadorActual(0)
+            }
+            //Actualizamos la persona que tiene el turno y en que vector está
+            for (let i = 0; i < vector1.length; i++) {
+              if (vector1[i].nombre == String(data.jugador)){
+                const indice1 = i
+                indiceJugadorTurno = indice1
+                setIndiceJugadorTurno(indiceJugadorTurno)
+                vectorJugadorTurno = "vector1"
+                setVectorJugadorTurno(vectorJugadorTurno)
+              }
+            }
+            for (let i = 0; i < vector2.length; i++) {
+              if (vector2[i].nombre == String(data.jugador)){
+                const indice2 = i
+                indiceJugadorTurno = indice2
+                const vectorActual2 = "vector2"
+                setIndiceJugadorTurno(indiceJugadorTurno)
+                vectorJugadorTurno = "vector2"
+                setVectorJugadorTurno(vectorJugadorTurno)
+              }
+            }
+            setShow4(!show4)
+            setShow4(!show4)
+            // console.log(indiceJugadorTurno)
+            // console.log(vectorJugadorTurno)
+            // //Logica mensaje general
+            // console.log(data.type)
+            // console.log(data.subtype)
+            switch(data.type) {
+              case "Respuesta":
+                switch(data.subtype) {
+                  case "Dado_casillas":
+                    valor_dado = data.valor_dado
+                    aux.forEach(element => {
+                      element = ""
+                    });
+                    setCasillas(aux)
+                    casillas = data.casillas_nuevas.split(",");
+                    casillas.forEach(element => {
+                      aux[element] = "parpadea"
+                    });
+                    setVprap(aux)
+                    pulsarDado()
+                    //setIsRunning(false) 
+                    setShow4(!show4)
+                    setShow4(!show4)
+                    break
+
+                  case "Pregunta":               
+                    enunciado = data.enunciado
+                    r1 = data.r1
+                    r2 = data.r2
+                    r3 = data.r3
+                    r4 = data.r4
+                    rc = data.rc
+                    quesito = data.quesito
+                    tematicaPregunta = data.tematica
+                    fun_colorTematica(tematicaPregunta)
+                    setTematicaPregunta(tematicaPregunta)
+                    setR1(r1)
+                    setR2(r2)
+                    setR3(r3)
+                    setR4(r4)
+                    setRc(rc)
+                    setEnunciado(enunciado)
+                    setQuesito(quesito)
+                    //Vaciamos las casillas
+                    vaciarRespuestas()
+                    //Activamos el reloj
+                    setShow3(!show3)
+                    setIsRunningRespuesta(true)
+                    setShow4(!show4)
+                    setShow4(!show4)
+                    //Mostrar la pregunta a todos
+                    setShow(!show)
+                    break
+                }
+                break
+              case "Accion":
+                switch(data.subtype) {
+                  case "Dados":
+                    //vaciarRespuestas()
+                    pulsadoDados = 0
+                    setIsRunningJugada(true)
+                    setPulsadoDados(pulsadoDados)
+                    vaciarCasillas()
+                    setShow4(!show4)
+                    setShow4(!show4)
+                    break
+                }
+                break
+                
+              case "Fin":
+                break
+
+              case "Chat":
+                break
+              
+              case "Peticion":
+                switch(data.subtype) {
+                  case "Tirar_dado":
+                    setIsRunningJugada(false)
+                    break
+                  case "Movimiento_casilla":
+                    if (vectorJugadorTurno == "vector1"){
+                      vector1[indiceJugadorTurno].posicion = String(data.casilla_elegida)
+                    }
+                    else {
+                      vector2[indiceJugadorTurno].posicion = String(data.casilla_elegida)
+                    }
+                    setV1(vector1)
+                    setV2(vector2)
+                    setShow4(!show4)
+                    setShow4(!show4)
+                    break
+                }
+              break  
+              case "Actualizacion":
+                switch(data.subtype) {
+                  //Caso de pausar la partida
+                  case "Pausar_partida":
+                    console.log("NOS LLEGA PAUSAR_PARTIDA")
+                    setShow1(!show1)
+                    setPartidaPausada(true)
+                    RelojPausa()
+                    break
+    
+                  //Caso de continuar la partida
+                  case "Continuar_partida":
+                    console.log("NOS LLEGA CONTINUAR_PARTIDA")
+                    setShow1(!show1)
+                    setPartidaPausada(false)
+                    break
+                    
+                  //Caso de contestar la pregunta (nos llegan los datos del que ha contestado, pero no cambiamos de turno ni nada)
+                  case "Contestar_pregunta":
+                    console.log("NOS LLEGA CONTESTAR_PREGUNTA")
+                    setIsRunningRespuesta(false)
+                    setIsRunningJugada(false)
+                    if (String(data.enunciado) == "noContestada") {
+                      colorPregunta[data.rc1-1] = "green"
+                      for (let i = 0; i < 4; i++){
+                        if (i != (data.rc - 1)){
+                          colorPregunta[i] = "red"
+                        }
+                      }
+                      setColorPregunta(colorPregunta)
+                      console.log(colorPregunta)
+                      setShow(!show)
+                      setShow(!show)
+                      vaciarCasillas()
+                      setShow3(false)
+                      setIsRunningCerrarPregunta(true)
+                      
+                      setShow4(!show4)
+                      setShow4(!show4)
+                    } 
+                    else {
+                      //Comprobamos si el jugador al que le tocaba ha respondido bien y ha ganado un quesito
+                      if(data.quesito == true && data.esCorrecta == "true"){
+                        switch(data.tematica) {
+                          case "Ciencia":
+                            varAux = QuesoVerde
+                            break
+                          case "Arte":
+                            varAux = QuesoRojo
+                            break
+                          case "Deportes":
+                            varAux = QuesoNaranja
+                            break
+                          case "Entretenimiento":
+                            varAux = QuesoRosa
+                            break
+                          case "Geografia":
+                            varAux = QuesoAzul
+                            break
+                          case "Historia":
+                            varAux = QuesoAmarillo
+                            break
+                        }
+                        //Miramos a quen le toca el turno y actualizamos los vector de quesitos
+                        setVarAux(varAux)
+                        //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+                        if (vectorJugadorTurno == "vector1"){
+                          vector1[indiceJugadorTurno].quesitos.push(varAux)
+                        }
+                        else {
+                          vector2[indiceJugadorTurno].quesitos.push(varAux)
+                        }
+                        setV1(vector1)
+                        setV2(vector2)
+
+                      }
+                      //ponemos bien las preguntas
+                      if (data.esCorrecta == "true"){
+                        aux2[data.r1-1] = "green"
+                      }
+                      else {
+                        aux2[data.r2-1] = "green"
+                        aux2[data.r1-1] = "red"
+                      }
+                      setColorPregunta(aux2)
+                      setShow(!show)
+                      setShow(!show)
+                      vaciarCasillas()
+                      setShow3(false)
+                      setIsRunningCerrarPregunta(true)
+                      console.log("Antes de entrar en CerrarPregunta")
+                      setShow4(!show4)
+                      setShow4(!show4)
+                    }
+                  break
+
+                  case "Fin_pregunta":
+                    break
+                } 
+            }
+          }
+          console.log("Sale del autómata")
         }
-        console.log("Sale del autómata")
       } catch (err) {
         console.log(err);
       }
@@ -618,14 +699,14 @@ const Tablero = () => {
 
     //Función que se ejecuta cuando se selecciona la casilla
   function vaciarRespuestas() {
-    console.log(colorPregunta)
-    console.log(aux2)
+    //console.log(colorPregunta)
+    //console.log(aux2)
     for (let i = 0; i < 4; i++) {
       aux2[i] = "white";
     }
     setColorPregunta(aux2)
-    console.log(colorPregunta)
-    console.log(aux2)
+    //console.log(colorPregunta)
+    //console.log(aux2)
   }
 
   function Dado() {
@@ -683,20 +764,31 @@ const Tablero = () => {
   }
 
 
-  /* --- RELOJ ---*/
-  const [isRunning, setIsRunning] = useState(true);
+  /* --- RELOJES ---*/
   const RelojJugada = () => {
       return (    
       <div>
           <CountdownCircleTimer
-              isPlaying={isRunning}
-              duration={7}
+              isPlaying={isRunningJugada}
+              duration={tiempoLanzarDado}
               colors={['#004777', '#F7B801', '#A30000', '#A30000']}
               colorsTime={[7, 5, 2, 0]}
               size={100}
-  
-              onComplete={() => {console.log("La cuenta regresiva ha finalizado");
-                                // Detiene el reloj
+              onComplete={() => {
+                // Detiene el reloj
+                console.log("RELOJ LANZAR DADO ha finalizado");
+                // Lanzar el dado aleatorimente
+                if (jugadorActual==1 && pulsadoDados == 0){
+                  //Peticion para que nos envien el dado y las casillas
+                  setPulsadoDados(1)
+                  type = "Peticion"
+                  subtype = "Tirar_dado"
+                  console.log("Envio Tirar_dado")
+                  enviarMensaje()
+                } else {
+                  console.log("Esperando a que pulse el dado el jugador que le toca")
+                }
+                setIsRunningJugada(false)
           }}
           >
               {({ remainingTime }) => remainingTime}
@@ -705,18 +797,25 @@ const Tablero = () => {
       );
   };
 
+  //Reloj que trata el tiempo de respuesta del jugador a una respuesta
   const RelojRespuesta = () => {
+    //setIsRunningRespuesta(true)
       return (    
       <div>
           <CountdownCircleTimer
-              isPlaying={isRunning}
-              duration={7}
+              isPlaying={isRunningRespuesta}
+              duration={tiempoPregunta}
               colors={['#004777', '#F7B801', '#A30000', '#A30000']}
               colorsTime={[7, 5, 2, 0]}
               size={100}
-  
-              onComplete={() => {console.log("La cuenta regresiva ha finalizado");
-                                // Detiene el reloj
+              onComplete={() => {
+              // Detiene el reloj
+              console.log("RELOJ RESPUESTA ha finalizado");
+              // Se da la pregunta por fallada y se cambia de turno + mensjae de fin de pregunta 
+
+              if(jugadorActual ==1){finTiempoRespuesta()}
+              setIsRunningRespuesta(false)
+
           }}
           >
               {({ remainingTime }) => remainingTime}
@@ -725,24 +824,55 @@ const Tablero = () => {
       );
   };
 
+  //Reloj que trata el pause de la partida
   const RelojPausa = () => {
+    //setIsRunningPausa(true)
       return (    
       <div>
-          <CountdownCircleTimer
-              isPlaying={isRunning}
-              duration={7}
-              colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-              colorsTime={[7, 5, 2, 0]}
-              size={100}
-  
-              onComplete={() => {console.log("La cuenta regresiva ha finalizado");
-          }}
-          >
-              {({ remainingTime }) => remainingTime}
-          </CountdownCircleTimer>
+        <CountdownCircleTimer
+            isPlaying={isRunningPausa}
+            duration={tiempoPausa}
+            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colorsTime={[7, 5, 2, 0]}
+            size={100}
+            onComplete={() => {
+              //Paramos el reloj
+              console.log("RELOJ PAUSAR PARTIDA ha finalizado");
+              //Quitamos la pausa y seguimos jugando
+              setShow1(false)
+              setPartidaPausada(false)
+        }}
+        >
+            {({ remainingTime }) => remainingTime}
+        </CountdownCircleTimer>
       </div>
       );
   };
+
+  //Reloj que se al tiempo para quitar en todos los usuarios el div de la pregunta
+  const RelojCerrarPregunta = () => {
+    return (    
+    <div>
+      <CountdownCircleTimer
+          isPlaying={isRunningCerrarPregunta}
+          duration={5}
+          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+          colorsTime={[7, 5, 2, 0]}
+          size={100}
+          onComplete={() => {
+            //Paramos el reloj
+            console.log("RELOJ CERRAR PREGUNTA HA finalizado");
+            //Quitamos la pausa y seguimos jugando
+            if (jugadorActual==1){cerrarPregunta()}
+            setIsRunningCerrarPregunta(false)
+            setShow(!show)
+      }}
+      >
+          {({ remainingTime }) => remainingTime}
+      </CountdownCircleTimer>
+    </div>
+    );
+};
 
   /* --- CHAT ---*//*
   const roomCHat= "pepe3";
@@ -825,16 +955,17 @@ const Tablero = () => {
   /* --- LANZAR DADO --- */
   function PosicionElementos() {
     if (vectorJugadorTurno == "vector1"){
-      console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+      //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
-        <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
+        <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> { } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
-              console.log(jugadorActual)
-              if (jugadorActual==1){
+              if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
+                setIsRunningJugada(false)
+                setPulsadoDados(1)
                 type = "Peticion"
                 subtype = "Tirar_dado"
                 console.log("Envio Tirar_dado")
@@ -849,16 +980,17 @@ const Tablero = () => {
       )
     }
     else {
-      console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+      //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
         <div style={{ position:"absolute", top:posv2[indiceJugadorTurno].top, left:posv2[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
-              console.log(jugadorActual)
-              if (jugadorActual==1){
+              if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
+                setIsRunningJugada(false)
+                setPulsadoDados(1)
                 type = "Peticion"
                 subtype = "Tirar_dado"
                 console.log("Envio Tirar_dado")
@@ -881,7 +1013,7 @@ const Tablero = () => {
     else {
       vector2[indiceJugadorTurno].posicion = props
     }
-    
+
     type = "Peticion"
     subtype = "Movimiento_casilla"
     casilla_elegida = props
@@ -908,12 +1040,7 @@ const Tablero = () => {
             <div style={{marginTop:"3%"}}>
                 <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"5%", backgroundColor:"white"}} /><br></br>
                 <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                {/*<img src={props.rojo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.azul} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.verde} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.amarillo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.rosa} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.naranja} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>*/
+                {
                 quesitos(props.quesitos)
                 }
                 <br></br>
@@ -936,12 +1063,7 @@ const Tablero = () => {
               <div style={{marginTop:"3%"}}>
                 <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"72%", backgroundColor:"white"}} /><br></br>
                 <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                {/*<img src={props.rojo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.azul} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.verde} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.amarillo} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.rosa} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
-                <img src={props.naranja} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>*/
+                {
                 quesitos(props.quesitos)
                 }
                 <br></br>
@@ -967,31 +1089,39 @@ const Tablero = () => {
   function Linea(props) {
     return(
         <div style={{position:"absolute", height: props.height, width: props.width, top: props.top, left: props.left , transform: props.transform, cursor:"pointer"}}>
-            <button className={vparp[props.v6]} style={{ backgroundColor: props.c1, height: "100%", width: props.width1, zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v6] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(props.v6); moverFicha(props.v6) }}}>  </button>
-            <button className={vparp[props.v5]} style={{ backgroundColor: props.c2, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v5] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(props.v5); moverFicha(props.v5) }}}>  </button>
-            <button className={vparp[props.v4]} style={{ backgroundColor: props.c3, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v4] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(props.v4); moverFicha(props.v4) }}}>  </button>
-            <button className={vparp[props.v3]} style={{ backgroundColor: props.c4, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v3] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(props.v3); moverFicha(props.v3) }}}>  </button>
-            <button className={vparp[props.v2]} style={{ backgroundColor: props.c5, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v2] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(props.v2); moverFicha(props.v2) }}}>  </button>
-            <button className={vparp[props.v1]} style={{ backgroundColor: props.c6, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v1] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(props.v1); moverFicha(props.v1) }}}>  </button>
+            <button className={vparp[props.v6]} style={{ backgroundColor: props.c1, height: "100%", width: props.width1, zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v6] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(props.v6); moverFicha(props.v6) }}}>  </button>
+            <button className={vparp[props.v5]} style={{ backgroundColor: props.c2, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v5] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(props.v5); moverFicha(props.v5) }}}>  </button>
+            <button className={vparp[props.v4]} style={{ backgroundColor: props.c3, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v4] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(props.v4); moverFicha(props.v4) }}}>  </button>
+            <button className={vparp[props.v3]} style={{ backgroundColor: props.c4, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v3] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(props.v3); moverFicha(props.v3) }}}>  </button>
+            <button className={vparp[props.v2]} style={{ backgroundColor: props.c5, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v2] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(props.v2); moverFicha(props.v2) }}}>  </button>
+            <button className={vparp[props.v1]} style={{ backgroundColor: props.c6, height: "100%", width:"15%", zIndez:"9", cursor:"pointer"}} onClick={() => { if (jugadorActual==1 && (vparp[props.v1] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(props.v1); moverFicha(props.v1) }}}>  </button>
         </div>
     );
   }
 
+  //
+  function cerrarPregunta() {
+    //Enviamos el mensaje "Actualización"
+    type = "Actualizacion"
+    subtype = "Fin_pregunta"
+    enviarMensaje()
+  }
+
+
   //Verificación de la respuesta
   function esCorrectaRespuesta(num) {
     let a = num + 1
-    console.log(a)
-    console.log(rc)
     if (a == rc) {
       colorPregunta[num] = "green"
       esCorrecta = "true"
     }
     else {
+      colorPregunta[rc-1] = "green"
       colorPregunta[num] = "red"
       esCorrecta = "false"
 
     }
-    setesCorrecta(esCorrecta)
+    setEsCorrecta(esCorrecta)
     if(quesito == true && esCorrecta == "true"){
       switch(tematicaPregunta) {
         case "Ciencia":
@@ -1027,18 +1157,22 @@ const Tablero = () => {
     console.log(colorPregunta)
     setColorPregunta(colorPregunta)
     console.log(colorPregunta)
-    setesCorrecta(esCorrecta)
-    setShow3(true)
+    setEsCorrecta(esCorrecta)
+    setIsRunningRespuesta(false)
+    setIsRunningJugada(false)
+    setIsRunningCerrarPregunta(true)
+    console.log("Antes de entrar en CerrarPregunta")
+    setShow3(!show3)
     //Enviamos el mensaje "Actualización"
     enunciado = ""
     r1 = num + 1
-    r2 = ""
+    r2 = rc
     r3 = ""
     r4 = ""
     rc = ""
     type = "Actualizacion"
+    subtype = "Contestar_pregunta"
     enviarMensaje()
-    r1 = ""
   }
 
   function fun_colorTematica(tematicaPregunta){
@@ -1064,6 +1198,52 @@ const Tablero = () => {
       
 
     }
+  }
+
+  /* --- NO HA CONTESTADO LA PREGUNTA --- */
+  function finTiempoRespuesta() {
+    colorPregunta[rc-1] = "green"
+    for (let i = 0; i < 4; i++){
+      if (i != (rc-1)){
+        colorPregunta[i] = "red"
+      }
+    }
+    esCorrecta = "false"
+    setContestada(true)
+    setColorPregunta(colorPregunta)
+    setEsCorrecta(esCorrecta)
+    //Enviamos el mensaje "Actualización"
+    enunciado = "noContestada"
+    r1 = ""
+    r2 = rc
+    r3 = ""
+    r4 = ""
+    rc = ""
+    type = "Actualizacion"
+    subtype = "Contestar_pregunta"
+    enviarMensaje()
+    setIsRunningCerrarPregunta(true)
+    console.log("Antes de entrar en CerrarPregunta")
+    setShow3(false)
+  }
+
+  /* --- CONTINUAR PARTIDA --- */
+  function continuarPartida() {
+    setPartidaPausada(false)
+    type = "Actualizacion"
+    subtype = "Continuar_partida"
+    console.log("Continuamos la partida")
+  }
+
+
+  /* --- PAUSAR PARTIDA --- */
+  function pausarPartida() {
+    setPartidaPausada(true)
+    RelojPausa()
+    type = "Actualizacion"
+    subtype = "Pausar_partida"
+    console.log("Pausamos la partida")
+    enviarMensaje()
   }
 
   /* --- PREGUNTA --- */
@@ -1119,14 +1299,14 @@ const Tablero = () => {
                   
                    
                   
-                  <img className={vparp[28]} style={{ position:"absolute", transform: "rotate(-2deg)", left:"20.9%", height:"15%", width:"19%", top:"-6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_azul} onClick={() => { if (jugadorActual==1 && (vparp[28] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(28); moverFicha(28) }}}/>
-                  <img className={vparp[21]} style={{ position:"absolute", transform: "rotate(+59.5deg)", left:"66%", height:"15%", width:"19%", top:"-6.9%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_naranja} onClick={() => { if (jugadorActual==1 && (vparp[21] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(21); moverFicha(21) }}}/>
-                  <img className={vparp[14]} style={{ position:"absolute", transform: "rotate(+118deg)", left:"89.8%", height:"14%", width:"18%", top:"32%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_amarilla} onClick={() => { if (jugadorActual==1 && (vparp[14] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(14); moverFicha(14) }}}/>
-                  <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-182deg)", left:"68.3%", height:"14%", width:"18%", top:"71.5%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_rosa} onClick={() => { if (jugadorActual==1 && (vparp[7] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(7); moverFicha(7) }}}/>
-                  <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_verde} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
-                  <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_roja} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
+                  <img className={vparp[28]} style={{ position:"absolute", transform: "rotate(-2deg)", left:"20.9%", height:"15%", width:"19%", top:"-6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_azul} onClick={() => { if (jugadorActual==1 && (vparp[28] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(28); moverFicha(28) }}}/>
+                  <img className={vparp[21]} style={{ position:"absolute", transform: "rotate(+59.5deg)", left:"66%", height:"15%", width:"19%", top:"-6.9%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_naranja} onClick={() => { if (jugadorActual==1 && (vparp[21] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(21); moverFicha(21) }}}/>
+                  <img className={vparp[14]} style={{ position:"absolute", transform: "rotate(+118deg)", left:"89.8%", height:"14%", width:"18%", top:"32%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_amarilla} onClick={() => { if (jugadorActual==1 && (vparp[14] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(14); moverFicha(14) }}}/>
+                  <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-182deg)", left:"68.3%", height:"14%", width:"18%", top:"71.5%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_rosa} onClick={() => { if (jugadorActual==1 && (vparp[7] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(7); moverFicha(7) }}}/>
+                  <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_verde} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
+                  <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_roja} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
 
-                  <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0" }} onClick={() => { if (jugadorActual==1 && (vparp[72] == "parpadea")){ vaciarCasillas(); setCasillaSeleccionada(72); moverFicha(72) }}}>
+                  <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0" }} onClick={() => { if (jugadorActual==1 && (vparp[72] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(72); moverFicha(72) }}}>
                       <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
                   </div>
 
@@ -1151,38 +1331,37 @@ const Tablero = () => {
               
               {mensajePantalla()}
 
-              <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {setShow1(!show1)}}>
+              <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1){setShow1(!show1); pausarPartida();} }}>
                   Pausar Partida
               </button>
               <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {setShow2(!show2)}}>
                   Abandonar Partida
               </button>
-              <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => { setShow3(true)}}/>
+              <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => {if (partidaPausada == false){ setShow3(true)}}}/>
 
               {/* --- PREGUNTA --- */}  
               {show ? (
               <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", zIndex:"6", backgroundColor: "rgba(0, 0, 0, 0)", border:"none"}}>
-                  <Respuesta width="100%" height="12%" left="-0.2%" top="-0.5%" size="50px" respuesta={tematicaPregunta} border= "40px 40px 0px 0px" marginTop="0%" color={colorTematica}/>
-                  <Respuesta width="100%" height="12%" left="-0.2%" top="12%" size="30px" respuesta={enunciado} border= "0px 0px 0px 0px" marginTop="1.2%" color={colorTematica} res=""/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="24%" letra="A)" size="30px" respuesta={r1} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[0]} num={0}/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="43%" letra="B)" size="30px" respuesta={r2} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[1]} num={1}/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="62%" letra="C)" size="30px" respuesta={r3} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[2]} num={2}/>
-                  <Respuesta width="70%" height="19%" left="-0.2%" top="81%"letra="D)" size="30px" respuesta={r4} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[3]} num={3}/>
+                  <Respuesta width="100%" height="12%" left="-0.2%" top="-5.5%" size="50px" respuesta={tematicaPregunta} border= "40px 40px 0px 0px" marginTop="0%" color={colorTematica}/>
+                  <Respuesta width="100%" height="20%" left="-0.2%" top="7%" size="30px" respuesta={enunciado} border= "0px 0px 0px 0px" marginTop="1.2%" color={colorTematica} res=""/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="27%" letra="A)" size="30px" respuesta={r1} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[0]} num={0}/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="46%" letra="B)" size="30px" respuesta={r2} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[1]} num={1}/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="65%" letra="C)" size="30px" respuesta={r3} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[2]} num={2}/>
+                  <Respuesta width="70%" height="19%" left="-0.2%" top="84%"letra="D)" size="30px" respuesta={r4} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[3]} num={3}/>
 
-                  <div  style= {{width:"30%", height:"76%", top: "24%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:colorTematica}} >
+                  <div  style= {{width:"30%", height:"76%", top: "27%", left: "70%", position:"absolute",  border: "3px solid black", backgroundColor:colorTematica}} >
                       <br></br><br></br><br></br>
                           <a style={{fontSize:"30px"}}> 
                           Tiempo para responder
                       </a>
-                      <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
-                          {RelojRespuesta()}
-                      </div>
                       {show3 ? (
-                      <button className="App-boton" style= {{top: "80%", left: "43%", position:"absolute", zIndex:"6"}} onClick={() => {setShow(false); setShow3(false); setContestada(false);vaciarRespuestas()}}>
-                          Cerrar Pregunta
-                      </button>
-                      ) : (
-                          <div/>
+                        <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
+                            {RelojRespuesta()}
+                        </div>
+                      ) : ( 
+                        <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
+                          {RelojCerrarPregunta()}
+                        </div>
                       )}
                   </div>
               </div>
@@ -1208,7 +1387,7 @@ const Tablero = () => {
                   <div style= {{top: "50%", left: "44%", position:"absolute"}}>
                       {RelojPausa()}
                   </div>
-                  <button className="App-boton" style= {{top: "80%", left: "33%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow1(!show1)}}>
+                  <button className="App-boton" style= {{top: "80%", left: "33%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow1(!show1); continuarPartida()}}>
                       Reanudar Partida
                   </button>
               </div>
