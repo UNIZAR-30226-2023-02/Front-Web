@@ -4,6 +4,7 @@ import './Estilos/Estilo.css';
 import { useNavigate } from 'react-router-dom';
 import { useSession, setSession } from 'react-session';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import InfiniteScroll from 'react-infinite-scroll-component'
 //npm install react-countdown-circle-timer
 
 import Cristiano from'./Imagenes/Usuario.png';
@@ -57,12 +58,12 @@ const Tablero = () => {
   let [show, setShow] = useState(false);
   let [show1, setShow1] = useState(false);
   let [show2, setShow2] = useState(false);
-  let [show3, setShow3] = useState(true);
-  let [show4, setShow4] = useState(false);
+  let [show3, setShow3] = useState(false);
+  let [show4, setShow4] = useState(true);
   let [jugadorActual, setJugadorActual] = useState(0);
   let [casillaSeleccionada, setCasillaSeleccionada] = useState("");
   let [vectorJugadorTurno, setVectorJugadorTurno] = useState("");
-  let [indiceJugadorTurno, setIndiceJugadorTurno] = useState("");
+  let [indiceJugadorTurno, setIndiceJugadorTurno] = useState(0);
   let [tablero, setTablero] = useState("");
   let [r1, setR1] = useState("");
   let [r2, setR2] = useState("");
@@ -72,13 +73,14 @@ const Tablero = () => {
   let [quesito, setQuesito] = useState("");
   let [enunciado, setEnunciado] = useState("");
   let [pregunta, setPregunta] = useState("");
-  let [partidaPausada, setPartidaPausada] = useState(false)
+  let [partidaPausada, setPartidaPausada] = useState(false);
+  let [mensage_chat, setMensage_chat] = useState("");
 
   //Tiempos de los usaurios
   let [tiempoPregunta, setTiempoPregunta] = useState(0);
   let [tiempoElegirCasilla, setTiempoElegirCasilla] = useState(0);
   let [tiempoPausa, setTiempoPausa] = useState(10);
-  let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(5);
+  let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(10);
   let [tiempoLanzarDado, setTiempoLanzarDado] = useState();
 
   //Variables usadas para activar los relojes
@@ -107,8 +109,9 @@ const Tablero = () => {
   const contraseña = cookies.get('password_sala');
   const websocket = cookies.get('WebSocketTablero');
 
+
   let errorPartida = "";
-  let type, subtype, mensage_chat = "";
+  let type, subtype; 
   let valor_dado, casilla_elegida = 0;
   let casillas_nuevas = [];
   let msgIni = 0;
@@ -130,6 +133,11 @@ const Tablero = () => {
   //Posiciones fijas para colocar los temporizadores y los quesitos para cadajugador
   const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"45%", left:"22%"}]
   const posv2 = [{top:"5%", left:"70%"},{top:"29%", left:"70%"},{top:"57%", left:"70%"}]
+
+  //variables del chat
+  const [showChat, setShowChat] = useState(false)
+  const [mensaje, setMensaje] = useState({username: "", mensaje: "" })
+  const [chat, setChat] = useState([])
 
   //Vector donde se encuentran las casillas que deben parpadear
   let [vparp, setVprap] = useState (
@@ -251,6 +259,15 @@ const Tablero = () => {
   const posiciones1 = [amarillo, rojo, azul]
   const posiciones2 = [rosa, verde, naranja]
 
+  //Mensaje del chat
+  const rellenarMensaje = (e) => {
+    setMensaje({
+      [e.target.id]: e.target.value,
+    });
+    console.log(mensaje)
+  };
+
+
   /* --- SOCKET --- */
   const chatSocketRef = useRef(null);
   
@@ -266,6 +283,7 @@ const Tablero = () => {
         }
         else {
           if (msgIni==0) {
+            console.log("Mensaje inicial")
             indiceJugadorTurno = 0
             vectorJugadorTurno = "vector1"
             setIndiceJugadorTurno(indiceJugadorTurno)
@@ -280,6 +298,7 @@ const Tablero = () => {
             let jugadores = data.jugadores
             let indice = 0
             //let jugadorVector
+            console.log("Carga de jugadores")
             jugadores.forEach(element => {
               if (indice < (jugadores.length/2)) {
                 // let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
@@ -309,10 +328,12 @@ const Tablero = () => {
                 if (vector2[indice].nombre == usuario) {
                   tablero = vector2[indice].tablero 
                   jugadorActual = vector2[indice].turno
+
                 }
               }
               indice = indice+1;
             });
+            console.log("Despues de la carga de jugadores")
             setV1(vector1)
             setV2(vector2)
             setJugadorActual(jugadorActual)
@@ -383,9 +404,11 @@ const Tablero = () => {
                 switch(data.subtype) {
                   case "Dado_casillas":
                     valor_dado = data.valor_dado
-                    aux.forEach(element => {
-                      element = ""
-                    });
+                    for (let i = 0; i < aux.legth; i++) {
+                      if (vector1[i].nombre == String(data.jugador)){
+                        aux = ""
+                      }
+                    }
                     setCasillas(aux)
                     casillas = data.casillas_nuevas.split(",");
                     casillas.forEach(element => {
@@ -393,7 +416,6 @@ const Tablero = () => {
                     });
                     setVprap(aux)
                     pulsarDado()
-                    //setIsRunning(false) 
                     setShow4(false)
                     setShow4(true)
                     break
@@ -453,6 +475,7 @@ const Tablero = () => {
                 switch(data.subtype) {
                   case "Tirar_dado":
                     setIsRunningJugada(false)
+                    setPulsadoDados(1)
                     break
                   case "Movimiento_casilla":
                     if (vectorJugadorTurno == "vector1"){
@@ -843,25 +866,26 @@ const Tablero = () => {
 
   //Reloj que se al tiempo para quitar en todos los usuarios el div de la pregunta
   const RelojCerrarPregunta = () => {
-    console.log("HE ENTRADO EN RELOJ CERRAR PREGUNTA" + "isrunning " + isRunningCerrarPregunta)
+    console.log("HE ENTRADO EN RELOJ CERRAR PREGUNTA" + "isrunning " + isRunningCerrarPregunta + " " + tiempoCerrarPregunta)
     return (    
     <div>
       <CountdownCircleTimer
           isPlaying={isRunningCerrarPregunta}
-          duration={5}
+          duration={tiempoCerrarPregunta}
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[7, 5, 2, 0]}
           size={100}
           onComplete={() => {
             //Paramos el reloj
-            console.log("RELOJ CERRAR PREGUNTA HA finalizado");
+            console.log("RELOJ CERRAR PREGUNTA HA finalizado, el jugador actual es:" + jugadorActual);
             //Quitamos la pausa y seguimos jugando
             if (jugadorActual==1){cerrarPregunta()}
-            setShow3(true)
-            setShow(false)
-            isRunningCerrarPregunta = false
-            setIsRunningCerrarPregunta(isRunningCerrarPregunta)
-           
+            else {
+              isRunningCerrarPregunta = false
+              setIsRunningCerrarPregunta(isRunningCerrarPregunta)
+              setIsRunningJugada(true)
+              setShow(false)
+            }
           }}
       >
           {({ remainingTime }) => remainingTime}
@@ -1010,18 +1034,19 @@ const Tablero = () => {
             </div>
           </div>
       </div>
+
     ));
   } 
 
   function fichas1() {
     return vector1.map((props, indice) => (
-      <img style={{ position:"absolute", left:posiciones1[indice][props.posicion].l, top:posiciones1[indice][props.posicion].t, height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
+      <img style={{ position:"absolute", left:posiciones1[indice][props.posicion], top:posiciones1[indice][props.posicion], height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
   ));
   }
 
   function fichas2() {
     return vector2.map((props, indice) => (
-      <img style={{ position:"absolute", left:posiciones2[indice][props.posicion].l, top:posiciones2[indice][props.posicion].t, height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
+      <img style={{ position:"absolute", left:posiciones2[indice][props.posicion], top:posiciones2[indice][props.posicion], height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
   ));
   }
 
@@ -1041,10 +1066,24 @@ const Tablero = () => {
 
   //
   function cerrarPregunta() {
-    //Enviamos el mensaje "Actualización"
+    isRunningCerrarPregunta = false
+    setIsRunningCerrarPregunta(isRunningCerrarPregunta)
+    setIsRunningJugada(true)
+    setShow(false)
+
     type = "Actualizacion"
     subtype = "Fin_pregunta"
+    console.log("Envio Fin de pregunta a todos, para que vuelvan a lanzar los dados")
     enviarMensaje()
+
+    console.log("runningJugada: " + isRunningJugada + " runningcerrarCerrarPregunta: " + isRunningCerrarPregunta + "show: " + show + " show3: " + show3 + " show2 " + show2 + " show4 " + show4)
+    //vaciarRespuestas()
+    pulsadoDados = 0
+    setIsRunningJugada(true)
+    setPulsadoDados(pulsadoDados)
+    vaciarCasillas()
+    setShow4(false)
+    setShow4(true)
   }
 
 
@@ -1052,14 +1091,13 @@ const Tablero = () => {
   function esCorrectaRespuesta(num) {
     let a = num + 1
     if (a == rc) {
-      colorPregunta[num] = "green"
+      aux2[num] = "green"
       esCorrecta = "true"
     }
     else {
-      colorPregunta[rc-1] = "green"
-      colorPregunta[num] = "red"
+      aux2[rc-1] = "green"
+      aux2[num] = "red"
       esCorrecta = "false"
-
     }
     setEsCorrecta(esCorrecta)
     if(quesito == true && esCorrecta == "true"){
@@ -1094,17 +1132,26 @@ const Tablero = () => {
     setV1(vector1)
     setV2(vector2)
     setContestada(true)
-    setColorPregunta(colorPregunta)
-    setEsCorrecta(esCorrecta)
+    setColorPregunta(aux2)
+    vaciarCasillas()
+
+    console.log("ColorPregunta: " + aux2 + " Escorrecta: " + esCorrecta)
+    console.log("runningRespuesta: " + isRunningRespuesta + " runningcerrarPregunta: " + isRunningCerrarPregunta + " show: " + show + " show3: " + show3 + " show2 " + show2 + " show4 "  + show4)
+
     isRunningRespuesta = false
     setIsRunningRespuesta(isRunningRespuesta)
     setShow(false)
     isRunningCerrarPregunta = true
     setIsRunningCerrarPregunta(isRunningCerrarPregunta)
-    setShow3(false)
-    setShow3(true)
+    let aux3 = false
+    show3 = aux3
+    setShow3(show3)
+    setShow(false)
+    setShow(true)
+    setShow4(false)
+    setShow4(true)
 
-    console.log("runningRespuesta: " + isRunningRespuesta + "runningcerrarPregunta:" + isRunningCerrarPregunta + "show: " + show + "show3: " + show3)
+    console.log("runningRespuesta: " + isRunningRespuesta + " runningcerrarPregunta: " + isRunningCerrarPregunta + "show: " + show + " show3: " + show3 + " show2 " + show2 + " show4 " + show4)
 
     //Enviamos el mensaje "Actualización"
     enunciado = ""
@@ -1156,12 +1203,14 @@ const Tablero = () => {
     setColorPregunta(aux2)
     vaciarCasillas()
     console.log("Estamos en FIN DE PREGUNTA")
+    esCorrecta = "false"
+    setEsCorrecta(esCorrecta)
+    setContestada(false)
+    isRunningCerrarPregunta = true
+    setIsRunningCerrarPregunta(isRunningCerrarPregunta)
+    setShow3(false)
     setShow4(false)
     setShow4(true)
-    esCorrecta = "false"
-    setContestada(false)
-    setEsCorrecta(esCorrecta)
-    setIsRunningRespuesta(false)
     //Enviamos el mensaje "Actualización"
     enunciado = "noContestada"
     r1 = ""
@@ -1221,6 +1270,58 @@ const Tablero = () => {
     }
   }
 
+  /* --- CHAT --- */
+  function enviarMensajeChat () {
+    mensaje.username =  "vini"
+    console.log(mensaje)
+    console.log(chat)
+    chat.push(mensaje)
+    setChat(body)
+    console.log(chat)
+    mensaje.mensaje = ""
+    setShowChat(false)  
+    setShowChat(true)  
+  }
+
+  function mensajeDelChat() {
+    return chat.map((msg) => (
+      <div style={{position: "relative",background:"lightblue",height:"min-content",width:"97%",wordWrap: "break-word", marginTop:"10px", marginLeft:"5px",borderRadius:"30px 30px 30px 30px", textAlign:""}}>
+        <a style={{color:"black", fontSize:"18px", marginLeft:"20px", fontWeight:"bold"}} >{msg.username}:</a> <a style={{color:"black", fontSize:"15px"}} >{msg.mensaje}</a>
+      </div>
+    ));
+  }
+
+  function scrollChat() {      
+    console.log(chat)
+    return (
+      <div style={{position:"absolute", top:"0%", left:"75.2%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"rgb(62, 108, 133)", borderRadius:"0px 0px 0px 30px"}}>
+        <a style={{color:"black", fontSize:"30px"}}> CHAT {chat.length}</a>
+        <img style={{ position:"absolute", left:"3%", height:"30px", width:"30px", top:"1%", zIndex: "5", cursor:"pointer"}} src={Cristiano} onClick={() => {setShowChat(false)}}/>
+        <InfiniteScroll     
+        dataLength={chat.length}
+        pageStart={0}
+        loadMore={mensajeDelChat}
+        hasMore={true || false}
+        useWindow={false}
+        style={{position:"absolute", width: "83%", height: "80%", top:"7%", left:"10%", backgroundColor:"rgb(200, 230, 247)", border:"1px solid black", borderRadius:"30px 30px 30px 30px"}}
+      >
+        {mensajeDelChat()}            
+      </InfiniteScroll>
+      <input
+      type="text"
+      size="100"
+      name="mensaje"
+      id="mensaje"
+      onChange={rellenarMensaje}
+      style={{position:"absolute", top:"90.2%", left:"0%", width:"98%", height:"9%", border:" 2px solid black", borderRadius:"0px 0px 0px 30px", fontSize:"30px", font:"black", backgroundColor:"rgb(200, 230, 247)"}}
+      />
+      <button id="chat-message-submit"  className="App-botonSinS" style={{position:"absolute", top:"90.4%", left:"75.1%", fontSize:"30px", width:"25%", height:"9.3%", borderRadius:"0px 0px 0px 0px", backgroundColor:"#3f3f3f",color:"white"}} onClick={enviarMensajeChat}>
+      Enviar
+      </button>
+    </div>
+      );
+  }
+
   return (
     <div className="App">
       <header className="App-headerJuego" style={{zIndex: "1"}}> 
@@ -1261,16 +1362,6 @@ const Tablero = () => {
                 {/* --- FICHAS --- m */} 
                 {fichas1()}
                 {fichas2()}
-                
-                {/*
-                <img style={{ position:"absolute", left:amarillo[vector1[0].posicion].l, top:amarillo[vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector1[0].ficha}/>
-                <img style={{ position:"absolute", left:rojo    [vector1[1].posicion].l, top:rojo    [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector1[1].ficha}/> 
-                <img style={{ position:"absolute", left:azul    [vector1[2].posicion].l, top:azul    [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector1[2].ficha}/>
-                <img style={{ position:"absolute", left:rosa    [vector2[0].posicion].l, top:rosa    [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector2[0].ficha}/>
-                <img style={{ position:"absolute", left:verde   [vector2[1].posicion].l, top:verde   [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector2[1].ficha}/>
-                <img style={{ position:"absolute", left:naranja [vector2[2].posicion].l, top:naranja [vector1[0].posicion].t, height:"3%", width:"3%", zIndex: "3"}} src={vector2[2].ficha}/>
-                */}
-                  
             </div>
 
               <PosicionElementos/>
@@ -1278,6 +1369,12 @@ const Tablero = () => {
               {jugadores2()}
               
               {mensajePantalla()}
+
+              {showChat ? (
+                  <div> {scrollChat()} </div>
+              ) : (
+                  <div> </div>
+              )}
 
               <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1){setShow1(!show1); pausarPartida();} }}>
                   Pausar Partida
@@ -1287,7 +1384,7 @@ const Tablero = () => {
               </button>
 
               {show4 ? (
-                <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => {if (partidaPausada == false){ /*setShow3(true)*/}}}/>
+                <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => {if (partidaPausada == false){ setShowChat(true)}}}/>
               ) : (
                 <div style= {{zIndex:"0", }}/>
               )}
@@ -1306,18 +1403,20 @@ const Tablero = () => {
                     <br></br><br></br><br></br>
                         <a style={{fontSize:"30px"}}> 
                         Tiempo para responder
-                    </a>
-
-                    {/* --- RELOJES DE PREGUNTA --- */}  
+                    </a>  
+                    <div>
                     {show3 ? (
                       <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
                         {RelojRespuesta()}
+                        {console.log("Realizao la función relojRespuesta")}
                       </div>
                     ) : ( 
                       <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
                         {RelojCerrarPregunta()}
+                        {console.log("Realizao la función relojCerrarPregunta")}
                       </div>
                     )}
+                    </div>
                 </div>
               </div>
               ) : (
