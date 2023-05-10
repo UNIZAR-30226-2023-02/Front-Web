@@ -43,7 +43,7 @@ function Modo( props ) {
       </div>
 
       <CeldaDesplegable texto="Perfil" function={props.functionP}/> 
-      <CeldaDesplegable texto="Historial" function={props.functionH} /> 
+      <CeldaDesplegable texto="Dar de baja" function={props.functionH} /> 
       <CeldaDesplegable texto="Contacto" function={props.functionC}/> 
       <CeldaDesplegable texto="Redes Sociales" function={props.functionR}/> 
       <CeldaDesplegable texto="Estadísticas" function={props.functionE}/> 
@@ -78,8 +78,8 @@ const MenuJuego = () => {
     let cambiarDatos = false;
     navigate(process.env.PUBLIC_URL + '/Perfil', {state: { cambiarDatos }});
   };
-  const onHistorial = async (event) => {
-    navigate(process.env.PUBLIC_URL + '/Historial');
+  const onDarDeBaja = async (event) => {
+    navigate(process.env.PUBLIC_URL + '/DarDeBaja');
   };
   const onContacto = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Contacto');
@@ -119,7 +119,7 @@ const MenuJuego = () => {
               <Modo texto="Amigos"function={onAmigos} img={Amigos}tam="50%" pad="10%"/>
               <Modo texto="Tienda" function={onTienda} img={Tienda}tam="50%" pad="10%"/>  
               </div>
-              <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onHistorial} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
+              <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onDarDeBaja} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
             </div>
           )}
         </header>

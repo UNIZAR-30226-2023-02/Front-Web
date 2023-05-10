@@ -22,7 +22,7 @@ import Contacto from './Contacto';
 import Estadisticas from './Estadisticas';
 import CerrarSesion from './CerrarSesion';
 import RedesSociales from './RedesSociales';
-import Historial from './Historial';
+import DarDeBaja from './DarDeBaja';
 import EsperandoJugadores from './EsperandoJugadores';
 import JuegoModoClasico from './JuegoModoClasico';
 import Tablero from './Tablero';
@@ -48,7 +48,7 @@ const App = () => {
       <Route path= '/RedesSociales' Component={RedesSociales} /> 
       <Route path= '/Estadisticas' Component={Estadisticas} /> 
       <Route path= '/CerrarSesion' Component={CerrarSesion} /> 
-      <Route path= '/Historial' Component={Historial} /> 
+      <Route path= '/DarDeBaja' Component={DarDeBaja} /> 
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
       <Route path= '/JuegoModoClasico' Component={JuegoModoClasico} /> 
       <Route path= '/Tablero' Component={Tablero} />
