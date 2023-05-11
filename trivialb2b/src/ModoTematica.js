@@ -29,10 +29,11 @@ const ModoTematica = () => {
     console.log(body)
     body.push(mes)
     setBody(body)
-    console.log(body)
+    
     mes.mensaje = ""
     setShow(false)  
     setShow(true)  
+    console.log(body)
   }
 
   function mensage_chat() {
