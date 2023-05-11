@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import './Estilos/App.css';
 import './Estilos/Estilo.css';
 import { useNavigate } from 'react-router-dom';
-import { useSession, setSession } from 'react-session';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import InfiniteScroll from 'react-infinite-scroll-component'
 //npm install react-countdown-circle-timer
@@ -15,20 +14,6 @@ import Esquina_roja from './Imagenes/Esquina_roja.png';
 import Esquina_verde from './Imagenes/Esquina_verde.png';
 import Esquina_rosa from './Imagenes/Esquina_rosa.png';
 
-import Ficha_azul from './Imagenes/Ficha_azul.png';
-import Ficha_amarilla from './Imagenes/Ficha_amarilla.png';
-import Ficha_naranja from './Imagenes/Ficha_naranja.png';
-import Ficha_roja from './Imagenes/Ficha_roja.png';
-import Ficha_verde from './Imagenes/Ficha_verde.png';
-import Ficha_rosa from './Imagenes/Ficha_rosa.png';
-
-import Queso_azul from './Imagenes/Queso_azul.png';
-import Queso_amarillo from './Imagenes/Queso_amarillo.png';
-import Queso_naranja from './Imagenes/Queso_naranja.png';
-import Queso_rojo from './Imagenes/Queso_rojo.png';
-import Queso_verde from './Imagenes/Queso_verde.png';
-import Queso_rosa from './Imagenes/Queso_rosa.png';
-
 import QuesoAzul from './Imagenes/QuesitoAzul.png';
 import QuesoAmarillo from './Imagenes/QuesitoAmarillo.png';
 import QuesoNaranja from './Imagenes/QuesitoNaranja.png';
@@ -36,7 +21,7 @@ import QuesoRojo from './Imagenes/QuesitoRojo.png';
 import QuesoVerde from './Imagenes/QuesitoVerde.png';
 import QuesoRosa from './Imagenes/QuesitoRosa.png';
 import QuesitosGeneral from './Imagenes/QuesitosGeneral.png';
-import Transparente from './Imagenes/Transparente.png';
+import Moneda from './Imagenes/Moneda.png';
 
 import Cruz from './Imagenes/Cruz.png';
 import ChatImg from './Imagenes/Chat.png';
@@ -61,7 +46,8 @@ const Tablero = () => {
   let [show3, setShow3] = useState(false);
   let [show4, setShow4] = useState(true);
   let [show5, setShow5] = useState(false);
-  let [showRelojJugada, setShowRelojJugada] = useState(false)
+  let [showDado, setShowDado] = useState(false);
+  let [showMensajeFin, setShowMensajeFin] = useState(false)
   let [jugadorActual, setJugadorActual] = useState(0);
   let [casillaSeleccionada, setCasillaSeleccionada] = useState("");
   let [vectorJugadorTurno, setVectorJugadorTurno] = useState("");
@@ -77,6 +63,7 @@ const Tablero = () => {
   let [pregunta, setPregunta] = useState("");
   let [partidaPausada, setPartidaPausada] = useState(false);
   let [mensage_chat, setMensage_chat] = useState("");
+  let [ganador, setGanador] = useState("Nico");
 
   //Tiempos de los usaurios
   let [tiempoPregunta, setTiempoPregunta] = useState(0);
@@ -115,12 +102,15 @@ const Tablero = () => {
   const contraseña = cookies.get('password_sala');
   const websocket = cookies.get('WebSocketTablero');
 
+  const quesitosFinal = [QuesitosGeneral,QuesoAzul, QuesoAmarillo, QuesoNaranja, QuesoRojo, QuesoRosa, QuesoVerde]
 
   let errorPartida = "";
   let type, subtype; 
   let valor_dado, casilla_elegida = 0;
   let casillas_nuevas = [];
   let msgIni = 0;
+
+  let [indicePartida, setIndicePartida] = useState(0)
 
   let [colorPregunta, setColorPregunta] = useState("white", "white", "white", "white")
   let aux2 = ["white", "white", "white", "white"]
@@ -133,8 +123,8 @@ const Tablero = () => {
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
   // Vector de los jugadores
-  let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
-  let [vector2, setV2] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+  let [vector1, setV1] = useState([{ nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+  let [vector2, setV2] = useState([{ nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
 
   //Posiciones fijas para colocar los temporizadores y los quesitos para cadajugador
   const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"45%", left:"22%"}]
@@ -146,6 +136,9 @@ const Tablero = () => {
   const [mensaje, setMensaje] = useState({username: "", mensaje: "" })
   let [mensajeAux, setMensajeAux] = useState({username: "", mensaje: "" })
   let [chat, setChat] = useState([])
+
+  //Monedas del jugador
+  let [monedasFin, setMonedasFin] = useState(2)
 
   //const newChat = [...chat]
 
@@ -325,6 +318,7 @@ const Tablero = () => {
                 if (vector1[indice].nombre == usuario) {
                   tablero = vector1[indice].tablero 
                   jugadorActual = vector1[indice].turno
+                  setIndicePartida(indice)
                 }
               }
               else {
@@ -341,7 +335,7 @@ const Tablero = () => {
                 if (vector2[indice].nombre == usuario) {
                   tablero = vector2[indice].tablero 
                   jugadorActual = vector2[indice].turno
-
+                  setIndicePartida(indice)
                 }
               }
               indice = indice+1;
@@ -373,6 +367,7 @@ const Tablero = () => {
             }
 
             //Logica del mensaje inicial
+            setShowDado(true)
             setShow4(false)
             setShow4(true)
             console.log(indiceJugadorTurno)
@@ -415,6 +410,7 @@ const Tablero = () => {
             switch(data.type) {
               case "Respuesta":
                 switch(data.subtype) {
+                  //Nos devuelven las casillas que puede seleccionar el usuario, tras haber lanzado el dado
                   case "Dado_casillas":
                     valor_dado = data.valor_dado
                     for (let i = 0; i < aux.legth; i++) {
@@ -434,7 +430,9 @@ const Tablero = () => {
                     setShow4(true)
                     break
 
-                  case "Pregunta":     
+                  //Nos llega una pregunta
+                  case "Pregunta":   
+                    setShowDado(false)  
                     setEstamosPregunta(true)          
                     enunciado = data.enunciado
                     r1 = data.r1
@@ -470,6 +468,7 @@ const Tablero = () => {
                 break
               case "Accion":
                 switch(data.subtype) {
+                  //Queremos tirar los dados
                   case "Dados":
                     //vaciarRespuestas()
                     setEstamosEliguiendoCasilla(false)
@@ -477,6 +476,7 @@ const Tablero = () => {
                     setIsRunningJugada(true)
                     setPulsadoDados(pulsadoDados)
                     vaciarCasillas()
+                    setShowDado(true)
                     setShow4(false)
                     setShow4(true)
                     break
@@ -484,8 +484,12 @@ const Tablero = () => {
                 break
                 
               case "Fin":
+                  ganador = data.jugador
+                  setGanador(ganador)
+                  setShowMensajeFin(true)
                 break
 
+              //Nos llega un mensaje del chat
               case "Chat":
                 mensajeAux.mensaje = data.mensage_chat
                 mensajeAux.username = data.jugador
@@ -495,18 +499,24 @@ const Tablero = () => {
                 setChat(chat)
                 setMensaje({mensaje:"a"})
                 setMensaje({mensaje:""})
-                setShow4(false)
-                setShow4(true)
+                setIsRunningRespuesta(true)
+                // setShow4(false)
+                // setShow4(true)
                 break
               
+
               case "Peticion":
                 switch(data.subtype) {
+                  //El jugador con el turno actual, ha pulsado los dados
                   case "Tirar_dado":
                     setIsRunningJugada(false)
                     setEstamosEliguiendoCasilla(true)
                     setPulsadoDados(1)
                     break
+
+                  //El jugador con el turno actual, ha seleccionado la casilla y movemos su ficha
                   case "Movimiento_casilla":
+                    setShowDado(false)
                     if (vectorJugadorTurno == "vector1"){
                       vector1[indiceJugadorTurno].posicion = String(data.casilla_elegida)
                     }
@@ -520,6 +530,7 @@ const Tablero = () => {
                     break
                 }
               break  
+
               case "Actualizacion":
                 switch(data.subtype) {
                   //Caso de pausar la partida
@@ -620,6 +631,8 @@ const Tablero = () => {
                     break
 
                   case "Fin_pregunta":
+
+                    setShowDado(true)
                     break
                 } 
             }
@@ -641,6 +654,7 @@ const Tablero = () => {
     };
   },[]);
 
+  //Función que envía un mensaje con los campos siguientes al Backend
   const enviarMensaje = () => {
     console.log("Enviar mensaje al backend ")
     console.log(JSON.stringify({
@@ -753,7 +767,7 @@ const Tablero = () => {
     setVprap(aux)
   }
 
-    //Función que se ejecuta cuando se selecciona la casilla
+  //Función que se ejecuta cuando se selecciona la casilla
   function vaciarRespuestas() {
     for (let i = 0; i < 4; i++) {
       aux2[i] = "white";
@@ -761,6 +775,7 @@ const Tablero = () => {
     setColorPregunta(aux2)
   }
 
+  //Función del dado
   function Dado() {
     return (
     <div className="container">
@@ -927,6 +942,7 @@ const Tablero = () => {
               setIsRunningJugada(true)
               setEstamosPregunta(false)
               setShow(false)
+              setShowDado(true)
             }
           }}
       >
@@ -939,7 +955,7 @@ const Tablero = () => {
 
 
   /* --- LANZAR DADO --- */
-  function PosicionElementos() {
+  function posicionElementos() {
     if (vectorJugadorTurno == "vector1"){
       //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
@@ -1009,6 +1025,13 @@ const Tablero = () => {
     enviarMensaje()
   }
 
+  function quesitosFin() {
+    return quesitosFinal.map((elemento) => (
+      <img src={elemento} className="App-imagenJugador" style={{ width: "25%", height: "32%", position: "absolute", top:"34%", left:"55%", backgroundColor:"none"}}/>
+    ));
+  }      
+  
+
   function quesitos(props) {
     return props.map((elemento, indice) => (
       <img src={elemento} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
@@ -1021,7 +1044,7 @@ const Tablero = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:`4%`, left:"3%"}}>  
         <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"0%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1044,7 +1067,7 @@ const Tablero = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:"4%", left:"3%"}}>  
           <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"70%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1058,19 +1081,18 @@ const Tablero = () => {
             </div>
           </div>
       </div>
-
     ));
   } 
 
   function fichas1() {
     return vector1.map((props, indice) => (
-      <img style={{ position:"absolute", left:posiciones1[indice][props.posicion], top:posiciones1[indice][props.posicion], height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
+      <img style={{ position:"absolute", left:posiciones1[indicePartida][props.posicion].l, top:posiciones1[indicePartida][props.posicion].t, height:"3%", width:"3%", zIndex: "12"}} src={'http://51.142.118.71:8000' + props.ficha}/>
   ));
   }
 
   function fichas2() {
     return vector2.map((props, indice) => (
-      <img style={{ position:"absolute", left:posiciones2[indice][props.posicion], top:posiciones2[indice][props.posicion], height:"3%", width:"3%", zIndex: "5"}} src={props.ficha}/>
+      <img style={{ position:"absolute", left:posiciones2[indicePartida][props.posicion].l, top:posiciones2[indicePartida][props.posicion].t, height:"3%", width:"3%", zIndex: "12"}} src={'http://51.142.118.71:8000' + props.ficha}/>
   ));
   }
 
@@ -1088,7 +1110,7 @@ const Tablero = () => {
     );
   }
 
-  //
+  //función del jugador con el turno actual, el cual indica a todos los jugadores que debe cerrar la regunta
   function cerrarPregunta() {
     isRunningCerrarPregunta = false
     setIsRunningCerrarPregunta(isRunningCerrarPregunta)
@@ -1106,6 +1128,7 @@ const Tablero = () => {
     setIsRunningJugada(true)
     setPulsadoDados(pulsadoDados)
     vaciarCasillas()
+    setShowDado(true)
     setShow4(false)
     setShow4(true)
   }
@@ -1317,7 +1340,7 @@ const Tablero = () => {
 
   function mensajeDelChat() {
     return chat.map((msg) => (
-      <div style={{position: "relative",background:"lightblue",height:"min-content",width:"97%",wordWrap: "break-word", marginTop:"10px", marginLeft:"5px",borderRadius:"30px 30px 30px 30px", textAlign:""}}>
+      <div style={{position: "relative",background:"lightblue",height:"min-content",width:"97%",wordWrap: "break-word", marginTop:"10px", marginLeft:"5px",borderRadius:"30px 30px 30px 30px", textAlign:"",zIndex:"10"}}>
         <a style={{color:"black", fontSize:"18px", marginLeft:"20px", fontWeight:"bold"}} >{msg.username}:</a> <a style={{color:"black", fontSize:"15px"}} >{msg.mensaje}</a>
       </div>
     ));
@@ -1326,7 +1349,7 @@ const Tablero = () => {
   function scrollChat() {      
     console.log(chat)
     return (
-      <div style={{position:"absolute", top:"0%", left:"75.2%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"rgb(62, 108, 133)", borderRadius:"0px 0px 0px 30px"}}>
+      <div style={{position:"absolute", top:"0%", left:"75.2%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"rgb(62, 108, 133)", borderRadius:"0px 0px 0px 30px", zIndex:"10"}}>
         <a style={{color:"black", fontSize:"30px"}}> CHAT </a>
         <img style={{ position:"absolute", left:"3%", height:"30px", width:"30px", top:"1%", zIndex: "5", cursor:"pointer"}} src={Cruz} onClick={() => {setShowChat(false)}}/>
         <InfiniteScroll     
@@ -1389,7 +1412,7 @@ const Tablero = () => {
                 <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_verde} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
                 <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_roja} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
 
-                <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0" }} onClick={() => { if (jugadorActual==1 && (vparp[72] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(72); moverFicha(72) }}}>
+                <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0", cursor:"pointer" }} onClick={() => { if (jugadorActual==1 && (vparp[72] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(72); moverFicha(72) }}}>
                     <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
                 </div>
 
@@ -1398,7 +1421,14 @@ const Tablero = () => {
                 {fichas2()}
             </div>
 
-              <PosicionElementos/>
+
+              {showDado ? (
+                  <div> {posicionElementos()}</div>
+              ) : (
+                <div style= {{zIndex:"0", }}/>
+              )}
+
+
               {jugadores1()}
               {jugadores2()}
               
@@ -1504,6 +1534,37 @@ const Tablero = () => {
                 </button>
                 <button className="App-botonConfirmar" style= {{width:"20%", height:"15%", top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => {navigate(process.env.PUBLIC_URL+ '/MenuJuego');}}>
                     Si
+                </button>
+              </div>
+              ) : (
+              <div style= {{zIndex:"0", }}/>
+              )}
+
+              {/* --- MENSAJE FIN PARTIDA --- */}  
+              {showMensajeFin ? (
+              <div className="App-CuadradoNegro"  style= {{width:"50%", height:"60%", top: "15%", left: "24.5%", position:"absolute", zIndex:"6", backgroundColor: "#000000"}}>
+                <br></br>
+                <br></br>
+                <a style={{color:"white",fontSize:"40px", fontWeight: "bold"}}>
+                ¡Fin de la partida!
+                </a>
+                <div style = {{marginTop: "2%"}}>
+                    <a style={{color:"white",fontSize:"30px"}}>
+                        El ganador de la partida ha sido : <a style={{color:"green", fontSize:"30px"}}> {ganador} </a>
+                    </a>
+                    <div>
+                      <img src={Cristiano} className="App-imagenJugador" style={{width: "20%", height: "30%", position: "absolute", top:"35%", left:"22%", backgroundColor:"white"}} /><br></br>
+                      {quesitosFin()}      
+                      <div style={{marginTop:"27%"}}>              
+                        <a style={{color:"white", fontSize:"30px", marginTop:"2%"}}>
+                          Has ganado un total de: <a style={{color:"yellow", fontSize:"30px"}}> {monedasFin} </a> <a> monedas</a> <img src={Moneda} className="App-imagenJugador" style={{width: "7%", height: "7%", position: "absolute", top:"72.5%", left:"75%"}} /><br></br>
+                        </a>
+                      </div>
+                    </div>
+                </div>
+
+                <button className="App-botonCancelar" style= {{width:"18%", height:"10%", top: "85%", left: "40%", position:"absolute", fontSize:"30px"}} onClick={() => {navigate(process.env.PUBLIC_URL+ '/MenuJuego');}}>
+                    Cerrar
                 </button>
               </div>
               ) : (
