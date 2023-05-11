@@ -6,14 +6,17 @@ import Atras from "./Imagenes/Atras.png";
 import Cookies from 'universal-cookie';
 
 //const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
-const URL = "http://51.142.118.71:8000/api/usuarios/estadisticas-yo/";
+let URL = "";
 
   const Estadisticas = () => {
     const cookies= new Cookies();
     const token = cookies.get('token');
+    const usuario_est = cookies.get('estadisticas');
+    const pagina = cookies.get('estadisticas_pagina');
+    const usuario = cookies.get('tokenUsuario');
     const navigate = useNavigate();
     const flechaAtras = async () => {
-      navigate(process.env.PUBLIC_URL + '/MenuJuego');
+      navigate(process.env.PUBLIC_URL + pagina);
     };
 
     const [geo, setGeo] = useState({total:"", bien:"", mal:"", porcentaje:""});
@@ -25,63 +28,129 @@ const URL = "http://51.142.118.71:8000/api/usuarios/estadisticas-yo/";
     const [est, setEst] = useState({quesitos_totales:"", total_preguntas:"", total_respuestas_correctas: "",total_respuestas_incorrectas: "", porcentaje_respuestas: ""});
 
     useEffect(() => {
-      fetch(URL, {
-        method: "POST",
-        headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      })
-        .then((response) => response.json())
-        .then((data) => {console.log(data)
-        if (data.OK == "True") {
-          setGeo({
-            total: data.geografia.total,
-            bien: data.geografia.bien,
-            mal: data.geografia.mal,
-            porcentaje: data.geografia.porcentaje,
-          })
-          setAyl({
-            total: data.arte_y_literatura.total,
-            bien: data.arte_y_literatura.bien,
-            mal: data.arte_y_literatura.mal,
-            porcentaje: data.arte_y_literatura.porcentaje,
-          })
-          setHis({
-            total: data.historia.total,
-            bien: data.historia.bien,
-            mal: data.historia.mal,
-            porcentaje: data.historia.porcentaje,
-          })
-          setEnt({
-            total: data.entretenimiento.total,
-            bien: data.entretenimiento.bien,
-            mal: data.entretenimiento.mal,
-            porcentaje: data.entretenimiento.porcentaje,
-          })
-          setCie({
-            total: data.ciencias.total,
-            bien: data.ciencias.bien,
-            mal: data.ciencias.mal,
-            porcentaje: data.ciencias.porcentaje,
-          })
-          setDep({
-            total: data.deportes.total,
-            bien: data.deportes.bien,
-            mal: data.deportes.mal,
-            porcentaje: data.deportes.porcentaje,
-          })
-          setEst({
-            quesitos_totales: data.quesitos_totales,
-            total_preguntas: data.total_preguntas,
-            total_respuestas_correctas: data.total_respuestas_correctas,
-            total_respuestas_incorrectas: data.total_respuestas_incorrectas,
-            porcentaje_respuestas: data.porcentaje_respuestas
-          })
+      if (usuario == usuario_est){
+        URL = "http://51.142.118.71:8000/api/usuarios/estadisticas-yo/";
+        fetch(URL, {
+          method: "POST",
+          headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {console.log(data)
+          if (data.OK == "True") {
+            setGeo({
+              total: data.geografia.total,
+              bien: data.geografia.bien,
+              mal: data.geografia.mal,
+              porcentaje: data.geografia.porcentaje,
+            })
+            setAyl({
+              total: data.arte_y_literatura.total,
+              bien: data.arte_y_literatura.bien,
+              mal: data.arte_y_literatura.mal,
+              porcentaje: data.arte_y_literatura.porcentaje,
+            })
+            setHis({
+              total: data.historia.total,
+              bien: data.historia.bien,
+              mal: data.historia.mal,
+              porcentaje: data.historia.porcentaje,
+            })
+            setEnt({
+              total: data.entretenimiento.total,
+              bien: data.entretenimiento.bien,
+              mal: data.entretenimiento.mal,
+              porcentaje: data.entretenimiento.porcentaje,
+            })
+            setCie({
+              total: data.ciencias.total,
+              bien: data.ciencias.bien,
+              mal: data.ciencias.mal,
+              porcentaje: data.ciencias.porcentaje,
+            })
+            setDep({
+              total: data.deportes.total,
+              bien: data.deportes.bien,
+              mal: data.deportes.mal,
+              porcentaje: data.deportes.porcentaje,
+            })
+            setEst({
+              quesitos_totales: data.quesitos_totales,
+              total_preguntas: data.total_preguntas,
+              total_respuestas_correctas: data.total_respuestas_correctas,
+              total_respuestas_incorrectas: data.total_respuestas_incorrectas,
+              porcentaje_respuestas: data.porcentaje_respuestas
+            })
+  
+          }
+            
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+      }
 
-        }
-          
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+      else {
+        URL = "http://51.142.118.71:8000/api/usuarios/estadisticas-usuario/";
+        fetch(URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({"username": usuario_est}),
+        })
+          .then((response) => response.json())
+          .then((data) => {console.log(data)
+          if (data.OK == "True") {
+            setGeo({
+              total: data.geografia.total,
+              bien: data.geografia.bien,
+              mal: data.geografia.mal,
+              porcentaje: data.geografia.porcentaje,
+            })
+            setAyl({
+              total: data.arte_y_literatura.total,
+              bien: data.arte_y_literatura.bien,
+              mal: data.arte_y_literatura.mal,
+              porcentaje: data.arte_y_literatura.porcentaje,
+            })
+            setHis({
+              total: data.historia.total,
+              bien: data.historia.bien,
+              mal: data.historia.mal,
+              porcentaje: data.historia.porcentaje,
+            })
+            setEnt({
+              total: data.entretenimiento.total,
+              bien: data.entretenimiento.bien,
+              mal: data.entretenimiento.mal,
+              porcentaje: data.entretenimiento.porcentaje,
+            })
+            setCie({
+              total: data.ciencias.total,
+              bien: data.ciencias.bien,
+              mal: data.ciencias.mal,
+              porcentaje: data.ciencias.porcentaje,
+            })
+            setDep({
+              total: data.deportes.total,
+              bien: data.deportes.bien,
+              mal: data.deportes.mal,
+              porcentaje: data.deportes.porcentaje,
+            })
+            setEst({
+              quesitos_totales: data.quesitos_totales,
+              total_preguntas: data.total_preguntas,
+              total_respuestas_correctas: data.total_respuestas_correctas,
+              total_respuestas_incorrectas: data.total_respuestas_incorrectas,
+              porcentaje_respuestas: data.porcentaje_respuestas
+            })
+  
+          }
+            
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+      }
+      
     },[]);
 
     function Tema(props) {

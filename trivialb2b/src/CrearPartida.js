@@ -33,7 +33,7 @@ function CeldaDesplegable( props ) {
       </div>
 
       <CeldaDesplegable texto="Perfil" function={props.functionP}/> 
-      <CeldaDesplegable texto="Historial" function={props.functionH} /> 
+      <CeldaDesplegable texto="Dar de baja" function={props.functionH} /> 
       <CeldaDesplegable texto="Contacto" function={props.functionC}/> 
       <CeldaDesplegable texto="Redes Sociales" function={props.functionR}/> 
       <CeldaDesplegable texto="Estadísticas" function={props.functionE}/> 
@@ -77,8 +77,8 @@ const CrearPartida = () => {
   const onPerfil = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Perfil');
   };
-  const onHistorial = async (event) => {
-    navigate(process.env.PUBLIC_URL + '/Historial');
+  const onDarDeBaja = async (event) => {
+    navigate(process.env.PUBLIC_URL + '/DarDeBaja');
   };
   const onContacto = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Contacto');
@@ -87,6 +87,8 @@ const CrearPartida = () => {
     navigate(process.env.PUBLIC_URL + '/RedesSociales');
   };
   const onEstadisticas = async (event) => {
+    cookies.set('estadisticas', usuario, {path: '/'})
+    cookies.set('estadisticas_pagina', "/CrearPartida", {path: '/'})
     navigate(process.env.PUBLIC_URL + '/Estadisticas');
   };
   const onCerrarSesion = async (event) => {
@@ -116,7 +118,7 @@ const CrearPartida = () => {
               <Modo texto="Modo Equipos"funcion={onSubmit2} img={Equipos}/>
               <Modo texto="Modo Tematica"funcion={onSubmit3} img={Tematica}/> 
             </div>
-            <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onHistorial} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
+            <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onDarDeBaja} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
           </div>
         )}
         <img src={Atras} style={{width:"170px", height:"170px", top:"75%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>

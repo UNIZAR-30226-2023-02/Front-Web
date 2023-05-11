@@ -25,6 +25,7 @@ const Amigos = () => {
   const [eliminarA, setEliminarA] = useState("");
 
   const [amigo, setAmigo] = useState({nombre: "", correo: "", telefono: "", fechaNac:"", imagen:""});
+  const [errores, setErroes] = useState();
   const [amigos, setAmigos] = useState([]);
 
   const [show, setShow] = useState(true);
@@ -35,6 +36,7 @@ const Amigos = () => {
 
   const cookies= new Cookies();
   const token = cookies.get('token');
+  
 
   useEffect(() => {
     fetch(URL1, {
@@ -69,6 +71,11 @@ const Amigos = () => {
   const flechaAtras = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
+  function estadisticas (props) {
+    cookies.set('estadisticas', props, {path: '/'})
+    cookies.set('estadisticas_pagina', "/Amigos", {path: '/'})
+    navigate(process.env.PUBLIC_URL+ '/Estadisticas');
+  };
 
   function add () {
     fetch(URL2, {
@@ -79,8 +86,11 @@ const Amigos = () => {
       .then((response) => response.json())
       .then((data) => {console.log(data)
         if (data.OK == "True"){
+          setShow1(false)
           window.location.reload(true);
-          console.log(data)
+        }
+        else {
+          setErroes(data.error)
         }
     })
     .catch((error) => {
@@ -98,8 +108,11 @@ const Amigos = () => {
       .then((response) => response.json())
       .then((data) => {console.log(data)
         if (data.OK == "True"){
+          setShow2(false)
           window.location.reload(true);
-          console.log(data)
+        }
+        else {
+          setErroes(data.error)
         }
     })
     .catch((error) => {
@@ -219,10 +232,13 @@ const Amigos = () => {
                 onChange={nombreAñadir}
                 style={{position: "absolute", top: "53%", left: "23%"}}
               />
-              <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow1(false)}}>
+              <div style={{textAlign:"center", position: "absolute", top: "67%", left: "20%"}}>
+                <a style={{color:"red", fontSize:"30px"}}> {errores} </a>
+              </div>
+              <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow1(false); setErroes("")}}>
                 Cancelar
               </button>
-              <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={() => {add(); setShow1(false); setShow2(false)}}>
+              <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={() => {add()}}>
                 Confirmar
               </button>
 
@@ -234,7 +250,7 @@ const Amigos = () => {
           
 
           {show2 ? (
-          <div className="App-CuadradoNegro" style={{ width: "45%", height: "60%", position: "absolute", top: "25%", left: "27%", borderRadius: "50px 50px 50px 50px"}}>
+          <div className="App-CuadradoNegro" style={{ width: "45%", height: "60%", position: "absolute", top: "25%", left: "27%", zIndex:"3", borderRadius: "50px 50px 50px 50px"}}>
             <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", borderRadius: "50px 50px 50px 50px"}}>
               <div style={{marginTop:"2%"}}>
                 <a style={{color:"white", fontSize:"50px"}}> Eliminar Amigo </a>
@@ -252,11 +268,13 @@ const Amigos = () => {
               onChange={nombreEliminar}
               style={{position: "absolute", top: "53%", left: "23%"}}
             />
-            <a style={{position: "absolute", top: "67%", left: "35%",color:"red", fontSize:"30px"}}> No existe este amigo </a>
-            <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow2(false)}}>
+            <div style={{textAlign:"center", position: "absolute", top: "67%", left: "18%"}}>
+              <a style={{color:"red", fontSize:"30px"}}> {errores} </a>
+            </div>
+            <button className="App-botonCancelar" style= {{ top: "78%", left: "25%", position:"absolute"}} onClick={() =>{setShow2(false);setErroes("")}}>
               Cancelar
             </button>
-            <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={() => {eliminarAmigo(); setShow1(false); setShow2(false)}}>
+            <button className="App-botonConfirmar" style= {{ top: "78%", left: "55%", position:"absolute"}} onClick={() => {eliminarAmigo()}}>
               Confirmar
             </button>
 
@@ -280,8 +298,11 @@ const Amigos = () => {
             <a style={{position: "absolute", top: "60%", left: "53%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Telefono: {amigo.telefono} </a>
             <a style={{position: "absolute", top: "60%", left: "6%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Fecha de nacimiento: {amigo.fechaNac} </a>
 
-            <button className="App-boton" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow3(false);}}>
+            <button className="App-botonCancelar" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow3(false)}}>
               Salir
+            </button>
+            <button className="App-botonConfirmar" style= {{top: "80%", left: "75%", position:"absolute", fontSize:"30px"}}  onClick={() =>{estadisticas(amigo.nombre)}}>
+              Estadisticas
             </button>
 
           </div>

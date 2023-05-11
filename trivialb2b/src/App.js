@@ -7,7 +7,9 @@ import {
 } from 'react-router-dom';
 import './Estilos/App.css';
 import MenuPrincipal from './MenuPrincipal';
+import MenuAdmin from './MenuAdmin';
 import InicioSesion from './InicioSesion';
+import InicioSesion_admin from './InicioSesion_admin';
 import Registrarse from './Registrarse';
 import MenuJuego from './MenuJuego';
 import CrearPartida from './CrearPartida';
@@ -22,7 +24,7 @@ import Contacto from './Contacto';
 import Estadisticas from './Estadisticas';
 import CerrarSesion from './CerrarSesion';
 import RedesSociales from './RedesSociales';
-import Historial from './Historial';
+import DarDeBaja from './DarDeBaja';
 import EsperandoJugadores from './EsperandoJugadores';
 import JuegoModoClasico from './JuegoModoClasico';
 import Tablero from './Tablero';
@@ -33,7 +35,9 @@ const App = () => {
     <BrowserRouter>
     <Routes>
       <Route path= '/' Component={MenuPrincipal }/>    
+      <Route path= '/MenuAdmin' Component={MenuAdmin}/>    
       <Route path= '/InicioSesion' Component={InicioSesion} />     
+      <Route path= '/InicioSesion_admin' Component={InicioSesion_admin} />     
       <Route path= '/Registrarse' Component={Registrarse} />    
       <Route path= '/MenuJuego' Component={MenuJuego} /> 
       <Route path= '/CrearPartida' Component={CrearPartida} /> 
@@ -48,7 +52,7 @@ const App = () => {
       <Route path= '/RedesSociales' Component={RedesSociales} /> 
       <Route path= '/Estadisticas' Component={Estadisticas} /> 
       <Route path= '/CerrarSesion' Component={CerrarSesion} /> 
-      <Route path= '/Historial' Component={Historial} /> 
+      <Route path= '/DarDeBaja' Component={DarDeBaja} /> 
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
       <Route path= '/JuegoModoClasico' Component={JuegoModoClasico} /> 
       <Route path= '/Tablero' Component={Tablero} />
