@@ -499,7 +499,6 @@ const Tablero = () => {
                 setChat(chat)
                 setMensaje({mensaje:"a"})
                 setMensaje({mensaje:""})
-                setIsRunningRespuesta(true)
                 // setShow4(false)
                 // setShow4(true)
                 break

@@ -9,6 +9,7 @@ const URL1 = "http://51.142.118.71:8000/api/admin/preguntas/lista/";
 const URL2 = "http://51.142.118.71:8000/api/admin/preguntas/add/";
 const URL3 = "http://51.142.118.71:8000/api/admin/preguntas/info/";
 const URL4 = "http://51.142.118.71:8000/api/admin/preguntas/delete/";
+const URL5 = "http://51.142.118.71:8000/api/admin/preguntas/edit/";
 
 function Cuadro(props) {
   return (
@@ -31,6 +32,7 @@ const MenuAdmin = () => {
   const [nuevaP, setNuevaP] = useState({enunciado: "", r1: "", r2: "", r3:"", r4:"",rc:"",categoria:""});
 
   const [pregunta, setPregunta] = useState({id:"", enunciado: "", r1: "", r2: "", r3:"", r4:"",rc:"",categoria:""});
+  const [editarP, setEditarP] = useState({id:"", enunciado: "", r1: "", r2: "", r3:"", r4:"",rc:"",categoria:""});
   const [errores, setErroes] = useState();
   const [listadoPregunta, setListadoPregunta] = useState([]);
 
@@ -53,11 +55,12 @@ const MenuAdmin = () => {
 
 
   const handleChange = (e) => {
-    setPregunta({
-      ...pregunta,
+    setEditarP({
+      ...editarP,
       [e.target.name]: e.target.value,
     });
   };
+  
   const handleChange2 = (e) => {
     setNuevaP({
       ...nuevaP,
@@ -94,8 +97,7 @@ const MenuAdmin = () => {
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.OK == "True"){
-          setShowAñadir(false)
+        if (data.Ok == "True"){
           window.location.reload(true);
         }
         else {
@@ -115,8 +117,7 @@ const MenuAdmin = () => {
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.OK == "True"){
-          setShowEliminar(false)
+        if (data.Ok == "True"){
           window.location.reload(true);
         }
         else {
@@ -129,15 +130,16 @@ const MenuAdmin = () => {
   };
 
   function editarPregunta () {
-    fetch(URL4, {
+    console.log(editarP)
+    fetch(URL5, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify(pregunta),
+      body: JSON.stringify(editarP/*{"id": parseInt(editarP.id), "enunciado": editarP.enunciado, "r1": editarP.r1, "r2": editarP.r2, "r3": editarP.r3, "r4": editarP.r4, "rc": parseInt(editarP.rc), "categoria": editarP.categoria}*/),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
         if (data.Ok == "True"){
-          setShowEditar(false)
+          window.location.reload(true);
         }
         else {
           setErroes(data.error)
@@ -231,7 +233,8 @@ const MenuAdmin = () => {
               Añadir Pregunta
             </button>
           </div>
-        )}
+          )}
+
 
           {showEditar ? (
             <div className="App-CuadradoNegro" style={{ width: "80%", height: "68%", position: "absolute", top: "25%", left: "10%", borderRadius: "50px 50px 50px 50px", zIndex:"2"}}>
@@ -244,12 +247,13 @@ const MenuAdmin = () => {
               </div>
             </div>
             <div  style={{ width: "100%", height: "55%", position: "absolute", top: "20%", left: "0%"}}>
-              <Cuadro text="Enunciado:" funcion={handleChange} value={pregunta.enunciado} label="enunciado" name="enunciado"/>
+              <Cuadro text="Enunciado:" funcion={handleChange} value={editarP.enunciado} name="enunciado"
+              />
               <a style={{position: "absolute", top: "42%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 1:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
-                value={pregunta.r1}
+                label="r1"
+                name="r1"
+                defaultValue={editarP.r1}
                 onChange={handleChange}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "40%", left: "17%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
@@ -257,41 +261,41 @@ const MenuAdmin = () => {
               <input className="App-textoNegro"
                 label="r2"
                 name="r2"
-                value={pregunta.r2}
+                defaultValue={editarP.r2}
                 onChange={handleChange}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "40%", left: "60%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
-              <a style={{position: "absolute", top: "62%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 1:  </a>
+              <a style={{position: "absolute", top: "62%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 3:  </a>
               <input className="App-textoNegro"
                 label="r3"
                 name="r3"
-                value={pregunta.r3}
+                defaultValue={editarP.r3}
                 onChange={handleChange}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "60%", left: "17%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
-              <a style={{position: "absolute", top: "62%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 2:  </a>
+              <a style={{position: "absolute", top: "62%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 4:  </a>
               <input className="App-textoNegro"
                 label="r4"
                 name="r4"
-                value={pregunta.r4}
+                defaultValue={editarP.r4}
                 onChange={handleChange}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "60%", left: "60%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
               <a style={{position: "absolute", top: "82%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta correcta:  </a>
-              <select name="rc" id="rc" className="App-textoNegro" value={pregunta.rc} style={{width:"24%", height: "15%", position: "absolute", top: "80%", left: "23%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}} 
-                onChange={(event) => setPregunta({
-                  ...pregunta,
+              <select name="rc" id="rc" className="App-textoNegro" defaultValue={editarP.rc} style={{width:"24%", height: "15%", position: "absolute", top: "80%", left: "23%" , borderRadius: "10px 10px 10px 10px",fontSize:"20px"}} 
+                onChange={(event) => setShowEditar({
+                  ...editarP,
                   [event.target.name]: event.target.value
                 })}>
-                  <option value="r1">Respuesta 1</option>
-                  <option value="r2">Respuesta 2</option>
-                  <option value="r3">Respuesta 3</option>
-                  <option value="r4">Respuesta 4</option>
+                  <option value="1">Respuesta 1</option>
+                  <option value="2">Respuesta 2</option>
+                  <option value="3">Respuesta 3</option>
+                  <option value="4">Respuesta 4</option>
               </select> 
               <a style={{position: "absolute", top: "82%", left: "50%", color:"white", fontSize:"27px"}}> Categoria:  </a>
-              <select name="categoria" id="categoria" className="App-textoNegro" value={pregunta.categoria} style={{width:"30%", height: "15%", position: "absolute", top: "80%", left: "60%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}}
-                onChange={(event) => setPregunta({
-                  ...pregunta,
+              <select name="categoria" id="categoria" className="App-textoNegro" defaultValue={editarP.categoria} style={{width:"30%", height: "15%", position: "absolute", top: "80%", left: "60%" , borderRadius: "10px 10px 10px 10px",fontSize:"20px"}}
+                onChange={(event) => setShowEditar({
+                  ...editarP,
                   [event.target.name]: event.target.value
                 })}>
                   <option value="Historia">Historia</option>
@@ -302,7 +306,7 @@ const MenuAdmin = () => {
                   <option value="Ciencia">Ciencia</option>
               </select> 
             </div>
-            <div style={{textAlign:"center", position: "absolute", top: "74%", left: "47%"}}>
+            <div style={{textAlign:"center", position: "absolute", top: "74%", left: "40%"}}>
               <a style={{color:"red", fontSize:"30px"}}> {errores} </a>
             </div>
             <button className="App-botonCancelar" style= {{ top: "84%", left: "32%", position:"absolute"}} onClick={() =>{ setShowPregunta(true); setShowEditar(false); setErroes("")} }>
@@ -317,8 +321,7 @@ const MenuAdmin = () => {
             <div/>
           )}
 
-          
-
+        
           {showEliminar ? (
             <div className="App-CuadradoNegro" style={{ width: "45%", height: "50%", position: "absolute", top: "25%", left: "27%", zIndex:"3", borderRadius: "50px 50px 50px 50px", zIndex:"3"}}>
               <div style={{marginTop:"10%"}}>
@@ -337,9 +340,6 @@ const MenuAdmin = () => {
           ) : (
             <div/>
           )}
-
-
-
           {showPregunta ? (
 
           <div className="App-CuadradoNegro" style={{ width: "80%", height: "68%", position: "absolute", top: "25%", left: "10%", borderRadius: "50px 50px 50px 50px", zIndex:"2"}}>
@@ -354,53 +354,39 @@ const MenuAdmin = () => {
             <div  style={{ width: "100%", height: "55%", position: "absolute", top: "20%", left: "0%"}}>
               <a style={{position: "absolute", top: "22%", left: "7%", color:"white", fontSize:"27px"}}> Enunciado:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
                 value={pregunta.enunciado}
                 style={{ width: "70%", height: "9%", position: "absolute", top: "20%", left: "17%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
               <a style={{position: "absolute", top: "42%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 1:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
                 value={pregunta.r1}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "40%", left: "17%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
               <a style={{position: "absolute", top: "42%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 2:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
                 value={pregunta.r2}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "40%", left: "60%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
-              <a style={{position: "absolute", top: "62%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 1:  </a>
+              <a style={{position: "absolute", top: "62%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 3:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
                 value={pregunta.r3}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "60%", left: "17%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
-              <a style={{position: "absolute", top: "62%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 2:  </a>
+              <a style={{position: "absolute", top: "62%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 4:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
                 value={pregunta.r4}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "60%", left: "60%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
               <a style={{position: "absolute", top: "82%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta correcta:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
                 value={pregunta.rc}
                 style={{ width: "21%", height: "8%", position: "absolute", top: "80%", left: "23%" , fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}/> 
               <a style={{position: "absolute", top: "82%", left: "50%", color:"white", fontSize:"27px"}}> Categoria:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
                 value={pregunta.categoria}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "80%", left: "60%" , fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}/> 
             </div>
-            <div style={{textAlign:"center", position: "absolute", top: "74%", left: "47%"}}>
+            <div style={{textAlign:"center", position: "absolute", top: "74%", left: "40%"}}>
               <a style={{color:"red", fontSize:"30px"}}> {errores} </a>
             </div>
             <button className="App-boton" style= {{ top: "84%", left: "42%", position:"absolute"}} onClick={() =>{setShowPregunta(false);setErroes("")}}>
@@ -409,19 +395,14 @@ const MenuAdmin = () => {
             <button className="App-botonCancelar" style= {{ top: "84%", left: "20%", position:"absolute"}} onClick={() =>{setShowEliminar(true);setErroes("")}}>
               Eliminar
             </button>
-            <button className="App-botonConfirmar" style= {{ top: "84%", left: "65%", position:"absolute"}} onClick={() => {setShowEditar(true);setShowPregunta(false);setErroes("")}}>
+            <button className="App-botonConfirmar" style= {{ top: "84%", left: "65%", position:"absolute"}} onClick={() => {setShowEditar(true);setShowPregunta(false);setErroes("");setEditarP(pregunta);console.log(editarP)}}>
               Editar
             </button>
 
           </div>
-
           ) : (
-
             <div/>
-
           )}
-
-
           {showAñadir ? (
 
           <div className="App-CuadradoNegro" style={{ width: "80%", height: "68%", position: "absolute", top: "25%", left: "10%", borderRadius: "50px 50px 50px 50px", zIndex:"2"}}>
@@ -444,52 +425,52 @@ const MenuAdmin = () => {
               />
               <a style={{position: "absolute", top: "42%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 1:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
+                label="r1"
+                name="r1"
                 value={nuevaP.r1}
                 onChange={handleChange2}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "40%", left: "17%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
               <a style={{position: "absolute", top: "42%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 2:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
+                label="r2"
+                name="r2"
                 value={nuevaP.r2}
                 onChange={handleChange2}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "40%", left: "60%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
-              <a style={{position: "absolute", top: "62%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 1:  </a>
+              <a style={{position: "absolute", top: "62%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta 3:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
+                label="r3"
+                name="r3"
                 value={nuevaP.r3}
                 onChange={handleChange2}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "60%", left: "17%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
-              <a style={{position: "absolute", top: "62%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 2:  </a>
+              <a style={{position: "absolute", top: "62%", left: "50%", color:"white", fontSize:"27px"}}> Respuesta 4:  </a>
               <input className="App-textoNegro"
-                label="enunciado"
-                name="enunciado"
+                label="r4"
+                name="r4"
                 value={nuevaP.r4}
                 onChange={handleChange2}
                 style={{ width: "27%", height: "8%", position: "absolute", top: "60%", left: "60%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
             <a style={{position: "absolute", top: "82%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta correcta:  </a>
-              <select name="rc" id="rc" className="App-textoNegro" value={pregunta.rc} style={{width:"24%", height: "15%", position: "absolute", top: "80%", left: "23%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}} 
+              <select name="rc" id="rc" className="App-textoNegro" style={{width:"24%", height: "15%", position: "absolute", top: "80%", left: "23%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}} 
                 onChange={(event) => setNuevaP({
                   ...nuevaP,
-                  [event.target.numeroJugadores]: event.target.value
+                  [event.target.name]: event.target.value
                 })}>
-                  <option value="r1">Respuesta 1</option>
-                  <option value="r2">Respuesta 2</option>
-                  <option value="r3">Respuesta 3</option>
-                  <option value="r4">Respuesta 4</option>
+                  <option value="1">Respuesta 1</option>
+                  <option value="2">Respuesta 2</option>
+                  <option value="3">Respuesta 3</option>
+                  <option value="4">Respuesta 4</option>
               </select> 
               <a style={{position: "absolute", top: "82%", left: "50%", color:"white", fontSize:"27px"}}> Categoria:  </a>
-              <select name="categoria" id="categoria" className="App-textoNegro" value={pregunta.categoria} style={{width:"30%", height: "15%", position: "absolute", top: "80%", left: "60%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}}
+              <select name="categoria" id="categoria" className="App-textoNegro" style={{width:"30%", height: "15%", position: "absolute", top: "80%", left: "60%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}}
                 onChange={(event) => setNuevaP({
                   ...nuevaP,
-                  [event.target.numeroJugadores]: event.target.value
+                  [event.target.name]: event.target.value
                 })}>
                   <option value="Historia">Historia</option>
                   <option value="Geografia">Geografia</option>
@@ -502,20 +483,27 @@ const MenuAdmin = () => {
             <div style={{textAlign:"center", position: "absolute", top: "74%", left: "47%"}}>
               <a style={{color:"red", fontSize:"30px"}}> {errores} </a>
             </div>
-            <button className="App-botonCancelar" style= {{ top: "84%", left: "32%", position:"absolute"}} onClick={() =>{ setShowAñadir(false); setErroes("")} }>
+            <button className="App-botonCancelar" style= {{ top: "84%", left: "32%", position:"absolute"}} onClick={() =>{ setShowAñadir(false); setErroes(""); 
+            setNuevaP({
+                  ...nuevaP,
+                  enunciado: "" ,
+                  r1: "" ,
+                  r2: "" ,
+                  r3: "" ,
+                  r4: "" ,
+                  rc: "" ,
+                  categoria:""
+                }) }}>
               Cancelar
             </button>
             <button className="App-botonConfirmar" style= {{ top: "84%", left: "55%", position:"absolute"}} onClick={() => { añadirPregunta()} }>
-              Editar
+              Añadir
             </button>
-
           </div>
-
           ) : (
-
             <div/>
-
           )}
+
 
 
           {showCerrarSesion ? (
@@ -536,6 +524,9 @@ const MenuAdmin = () => {
           ) : (
             <div/>
           )}
+
+
+
           <button className="App-boton" style= {{fontSize:"32px",  top: "8%", left: "80%", position:"absolute"}} onClick={() => { setShowCerrarSesion(true); setShowEditar(false); setShowAñadir(false); setShowEliminar(false); setShowPregunta(false) }} >
             Cerrar Sesion
           </button>
