@@ -23,15 +23,25 @@ const MenuPrincipal = () => {
   const Registrarse = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Registrarse');
   };
+  const IniciarSesion_Admin = async (event) => {
+    navigate(process.env.PUBLIC_URL + '/InicioSesion_admin');
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        <div className="App-titulo" style={{ top: "20%" }} > Trivial B2B  
+        <div className="App-titulo" style={{ top: "16%" }} > Trivial B2B  
           <div className="App-Quesitos"/> 
         </div>
-        <Boton texto="Inicio Sesión" style1="5%" style2="5%" function={IniciarSesion}/>
-        <Boton texto="Registrarse" style1="0%" style2="0%" function={Registrarse}/>
+        <button className="App-boton" style= {{position:"absolute", top:"40%", left:"auto" }} type="submit" onClick={IniciarSesion}>
+          Inicio Sesión
+        </button>
+        <button className="App-boton" style= {{position:"absolute", top:"55%", left:"auto" }} type="submit" onClick={Registrarse}>
+          Registrarse
+        </button>
+        <button className="App-boton" style= {{position:"absolute", top:"70%", left:"auto" }} onClick={IniciarSesion_Admin}>
+          Inicio Sesión {"(Admin)"}
+        </button>
       </header>
     </div>
   );
