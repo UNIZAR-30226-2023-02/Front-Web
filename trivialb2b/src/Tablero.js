@@ -46,6 +46,7 @@ const Tablero = () => {
   let [show3, setShow3] = useState(false);
   let [show4, setShow4] = useState(true);
   let [show5, setShow5] = useState(false);
+  let [showAbandonar, setShowAbandonar] = useState(false);
   let [showDado, setShowDado] = useState(false);
   let [showMensajeFin, setShowMensajeFin] = useState(false)
   let [jugadorActual, setJugadorActual] = useState(0);
@@ -99,6 +100,9 @@ const Tablero = () => {
   let [monedasGanador, setMonedasGanador] = useState(0)
     //Variable de las monedas para los jugadores
   let [monedasJugador, setMonedasJugador] = useState(0)
+
+  //Variable que me indica si estamos en el chat o no
+  let [estamosChat, setEstamosChat] = useState(false)
 
   let [vectorJugadores, setVectorJugadores ]  = useState([]);
   let [indice, setIndice] = useState(0)
@@ -570,9 +574,7 @@ const Tablero = () => {
                 setChat(chat)
                 setMensaje({mensaje:"a"})
                 setMensaje({mensaje:""})
-                // setShow4(false)
-                // setShow4(true)
-                break
+              break
               
 
               case "Peticion":
@@ -1387,15 +1389,53 @@ const Tablero = () => {
 
   /* --- MENSAJE POR PANTALLA --- */
   function mensajePantalla(props) {
-    if (vectorJugadorTurno == "vector1"){
-      return (
-        <div style={{position:"absolute", top:"82%", left: "45%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector1[indiceJugadorTurno].nombre}</a></div>
-      );
+    if (estamosEliguiendoCasilla) {
+      if (vectorJugadorTurno == "vector1"){
+        return (
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+        );
+      }
+      else {
+        return (
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+        );
+      }
+    }
+    else if(estamosPregunta) {
+      if (vectorJugadorTurno == "vector1"){
+        return (
+          <div style={{position:"absolute", top:"84%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está contestando a la pregunta</a></div>
+        );
+      }
+      else {
+        return (
+          <div style={{position:"absolute", top:"84%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está contestando a la pregunta </a></div>
+        );
+      }
+    }
+    else if(partidaPausada) {
+      if (vectorJugadorTurno == "vector1"){
+        return (
+          <div style={{position:"absolute", top:"77%", left: "41%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} ha pausado la partida </a></div>
+        );
+      }
+      else {
+        return (
+          <div style={{position:"absolute", top:"77%", left: "41%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} ha pausado la partida </a></div>
+        );
+      }
     }
     else {
-      return (
-        <div style={{position:"absolute", top:"82%", left: "45%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector2[indiceJugadorTurno].nombre}</a></div>
-      );
+      if (vectorJugadorTurno == "vector1"){
+        return (
+          <div style={{position:"absolute", top:"74%", left: "42%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector1[indiceJugadorTurno].nombre}</a></div>
+        );
+      }
+      else {
+        return (
+          <div style={{position:"absolute", top:"74%", left: "42%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector2[indiceJugadorTurno].nombre}</a></div>
+        );
+      }
     }
   }
 
@@ -1426,7 +1466,7 @@ const Tablero = () => {
     return (
       <div style={{position:"absolute", top:"0%", left:"75.2%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"rgb(62, 108, 133)", borderRadius:"0px 0px 0px 30px", zIndex:"10"}}>
         <a style={{color:"black", fontSize:"30px"}}> CHAT </a>
-        <img style={{ position:"absolute", left:"3%", height:"30px", width:"30px", top:"1%", zIndex: "5", cursor:"pointer"}} src={Cruz} onClick={() => {setShowChat(false)}}/>
+        <img style={{ position:"absolute", left:"3%", height:"30px", width:"30px", top:"1%", zIndex: "5", cursor:"pointer"}} src={Cruz} onClick={() => {setShowChat(false) && setEstamosChat(false)}}/>
         <InfiniteScroll     
         dataLength={chat.length}
         pageStart={0}
@@ -1461,7 +1501,7 @@ const Tablero = () => {
           <div>
             <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"714px", top:"2%", left:"31%",borderRadius:"5%", backgroundColor:"white"}} ><img src={URL + tablero} style={{width:"100%",marginTop:"0%"} }/>
             </div>       
-            <div style={{ position: "absolute", zIndex: "3", height:"700px", width:"700px", top:"9%", left:"30%"}}>
+            <div style={{ position: "absolute", zIndex: "3", height:"700px", width:"700px", top:"7%", left:"30%"}}>
                 {/* --- TABLERO --- */}  
                 <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1="blue" c2="white" c3="red" c4="yellow" c5="white" c6="orange" width1="15%" transform="rotate(180deg)" v1={1} v2={2} v3={3} v4={4} v5={5} v6={6}/> 
                 <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1="red" c2="white" c3="green" c4="orange" c5="white" c6="blue" width1="15%" transform="rotate(120deg)" v1={8} v2={9} v3={10} v4={11} v5={12} v6={13}/>  
@@ -1511,7 +1551,8 @@ const Tablero = () => {
 
               {showChat ? (
                 <div>
-                      <div> {scrollChat()} </div>
+                    {setEstamosChat(true)}
+                    {scrollChat()}
                 </div>
               ) : (
                 <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => {if (partidaPausada == false && finPartida == false){ setShowChat(true)}}}/>
@@ -1520,7 +1561,7 @@ const Tablero = () => {
               <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1 && !estamosPregunta && finPartida == false){setShowPausa(true); pausarPartida();}}}>
                   Pausar Partida
               </button>
-              <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {if(finPartida == false) {setShow2(!show2)}}}>
+              <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {if(finPartida == false && jugadorActual==1) {setShow2(!show2); setShowAbandonar(true)} else if(finPartida == false && jugadorActual==0){setShow2(!show2); setShowAbandonar(false)}}}>
                   Abandonar Partida
               </button>
 
@@ -1583,8 +1624,8 @@ const Tablero = () => {
                 <div style= {{top: "50%", left: "44%", position:"absolute"}}>
                     {RelojPausa()}
                 </div>
-                <button className="App-boton" style= {{top: "78%", left: "35%", position:"absolute"}} onClick={() => {if (jugadorActual == 1 && finPartida == false){ continuarPartida();setShowPausa(false)}}}>
-                  Pausar Partida
+                <button className="App-boton" style= {{top: "78%", left: "27%", position:"absolute"}} onClick={() => {if (jugadorActual == 1 && finPartida == false){ continuarPartida();setShowPausa(false)}}}>
+                  Continuar Partida
                 </button>
               </div>
               ) : (
@@ -1593,22 +1634,46 @@ const Tablero = () => {
 
               {/* --- ABANDONAR --- */}  
               {show2 ? (
-              <div className="App-CuadradoNegro"  style= {{width:"35%", height:"40%", top: "25%", left: "32.5%", position:"absolute", zIndex:"6", backgroundColor: "#000000"}}>
-                <br></br>
-                <br></br>
-                <br></br>
-                <a style={{color:"white",fontSize:"30px"}}>
-                ¿Estas seguro de que quieres abandonar la partida?
-                </a>
-                <button className="App-botonCancelar" style= {{width:"20%", height:"15%", top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)}}>
-                    No
-                </button>
-                <button className="App-botonConfirmar" style= {{width:"20%", height:"15%", top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => {navigate(process.env.PUBLIC_URL+ '/MenuJuego');}}>
-                    Si
-                </button>
+                <div>
+                {showAbandonar ? (
+                  <div>
+                    <div className="App-CuadradoNegro"  style= {{width:"35%", height:"40%", top: "25%", left: "32.5%", position:"absolute", zIndex:"6", backgroundColor: "#000000"}}>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <a style={{color:"white",fontSize:"30px"}}>
+                      ¿Estas seguro de que quieres abandonar la partida?
+                    </a>
+                    <button className="App-botonCancelar" style= {{width:"20%", height:"15%", top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2); setShowAbandonar(!showAbandonar)}}>
+                       No
+                    </button>
+                    <button className="App-botonConfirmar" style= {{width:"20%", height:"15%", top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => {{navigate(process.env.PUBLIC_URL + '/MenuJuego')} }}>
+                        Si
+                    </button>
+                    </div>
+                  </div>
+                ) : (
+                  //Mensaje de que el jugador actual no puede abandonar la partida
+                  <div className="App-CuadradoNegro"  style= {{width:"35%", height:"40%", top: "25%", left: "32.5%", position:"absolute", zIndex:"6", backgroundColor: "#000000"}}>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <a style={{color:"white",fontSize:"30px"}}>
+                      Lo sentimos, no puedes abandonar la partida si es tu turno,
+                    </a>
+                    <div style={{marginTop:"2%"}}>
+                      <a style={{color:"white",fontSize:"30px"}}>
+                        cuando acabes el turno, podrás abandonarla
+                      </a>
+                    </div>
+                    <button className="App-botonCancelar" style= {{width:"20%", height:"15%", top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)}}>
+                        Cerrar
+                    </button>
+                  </div>
+                )}
               </div>
               ) : (
-              <div style= {{zIndex:"0", }}/>
+                  <div></div>
               )}
 
               {/* --- MENSAJE FIN PARTIDA --- */}  
