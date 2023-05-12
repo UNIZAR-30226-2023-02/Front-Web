@@ -296,18 +296,13 @@ const Tablero = () => {
             tiempoLanzarDado = data.tiempo_elegir_casilla;
             setTiempoLanzarDado(tiempoLanzarDado)
             setTiempoPregunta(tiempoPregunta)
-            //setTiempoElegirCasilla(5)
-            //{setTiempoCerrarPregunta(+5)}
             errorPartida = data.error;
             msgIni=1
-            //if (numJugadores==2) {
             let jugadores = data.jugadores
             let indice = 0
-            //let jugadorVector
             console.log("Carga de jugadores")
             jugadores.forEach(element => {
               if (indice < (jugadores.length/2)) {
-                // let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
                 vector1[indice].nombre = element.jugador
                 vector1[indice].activo = element.activo
                 vector1[indice].ficha = element.ficha
@@ -319,6 +314,7 @@ const Tablero = () => {
                   tablero = vector1[indice].tablero 
                   jugadorActual = vector1[indice].turno
                   setIndicePartida(indice)
+                  setTablero(tablero)
                 }
               }
               else {
@@ -336,6 +332,7 @@ const Tablero = () => {
                   tablero = vector2[indice].tablero 
                   jugadorActual = vector2[indice].turno
                   setIndicePartida(indice)
+                  setTablero(tablero)
                 }
               }
               indice = indice+1;
@@ -894,7 +891,6 @@ const Tablero = () => {
 
   //Reloj que trata el pause de la partida
   const RelojPausa = () => {
-    //setIsRunningPausa(true)
       return (    
       <div>
         <CountdownCircleTimer
@@ -934,7 +930,7 @@ const Tablero = () => {
             //Paramos el reloj
             console.log("RELOJ CERRAR PREGUNTA HA finalizado, el jugador actual es:" + jugadorActual);
             //Quitamos la pausa y seguimos jugando
-            if (jugadorActual==1){cerrarPregunta()}
+            if (jugadorActual==1){cerrarPregunta();setEstamosPregunta(false)}
             else {
               isRunningCerrarPregunta = false
               setIsRunningCerrarPregunta(isRunningCerrarPregunta)
@@ -956,7 +952,7 @@ const Tablero = () => {
   /* --- LANZAR DADO --- */
   function posicionElementos() {
     if (vectorJugadorTurno == "vector1"){
-      //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+      console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
         <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> { } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
@@ -1383,7 +1379,7 @@ const Tablero = () => {
       
         {show4 ? (
           <div>
-            <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"714px", top:"2%", left:"31%",borderRadius:"5%", backgroundColor:"white"}} ><img src={URL + "/static/images/objetos/10.png"} style={{width:"100%",marginTop:"0%"} }/>
+            <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"714px", top:"2%", left:"31%",borderRadius:"5%", backgroundColor:"white"}} ><img src={URL + tablero} style={{width:"100%",marginTop:"0%"} }/>
             </div>       
             <div style={{ position: "absolute", zIndex: "3", height:"700px", width:"700px", top:"9%", left:"30%"}}>
                 {/* --- TABLERO --- */}  
@@ -1445,7 +1441,7 @@ const Tablero = () => {
                 <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => {if (partidaPausada == false){ setShowChat(true)}}}/>
               )}
 
-              <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1 && !estamosPregunta){setShowPausa(true); pausarPartida();} }}>
+              <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1 && !estamosPregunta){setShowPausa(true); pausarPartida();}}}>
                   Pausar Partida
               </button>
               <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {setShow2(!show2)}}>
