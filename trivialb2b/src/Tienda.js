@@ -29,15 +29,8 @@ const Tienda = () => {
 
   const [fichas, setFichas] = useState([]);
   const [tableros, setTableros] = useState([]);
-
   const [monedas, setMonedas] = useState();
-  
   const [itemSeleccionado, setItemSeleccionado] = useState({nombre:"", imagen:"", valor:""})
-  
-  //const tableros = [{nombre:"Tablero1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Tablero2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Tablero3", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Tablero5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Tablero6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
-  //const fichas = [{nombre:"Ficha1", imagen:Cristiano, valor:15, estado:"seleccionado", comprado:true},{nombre:"Ficha2", imagen:Cristiano, valor:12, estado:"adquirido",comprado:true},{nombre:"Ficha3", imagen:Cristiano, valor:20, estado:"", comprado:true},{nombre:"Ficha4", imagen:Cristiano, valor:1, estado:"", comprado:false},{nombre:"Ficha5", imagen:Cristiano, valor:20, estado:"", comprado:false},{nombre:"Ficha6", imagen:Cristiano, valor:30, estado:"", comprado:false}];
-
-
   const cookies= new Cookies();
   const token = cookies.get('token');
 
@@ -148,6 +141,7 @@ const Tienda = () => {
   };
 
   function usar() {
+    console.log({"objeto_id": itemSeleccionado.nombre})
     fetch(URL3, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -172,7 +166,7 @@ const Tienda = () => {
           <div style={{border: "2px solid white", height:"97.9%"}} >
             <div style={{ height:"20%", width:"100%", alignItems:"center", marginTop:"2%"}}>
               <a style={{color:"white", fontSize:"20px"}}>
-                {item.id}
+                Tablero {item.id}
               </a>
             </div>
             {item.adquirido ? (
@@ -198,7 +192,7 @@ const Tienda = () => {
           <div style={{border: "2px solid white", height:"97.9%"}} >
             <div style={{ height:"20%", width:"100%", alignItems:"center", marginTop:"2%"}}>
               <a style={{color:"white", fontSize:"20px"}}>
-                {item.id}
+                Ficha {item.id}
               </a>
             </div>
             {item.adquirido ? (

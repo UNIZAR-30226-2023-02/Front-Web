@@ -284,7 +284,7 @@ const Amigos = () => {
           )}
           {show3 ? (
 
-          <div className="App-CuadradoNegro" style={{ width: "60%", height: "60%", position: "absolute", top: "25%", left: "20%", borderRadius: "50px 50px 50px 50px", zIndex:"5"}}>
+          <div className="App-CuadradoNegro" style={{ width: "60%", height: "60%", position: "absolute", top: "20%", left: "20%", borderRadius: "50px 50px 50px 50px", zIndex:"5"}}>
             <div className="App-CuadradoNegro" style={{ width: "100%", height: "15%", position: "absolute", top: "0%", left: "0%", zIndex:"5", borderRadius: "50px 50px 50px 50px"}}>
               <div style={{marginTop:"2%"}}>
                 <a style={{color:"white", fontSize:"50px"}}> Datos Usuario </a>
@@ -301,7 +301,7 @@ const Amigos = () => {
             <button className="App-botonCancelar" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow3(false)}}>
               Salir
             </button>
-            <button className="App-botonConfirmar" style= {{top: "80%", left: "75%", position:"absolute", fontSize:"30px"}}  onClick={() =>{estadisticas(amigo.nombre)}}>
+            <button className="App-boton" style= {{top: "80%", left: "75%", position:"absolute", fontSize:"30px"}}  onClick={() =>{estadisticas(amigo.nombre)}}>
               Estadisticas
             </button>
 
