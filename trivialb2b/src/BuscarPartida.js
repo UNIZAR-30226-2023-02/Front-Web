@@ -9,16 +9,14 @@ import Cookies from 'universal-cookie';
 
 const URL = "http://51.142.118.71:8000/api/salas/lista-salas/";
 const URL2 = "http://51.142.118.71:8000/api/salas/validar/";
+const URL1 = "http://51.142.118.71:8000/api/salas/listar-peticiones-sala/";
 
 const ModoClasico = () => {
   const [contraseña, setContraseña] = useState("");
 
   const [sala, setSala] = useState({ nombre: "", tiempo: "", numJugadores: "", password: "", creador: "", modo: "", tipo: ""});
+  const [peticiones, setPeticiones] = useState([]);
   const [salas, setSalas] = useState([]);
-  
-
-  const [salasBuscadas, setSalasBuscadas] = useState();
-
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -81,6 +79,28 @@ const ModoClasico = () => {
 
   const cancelar = async (event) => {
     navigate(process.env.PUBLIC_URL + '/MenuJuego');
+  }; 
+
+
+  const invitaciones = async (event) => {
+    fetch(URL1, {
+      method: "POST",
+      headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK = "true"){
+          data.peticiones.forEach(element => {
+            peticiones.push(element)
+          })
+          setPeticiones(peticiones)
+          console.log(peticiones)
+        }
+ 
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
   };  
 
   /*const handleChange4 = (e) => {
@@ -161,7 +181,10 @@ const ModoClasico = () => {
           <div>
             <img src={Buscar} style={{width:"5%", height:"7%", left:"29%",zIndex: "1", top:"3%", cursor: "pointer", position:"absolute"}} /*onClick={search}*//>
             <input className="App-textoNegro" label="pepe" name="pepe" onChange={handleChange3} value={searchTerm} style= {{top: "2%", left: "2%", position:"absolute", width: "500px", height: "50px"}} />;
-            <button className="App-botonAzul" style= {{top: "2%", left: "85%" , position:"absolute"}} onClick={() => cancelar()} >
+            <button className="App-botonAzul" style= {{top: "2%", left: "74%" , position:"absolute"}} onClick={() => invitaciones()} >
+              Invitaciones
+            </button>
+            <button className="App-botonAzul" style= {{top: "2%", left: "90%" , position:"absolute"}} onClick={() => cancelar()} >
               Volver
             </button>
           </div>

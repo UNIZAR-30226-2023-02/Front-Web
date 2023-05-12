@@ -148,6 +148,7 @@ const Tienda = () => {
   };
 
   function usar() {
+    console.log({"objeto_id": itemSeleccionado.nombre})
     fetch(URL3, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
