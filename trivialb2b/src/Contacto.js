@@ -32,10 +32,10 @@ const Contacto = () => {
                     <LetraContacto titulo="Correo electronico" variable="prueba@unizar.es"/>
                     <LetraContacto titulo="Telefono" variable="123456789"/>
                   </div>
-                  <div> <button className="App-boton" style= {{top:"78%", left: "46%", position:"absolute"}} onClick={() => continuar() } > Volver </button></div>
+                  <div> <button className="App-botonCancelar" style= {{top:"78%", left: "46%", position:"absolute"}} onClick={() => continuar() } > Volver </button></div>
                 </div>
               </div>
-        <div className = "App-header" style={{ filter: 'blur(5px)'}} > 
+        <div className = "App-header"> 
             <div className="App-titulo" style= {{top: "7%"}} > Contacto
                 <div className="App-Quesitos" style= {{left: "40%"}}> </div> 
             </div>
