@@ -7,7 +7,9 @@ import {
 } from 'react-router-dom';
 import './Estilos/App.css';
 import MenuPrincipal from './MenuPrincipal';
+import MenuAdmin from './MenuAdmin';
 import InicioSesion from './InicioSesion';
+import InicioSesion_admin from './InicioSesion_admin';
 import Registrarse from './Registrarse';
 import MenuJuego from './MenuJuego';
 import CrearPartida from './CrearPartida';
@@ -33,7 +35,9 @@ const App = () => {
     <BrowserRouter>
     <Routes>
       <Route path= '/' Component={MenuPrincipal }/>    
+      <Route path= '/MenuAdmin' Component={MenuAdmin}/>    
       <Route path= '/InicioSesion' Component={InicioSesion} />     
+      <Route path= '/InicioSesion_admin' Component={InicioSesion_admin} />     
       <Route path= '/Registrarse' Component={Registrarse} />    
       <Route path= '/MenuJuego' Component={MenuJuego} /> 
       <Route path= '/CrearPartida' Component={CrearPartida} /> 

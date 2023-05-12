@@ -87,6 +87,8 @@ const CrearPartida = () => {
     navigate(process.env.PUBLIC_URL + '/RedesSociales');
   };
   const onEstadisticas = async (event) => {
+    cookies.set('estadisticas', usuario, {path: '/'})
+    cookies.set('estadisticas_pagina', "/CrearPartida", {path: '/'})
     navigate(process.env.PUBLIC_URL + '/Estadisticas');
   };
   const onCerrarSesion = async (event) => {
