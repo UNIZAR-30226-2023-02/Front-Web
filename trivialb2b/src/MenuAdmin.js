@@ -97,7 +97,7 @@ const MenuAdmin = () => {
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.Ok == "True"){
+        if (data.OK == "True"){
           window.location.reload(true);
         }
         else {
@@ -117,7 +117,7 @@ const MenuAdmin = () => {
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.Ok == "True"){
+        if (data.OK == "True"){
           window.location.reload(true);
         }
         else {
@@ -138,7 +138,7 @@ const MenuAdmin = () => {
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        if (data.Ok == "True"){
+        if (data.OK == "True"){
           window.location.reload(true);
         }
         else {

@@ -30,7 +30,6 @@ function CuadroTexto(props) {
 const Perfil = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
-  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
@@ -50,7 +49,7 @@ const Perfil = () => {
     });
   };
 
-  const flechaAtras = async (event) => {
+  const flechaAtras = async () => {
       navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
 
@@ -100,7 +99,7 @@ const Perfil = () => {
       body: JSON.stringify(body),
     })
     .then((response) => response.json())
-    .then((data) => { console.log()
+    .then((data) => { console.log(data)
       if (data.OK === "True"){
         setErorres(""); 
         setShow2(false);
@@ -112,11 +111,6 @@ const Perfil = () => {
     })
     .catch((error) => console.error(error));
   }
-
-  const confirmarCambios = async () => {
-    fetchCambiardatos();
-    setShow2(!show2);
-  };
 
 
   function ConfirmacionDatos() {
@@ -184,16 +178,16 @@ const Perfil = () => {
                     </div>
                   </div>
                 </form> 
-                <div style={{top:"62%", position:"absolute", fontSize:"33px"}}>
+                <div style={{top:"74%", left:"38%", position:"absolute", fontSize:"33px", textAlign:"center"}}>
                   <span style={{color:"red"}}>{errores}</span>
                 </div>
-                <button className="App-botonCancelar" style= {{top: "80%", left:"37%", position:"absolute"}} onClick={() => setShow(!show)} >
+                <button className="App-botonCancelar" style= {{top: "80%", left:"37%", position:"absolute"}} onClick={() => {setShow(!show);setErorres("")}} >
                   Cancelar
                 </button>
-                <button className="App-botonConfirmar" style= {{top: "80%", left:"53%", position:"absolute", marginLeft: "10%"}} onClick={() => { confirmarCambios()}}>
+                <button className="App-botonConfirmar" style= {{top: "80%", left:"40%", position:"absolute", marginLeft: "10%"}} onClick={() => { fetchCambiardatos()}}>
                   Confirmar
                 </button>
-                </div>
+              </div>
               ) : (
               <ConfirmacionDatos/>
             )}
