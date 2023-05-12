@@ -560,6 +560,7 @@ const Tablero = () => {
                   isRunningPausa(false)
                   isRunningRespuesta(false)
                   setFinPartida(true)
+                  chatSocketRef.current.close();
                 break
 
               //Nos llega un mensaje del chat
@@ -604,8 +605,7 @@ const Tablero = () => {
                     break
                 }
               break  
-
-              case "Actualizacion":
+              case "Actualizacion" :
                 switch(data.subtype) {
                   //Caso de pausar la partida
                   case "Pausar_partida":
@@ -1561,7 +1561,7 @@ const Tablero = () => {
               <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1 && !estamosPregunta && finPartida == false){setShowPausa(true); pausarPartida();}}}>
                   Pausar Partida
               </button>
-              <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {if(finPartida == false && jugadorActual==1) {setShow2(!show2); setShowAbandonar(true)} else if(finPartida == false && jugadorActual==0){setShow2(!show2); setShowAbandonar(false)}}}>
+              <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {if(finPartida == false && jugadorActual==1) {setShow2(!show2); setShowAbandonar(false)} else if(finPartida == false && jugadorActual==0){setShow2(!show2); setShowAbandonar(true)}}}>
                   Abandonar Partida
               </button>
 
@@ -1644,7 +1644,7 @@ const Tablero = () => {
                     <a style={{color:"white",fontSize:"30px"}}>
                       ¿Estas seguro de que quieres abandonar la partida?
                     </a>
-                    <button className="App-botonCancelar" style= {{width:"20%", height:"15%", top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2); setShowAbandonar(!showAbandonar)}}>
+                    <button className="App-botonCancelar" style= {{width:"20%", height:"15%", top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)/*; setShowAbandonar(!showAbandonar)*/}}>
                        No
                     </button>
                     <button className="App-botonConfirmar" style= {{width:"20%", height:"15%", top: "70%", left: "55%", position:"absolute", fontSize:"30px"}} onClick={() => {{navigate(process.env.PUBLIC_URL + '/MenuJuego')} }}>
