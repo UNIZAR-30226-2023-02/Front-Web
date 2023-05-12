@@ -70,7 +70,7 @@ const Tablero = () => {
   let [tiempoPregunta, setTiempoPregunta] = useState(0);
   let [tiempoElegirCasilla, setTiempoElegirCasilla] = useState(0);
   let [tiempoPausa, setTiempoPausa] = useState(10);
-  let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(5);
+  let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(3);
   let [tiempoLanzarDado, setTiempoLanzarDado] = useState(0);
 
   //Variables usadas para activar los relojes
@@ -102,7 +102,7 @@ const Tablero = () => {
   let [monedasJugador, setMonedasJugador] = useState(0)
 
   //Variable que me indica si estamos en el chat o no
-  let [estamosChat, setEstamosChat] = useState(false)
+  let estamosChat = false
 
   let [vectorJugadores, setVectorJugadores ]  = useState([]);
   let [indice, setIndice] = useState(0)
@@ -325,8 +325,31 @@ const Tablero = () => {
                   vector1[indice].activo = element.activo
                   vector1[indice].ficha = element.ficha
                   vector1[indice].turno = element.turno
-                  vector1[indice].posicion = element.posicion       
-                  vector1[indice].quesitos = element.quesitos  
+                  vector1[indice].posicion = element.posicion  
+                  element.quesitos.forEach(ele => {
+                    switch(ele) {
+                      case "Ciencia":
+                        vector1[indice].quesitos.push(QuesoVerde)
+                      break
+                      case "Arte":
+                        vector1[indice].quesitos.push(QuesoRojo)
+                      break
+                      case "Deportes":
+                        vector1[indice].quesitos.push(QuesoNaranja)
+                      break
+                      case "Entretenimiento":
+                        vector1[indice].quesitos.push(QuesoRosa)
+                      break
+                      case "Geografia":
+                        vector1[indice].quesitos.push(QuesoAzul)
+                      break
+                      case "Historia":
+                        vector1[indice].quesitos.push(QuesoAmarillo)
+                      break
+                    }    
+
+                  })
+ 
                   vector1[indice].tablero = element.tablero  
                   if (vector1[indice].nombre == usuario) {
                     tablero = vector1[indice].tablero 
@@ -339,8 +362,29 @@ const Tablero = () => {
                     vector1Aux.activo = element.activo
                     vector1Aux.ficha = element.ficha
                     vector1Aux.turno = element.turno
-                    vector1Aux.posicion = element.posicion       
-                    vector1Aux.quesitos = element.quesitos  
+                    vector1Aux.posicion = element.posicion   
+                    element.quesitos.forEach(ele => {
+                      switch(ele) {
+                        case "Ciencia":
+                          vector1Aux.quesitos.push(QuesoVerde)
+                        break
+                        case "Arte":
+                          vector1Aux.quesitos.push(QuesoRojo)
+                        break
+                        case "Deportes":
+                          vector1Aux.quesitos.push(QuesoNaranja)
+                        break
+                        case "Entretenimiento":
+                          vector1Aux.quesitos.push(QuesoRosa)
+                        break
+                        case "Geografia":
+                          vector1Aux.quesitos.push(QuesoAzul)
+                        break
+                        case "Historia":
+                          vector1Aux.quesitos.push(QuesoAmarillo)
+                        break
+                      }  
+                    })
                     vector1Aux.tablero = element.tablero     
                     if (vector1Aux.nombre == usuario) {
                       tablero = vector1Aux.tablero 
@@ -360,8 +404,29 @@ const Tablero = () => {
                   vector2[indiceAux].activo = element.activo
                   vector2[indiceAux].ficha = element.ficha
                   vector2[indiceAux].turno = element.turno
-                  vector2[indiceAux].posicion = element.posicion       
-                  vector2[indiceAux].quesitos = element.quesitos  
+                  vector2[indiceAux].posicion = element.posicion  
+                  element.quesitos.forEach(ele => {
+                    switch(ele) {
+                      case "Ciencia":
+                        vector2[indice].quesitos.push(QuesoVerde)
+                      break
+                      case "Arte":
+                        vector2[indice].quesitos.push(QuesoRojo)
+                      break
+                      case "Deportes":
+                        vector2[indice].quesitos.push(QuesoNaranja)
+                      break
+                      case "Entretenimiento":
+                        vector2[indice].quesitos.push(QuesoRosa)
+                      break
+                      case "Geografia":
+                        vector2[indice].quesitos.push(QuesoAzul)
+                      break
+                      case "Historia":
+                        vector2[indice].quesitos.push(QuesoAmarillo)
+                      break
+                    }
+                  })         
                   vector2[indiceAux].tablero = element.tablero  
                   if (vector2[indiceAux].nombre == usuario) {
                     tablero = vector2[indiceAux].tablero 
@@ -374,8 +439,29 @@ const Tablero = () => {
                   vector2Aux.activo = element.activo
                   vector2Aux.ficha = element.ficha
                   vector2Aux.turno = element.turno
-                  vector2Aux.posicion = element.posicion       
-                  vector2Aux.quesitos = element.quesitos  
+                  vector2Aux.posicion = element.posicion  
+                  element.quesitos.forEach(ele => {
+                    switch(ele) {
+                      case "Ciencia":
+                        vector2Aux.quesitos.push(QuesoVerde)
+                      break
+                      case "Arte":
+                        vector2Aux.quesitos.push(QuesoRojo)
+                      break
+                      case "Deportes":
+                        vector2Aux.quesitos.push(QuesoNaranja)
+                      break
+                      case "Entretenimiento":
+                        vector2Aux.quesitos.push(QuesoRosa)
+                      break
+                      case "Geografia":
+                        vector2Aux.quesitos.push(QuesoAzul)
+                      break
+                      case "Historia":
+                        vector2Aux.quesitos.push(QuesoAmarillo)
+                      break
+                    }  
+                  })      
                   vector2Aux.tablero = element.tablero     
                   if (vector2Aux.nombre == usuario) {
                     tablero = vector2Aux.tablero 
@@ -567,6 +653,8 @@ const Tablero = () => {
               case "Chat":
                 console.log("Accion --> CHAT")
                 console.log("Entramos en el caso del chat ")
+                console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)
+                console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " Tiemporespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)
                 mensajeAux.mensaje = data.mensage_chat
                 mensajeAux.username = data.jugador
                 setMensajeAux(mensajeAux)
@@ -575,6 +663,12 @@ const Tablero = () => {
                 setChat(chat)
                 setMensaje({mensaje:"a"})
                 setMensaje({mensaje:""})
+                
+                console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)
+                console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " TiempoRespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)
+
+
+
               break
               
 
@@ -1033,7 +1127,6 @@ const Tablero = () => {
   /* --- LANZAR DADO --- */
   function posicionElementos() {
     if (vectorJugadorTurno == "vector1"){
-      console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
         <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> { } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
@@ -1442,6 +1535,8 @@ const Tablero = () => {
   /* --- CHAT --- */
   function enviarMensajeChat () {
     console.log("Función enviar Mensaje")
+    console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)
+    console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " TiempoRespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)
     chat.push(mensaje)
     setChat(chat)
     type = "Chat"
@@ -1451,6 +1546,8 @@ const Tablero = () => {
       mensaje: "",
       username: usuario
     });
+    console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)
+    console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " TiempoRespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)
   }
 
   function mensajeDelChat() {
@@ -1466,7 +1563,7 @@ const Tablero = () => {
     return (
       <div style={{position:"absolute", top:"0%", left:"75.2%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"rgb(62, 108, 133)", borderRadius:"0px 0px 0px 30px", zIndex:"10"}}>
         <a style={{color:"black", fontSize:"30px"}}> CHAT </a>
-        <img style={{ position:"absolute", left:"3%", height:"30px", width:"30px", top:"1%", zIndex: "5", cursor:"pointer"}} src={Cruz} onClick={() => {setShowChat(false) && setEstamosChat(false)}}/>
+        <img style={{ position:"absolute", left:"3%", height:"30px", width:"30px", top:"1%", zIndex: "5", cursor:"pointer"}} src={Cruz} onClick={() => {setShowChat(false) ; estamosChat = false}}/>
         <InfiniteScroll     
         dataLength={chat.length}
         pageStart={0}
@@ -1507,7 +1604,7 @@ const Tablero = () => {
                 <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1="red" c2="white" c3="green" c4="orange" c5="white" c6="blue" width1="15%" transform="rotate(120deg)" v1={8} v2={9} v3={10} v4={11} v5={12} v6={13}/>  
                 <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1="green" c2="white" c3="pink" c4="blue" c5="white" c6="red" width1="15%" transform="rotate(60deg)" v1={15} v2={16} v3={17} v4={18} v5={19} v6={20}/> 
                 <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1="pink" c2="white" c3="yellow" c4="red" c5="white" c6="green" width1="15%" transform="" v1={22} v2={23} v3={24} v4={25} v5={26} v6={27}/>  
-                <Linea height="10.5%" width="37%" top="14%" left="0%" c1="yellow" c2="white" c3="orange" c4="green" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)" v1={29} v2={30} v3={31} v4={32} v5={32} v6={33}/>
+                <Linea height="10.5%" width="37%" top="14%" left="0%" c1="yellow" c2="white" c3="orange" c4="green" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)" v1={29} v2={30} v3={31} v4={32} v5={33} v6={34}/>
                 <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1="orange" c2="white" c3="blue" c4="pink" c5="white" c6="yellow" width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/> 
                 
                 
@@ -1549,9 +1646,10 @@ const Tablero = () => {
               
               {mensajePantalla()}
 
+              {/* --- CHAT --- */}  
               {showChat ? (
                 <div>
-                    {setEstamosChat(true)}
+                    {estamosChat = true}
                     {scrollChat()}
                 </div>
               ) : (
@@ -1658,15 +1756,12 @@ const Tablero = () => {
                     <br></br>
                     <br></br>
                     <br></br>
-                    <a style={{color:"white",fontSize:"30px"}}>
-                      Lo sentimos, no puedes abandonar la partida si es tu turno,
-                    </a>
-                    <div style={{marginTop:"2%"}}>
+                    <div style={{marginTop:"3%"}}>
                       <a style={{color:"white",fontSize:"30px"}}>
-                        cuando acabes el turno, podrás abandonarla
+                        Lo sentimos, no puedes abandonar la partida si es tu turno, cuando acabes el turno, podrás abandonarla
                       </a>
                     </div>
-                    <button className="App-botonCancelar" style= {{width:"20%", height:"15%", top: "70%", left: "25%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)}}>
+                    <button className="App-botonCancelar" style= {{width:"20%", height:"15%", top: "70%", left: "40%", position:"absolute", fontSize:"30px"}} onClick={() => { setShow2(!show2)}}>
                         Cerrar
                     </button>
                   </div>

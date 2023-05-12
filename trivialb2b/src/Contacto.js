@@ -22,15 +22,15 @@ const Contacto = () => {
   };
   return (
     <div className="App">
-              <div className="App-CuadradoNegro" style={{ width: "70%", height: "65%", position: "absolute", zIndex: "1", top: "25%", left: "16%"}}>
+              <div className="App-CuadradoNegro" style={{ width: "70%", height: "65%", position: "absolute", zIndex: "1", top: "23%", left: "16%"}}>
                 <div style={{marginTop: "3%"}}>                
-                  <a style={{color:"white", fontSize:"50px"}}>Contactanos </a>
+                  <a style={{color:"white", fontSize:"50px"}}>Contáctanos </a>
                   <div style={{marginTop:"2%", color: "white"}}>
                     <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
                   </div>
                   <div>
-                    <LetraContacto titulo="Correo electronico" variable="prueba@unizar.es"/>
-                    <LetraContacto titulo="Telefono" variable="123456789"/>
+                    <LetraContacto titulo="Correo electronico:   " variable="tribialB2B@gmail.com"/>
+                    <LetraContacto titulo="Telefono:   " variable="605828074"/>
                   </div>
                   <div> <button className="App-botonCancelar" style= {{top:"78%", left: "46%", position:"absolute"}} onClick={() => continuar() } > Volver </button></div>
                 </div>

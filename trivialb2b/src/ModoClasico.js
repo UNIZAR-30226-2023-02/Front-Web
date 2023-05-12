@@ -69,7 +69,7 @@ const ModoClasico = () => {
             setErorres("Error con el nombre de la sala");
           }
           else if (data.error_tipo_sala !== ""){
-            setErorres("Error tipo sala");
+            setErorres("Error: Ya estas en una partida");
           }
           else if (data.error_tipo_partida !== ""){
             setErorres("Error tipo partida");

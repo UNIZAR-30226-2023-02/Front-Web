@@ -96,7 +96,6 @@ const EsperandoJugadores = () => {
           }
         }
         else if (data.accion == "empezar_partida") {
-          console.log("selal")
           cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
           chatSocketRef.current.close();
           navigate(process.env.PUBLIC_URL+ '/Tablero');
@@ -191,7 +190,7 @@ const EsperandoJugadores = () => {
               </div>
             </div>
           </div>
-          <div className="App-CuadradoNegro" style={{ width: "1000px", height: "400px", position: "absolute", zIndex: "1", top: "20%", left: "25%", zIndex: "4",   backgroundColor:"#303030"}}>
+          <div className="App-CuadradoNegro" style={{ width: "1000px", height: "400px", position: "absolute", zIndex: "1", top: "30%", left: "25%", zIndex: "4",   backgroundColor:"#303030"}}>
             <div style={{marginTop: "3%"}}>                
               <a style={{color:"white", fontSize:"40px"}}>¿Estas seguro de que quieres abandonar la sala? </a>
               <div style={{marginTop:"30px", color: "white"}}>

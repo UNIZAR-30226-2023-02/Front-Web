@@ -43,8 +43,8 @@ const DarDeBaja = () => {
         <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", zIndex: "1", top: "30%", left: "25%"}}>
           <div style={{marginTop: "7%"}}>                
             <a style={{color:"white", fontSize:"40px"}}>¿Estar seguro de que quieres darte de baja en la aplicación? </a>
-            <button className="App-botonCancelar" style= {{top:"70%", left: "30%", position:"absolute"}} onClick={() => irse() } > Cancelar </button>
-            <button className="App-botonConfirmar" style= {{top:"70%", left: "55%", position:"absolute"}} onClick={() => darDeBaja() } > Confirmar </button>
+            <button className="App-botonCancelar" style= {{top:"70%", left: "20%", position:"absolute"}} onClick={() => irse() } > Cancelar </button>
+            <button className="App-botonConfirmar" style= {{top:"70%", left: "60%", position:"absolute"}} onClick={() => darDeBaja() } > Confirmar </button>
           </div>
         </div>
     </div>

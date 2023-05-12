@@ -23,6 +23,9 @@ const ModoClasico = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
+  const [webs, setWeb] = useState();
+
+
 
   const handleChange3 = event => {
     setSearchTerm(event.target.value);
@@ -73,6 +76,7 @@ const ModoClasico = () => {
       .then((response) => response.json())
       .then((data) => {console.log(data)
         if (data.OK == "True") {
+          setWeb(data.ws_partida)
           setShow4(true)
         }
         
@@ -163,16 +167,21 @@ const ModoClasico = () => {
   }
 
   function funcionEntrar2() {
-    cookies.set('n_jugadores', pet.me_invita, {path: '/'})  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+    cookies.set('n_jugadores', 4, {path: '/'})  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     cookies.set('noCreador', 1, {path: '/'})
     cookies.set('WebSocketEsperando', pet.ws, {path: '/'})
     navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
   }
 
-  function jugadores() {
+  function funcionEntrar3() {
+    cookies.set('WebSocketTablero', webs, {path: '/'})
+    navigate(process.env.PUBLIC_URL+ '/Tablero');
+  }
 
+
+  function jugadores() {
     return searchResults.map(elemento  => (
-      <div className="App-CuadradoBlanco" style={{ width: "99.6%", height: "15%", position: "relative", left: "0%",cursor: "pointer"}}onClick={() => {handleChange(elemento);setShow(!show); if (elemento.tipo_sala){setShow1(false)}else{setShow1(true)}}}>
+      <div className="App-CuadradoBlanco" style={{ width: "99.6%", height: "15%", position: "relative", left: "0%",cursor: "pointer"}} onClick={() => {handleChange(elemento); setShow(!show); if (elemento.tipo_sala == "Privado"){setShow1(false)} else{setShow1(true)}}}>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
           {elemento.nombre_sala}
         </a>
@@ -230,16 +239,14 @@ const ModoClasico = () => {
           <div>
             
           {show4 ? (
-            <button className="App-botonAzul" style= {{top: "2%", left: "60%" , position:"absolute", fontSize:"10px"}} onClick={() => cancelar()} >
-              Partida Activa
+            <button className="App-botonConfirmar" style= {{top: "1%", left: "64%" , weith:"20%", position:"absolute", fontSize:"30px"}} onClick={() => funcionEntrar3()} >
+              Partida <br></br>
+              Activa
             </button>
           ) : (
             <div/>
           )}
-
-
-
-            <button className="App-botonAzul" style= {{top: "2%", left: "90%" , position:"absolute"}} onClick={() => cancelar()} >
+            <button className="App-botonCancelar" style= {{top: "3%", left: "90%" , position:"absolute", fontSize:"30px"}} onClick={() => cancelar()} >
               Volver
             </button>
           </div>
@@ -247,7 +254,7 @@ const ModoClasico = () => {
             <div>
               <img src={Buscar} style={{width:"5%", height:"7%", left:"29%",zIndex: "1", top:"3%", position:"absolute"}}/>
               <input className="App-textoNegro" label="pepe" name="pepe" onChange={handleChange3} value={searchTerm} style= {{top: "2%", left: "2%", position:"absolute", width: "500px", height: "50px"}} />
-              <button className="App-botonAzul" style= {{top: "2%", left: "74%" , position:"absolute"}} onClick={() => invitaciones()} >
+              <button className="App-botonAzul" style= {{top: "3%", left: "75%" , position:"absolute", fontSize:"30px"}} onClick={() => invitaciones()} >
                 Invitaciones
               </button>
               <div className="App-CuadradoGris" style={{ width: "100%", height: "85%", position: "absolute", top: "15%", left: "-0.2%"}}>
@@ -281,7 +288,7 @@ const ModoClasico = () => {
             </div>
           ) : (
             <div>
-              <button className="App-botonAzul" style= {{top: "2%", left: "80%" , position:"absolute"}} onClick={() => {setShow2(true)}} >
+              <button className="App-botonAzul" style= {{top: "3%", left: "78%" , position:"absolute", fontSize:"30px"}} onClick={() => {setShow2(true)}} >
                 Salas
               </button>
               <div className="App-CuadradoGris" style={{ width: "100%", height: "85%", position: "absolute", top: "15%", left: "-0.2%"}}>
@@ -353,10 +360,10 @@ const ModoClasico = () => {
             <div>
               <img src={Buscar} style={{width:"5%", height:"7%", left:"29%",zIndex: "1", top:"3%", position:"absolute"}}/>
               <input className="App-textoNegro" label="pepe" name="pepe" style= {{top: "2%", left: "2%", position:"absolute", width: "500px", height: "50px"}}/>
-              <button className="App-botonAzul" style= {{top: "2%", left: "90%" , position:"absolute"}} >
+              <button className="App-botonAzul" style= {{top: "3%", left: "90%" , position:"absolute", fontSize:"30px"}} >
                 Volver
               </button>
-              <button className="App-botonAzul" style= {{top: "2%", left: "74%" , position:"absolute"}} onClick={() => invitaciones()} >
+              <button className="App-botonAzul" style= {{top: "3%", left: "75%" , position:"absolute", fontSize:"30px"}} onClick={() => invitaciones()} >
                 Invitaciones
               </button>
             </div>
