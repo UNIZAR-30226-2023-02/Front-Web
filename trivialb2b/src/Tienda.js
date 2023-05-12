@@ -11,6 +11,7 @@ import Cookies from 'universal-cookie';
 const URL1 = "http://51.142.118.71:8000/api/tienda/objetos/";
 const URL2 = "http://51.142.118.71:8000/api/tienda/comprar/";
 const URL3 = "http://51.142.118.71:8000/api/tienda/usar/";
+const URL4 = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
 
 const Tienda = () => {
 
@@ -29,7 +30,7 @@ const Tienda = () => {
   const [fichas, setFichas] = useState([]);
   const [tableros, setTableros] = useState([]);
 
-  const [monedas, setMonedas] = useState(15);
+  const [monedas, setMonedas] = useState();
   
   const [itemSeleccionado, setItemSeleccionado] = useState({nombre:"", imagen:"", valor:""})
   
@@ -41,6 +42,18 @@ const Tienda = () => {
   const token = cookies.get('token');
 
   useEffect(() => {
+    fetch(URL4, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+      setMonedas(data.monedas)
+    })
+    .catch((error) => {
+      console.error("Error fetching monedas data:", error);
+    });
+
     fetch(URL1, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -58,7 +71,7 @@ const Tienda = () => {
       setShow(true)
     })
     .catch((error) => {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching objetos data:", error);
     });
   },[]);
 
@@ -118,8 +131,6 @@ const Tienda = () => {
   };
   
   function comprar() {
-    console.log(itemSeleccionado)
-    console.log(itemSeleccionado.nombre)
     fetch(URL2, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -129,18 +140,14 @@ const Tienda = () => {
       .then((data) => {console.log(data)
         if (data.OK == "True"){
           window.location.reload(true);
-          console.log(data)
         }
-        console.log(data)
     })
     .catch((error) => {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching comprar data:", error);
     });
   };
 
   function usar() {
-    console.log(itemSeleccionado)
-    console.log(itemSeleccionado.nombre)
     fetch(URL3, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -148,15 +155,12 @@ const Tienda = () => {
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
-        /*if (data.OK == "True"){
+        if (data.OK == "True"){
           window.location.reload(true);
-          console.log(data)
-        }*/
-        window.location.reload(true);
-        console.log(data)
+        }
     })
     .catch((error) => {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching usar data:", error);
     });
   };
 
@@ -257,14 +261,14 @@ const Tienda = () => {
 
       {show1 ? ( 
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{itemSeleccionado.id} cuesta: {itemSeleccionado.coste} monedas</a>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{itemSeleccionado.nombre} cuesta: {itemSeleccionado.valor} monedas</a>
         </div>
       ) : (
         <div/>
       )}
       {show12 ? ( 
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{itemSeleccionado.id} seleccionado</a>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{itemSeleccionado.nombre} seleccionado</a>
         </div>
       ) : (
         <div/>

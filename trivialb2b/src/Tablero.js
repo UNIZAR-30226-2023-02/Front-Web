@@ -95,6 +95,8 @@ const Tablero = () => {
   let [estamosEliguiendoCasilla, setEstamosEliguiendoCasilla] = useState(false)
 
   let [vectorJugadores, setVectorJugadores ]  = useState([]);
+  let [indice, setIndice] = useState(0)
+  let [indiceAux, setIndiceAux] = useState(0)
 
   const cookies= new Cookies();
   const numJugadores = cookies.get('n_jugadores');
@@ -123,8 +125,12 @@ const Tablero = () => {
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
   // Vector de los jugadores
-  let [vector1, setV1] = useState([{ nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
-  let [vector2, setV2] = useState([{ nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+  let vector1Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
+  let vector2Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
+  let limpiarVector1Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
+  let limpiarVector2Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
+  let [vector1, setV1] = useState([ { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+  let [vector2, setV2] = useState([ { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
 
   //Posiciones fijas para colocar los temporizadores y los quesitos para cadajugador
   const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"45%", left:"22%"}]
@@ -296,49 +302,84 @@ const Tablero = () => {
             tiempoLanzarDado = data.tiempo_elegir_casilla;
             setTiempoLanzarDado(tiempoLanzarDado)
             setTiempoPregunta(tiempoPregunta)
-            //setTiempoElegirCasilla(5)
-            //{setTiempoCerrarPregunta(+5)}
             errorPartida = data.error;
             msgIni=1
-            //if (numJugadores==2) {
             let jugadores = data.jugadores
-            let indice = 0
-            //let jugadorVector
             console.log("Carga de jugadores")
+            console.log(jugadores)
             jugadores.forEach(element => {
+              console.log(indice)
               if (indice < (jugadores.length/2)) {
-                // let [vector1, setV1] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
-                vector1[indice].nombre = element.jugador
-                vector1[indice].activo = element.activo
-                vector1[indice].ficha = element.ficha
-                vector1[indice].turno = element.turno
-                vector1[indice].posicion = element.posicion       
-                vector1[indice].quesitos = element.quesitos  
-                vector1[indice].tablero = element.tablero     
-                if (vector1[indice].nombre == usuario) {
-                  tablero = vector1[indice].tablero 
-                  jugadorActual = vector1[indice].turno
-                  setIndicePartida(indice)
-                }
+                if (indice == 0){
+                  vector1[indice].nombre = element.jugador
+                  vector1[indice].activo = element.activo
+                  vector1[indice].ficha = element.ficha
+                  vector1[indice].turno = element.turno
+                  vector1[indice].posicion = element.posicion       
+                  vector1[indice].quesitos = element.quesitos  
+                  vector1[indice].tablero = element.tablero  
+                  if (vector1[indice].nombre == usuario) {
+                    tablero = vector1[indice].tablero 
+                    jugadorActual = vector1[indice].turno
+                    setIndicePartida(indice)
+                    setTablero(tablero)
+                  }
+                } else {
+                    vector1Aux.nombre = element.jugador
+                    vector1Aux.activo = element.activo
+                    vector1Aux.ficha = element.ficha
+                    vector1Aux.turno = element.turno
+                    vector1Aux.posicion = element.posicion       
+                    vector1Aux.quesitos = element.quesitos  
+                    vector1Aux.tablero = element.tablero     
+                    if (vector1Aux.nombre == usuario) {
+                      tablero = vector1Aux.tablero 
+                      jugadorActual = vector1Aux.turno
+                      setIndicePartida(indice)
+                      setTablero(tablero)
+                    }
+                    vector1.push(vector1Aux)
+                    vector1Aux = limpiarVector1Aux 
+                  }
               }
               else {
-                if (indice == (jugadores.length/2)){
-                  indice=0
-                }
-                vector2[indice].nombre = element.jugador
-                vector2[indice].activo = element.activo
-                vector2[indice].ficha = element.ficha
-                vector2[indice].turno = element.turno
-                vector2[indice].posicion = element.posicion       
-                vector2[indice].quesitos = element.quesitos  
-                vector2[indice].tablero = element.tablero     
-                if (vector2[indice].nombre == usuario) {
-                  tablero = vector2[indice].tablero 
-                  jugadorActual = vector2[indice].turno
-                  setIndicePartida(indice)
+                indiceAux = indice - (jugadores.length/2)
+                setIndiceAux(indiceAux)
+                if (indiceAux == 0) {
+                  vector2[indiceAux].nombre = element.jugador
+                  vector2[indiceAux].activo = element.activo
+                  vector2[indiceAux].ficha = element.ficha
+                  vector2[indiceAux].turno = element.turno
+                  vector2[indiceAux].posicion = element.posicion       
+                  vector2[indiceAux].quesitos = element.quesitos  
+                  vector2[indiceAux].tablero = element.tablero  
+                  if (vector2[indiceAux].nombre == usuario) {
+                    tablero = vector2[indiceAux].tablero 
+                    jugadorActual = vector2[indiceAux].turno
+                    setIndicePartida(indiceAux)
+                    setTablero(tablero)
+                  }
+                } else {
+                  vector2Aux.nombre = element.jugador
+                  vector2Aux.activo = element.activo
+                  vector2Aux.ficha = element.ficha
+                  vector2Aux.turno = element.turno
+                  vector2Aux.posicion = element.posicion       
+                  vector2Aux.quesitos = element.quesitos  
+                  vector2Aux.tablero = element.tablero     
+                  if (vector2Aux.nombre == usuario) {
+                    tablero = vector2Aux.tablero 
+                    jugadorActual = vector2Aux.turno
+                    setIndicePartida(indiceAux)
+                    setTablero(tablero)
+                  }
+                  vector2.push(vector2Aux)
+                  vector2Aux = limpiarVector2Aux
                 }
               }
+              console.log(indice)
               indice = indice+1;
+              setIndice(indice)
             });
             console.log("Despues de la carga de jugadores")
             setV1(vector1)
@@ -499,7 +540,6 @@ const Tablero = () => {
                 setChat(chat)
                 setMensaje({mensaje:"a"})
                 setMensaje({mensaje:""})
-                setIsRunningRespuesta(true)
                 // setShow4(false)
                 // setShow4(true)
                 break
@@ -895,7 +935,6 @@ const Tablero = () => {
 
   //Reloj que trata el pause de la partida
   const RelojPausa = () => {
-    //setIsRunningPausa(true)
       return (    
       <div>
         <CountdownCircleTimer
@@ -935,7 +974,7 @@ const Tablero = () => {
             //Paramos el reloj
             console.log("RELOJ CERRAR PREGUNTA HA finalizado, el jugador actual es:" + jugadorActual);
             //Quitamos la pausa y seguimos jugando
-            if (jugadorActual==1){cerrarPregunta()}
+            if (jugadorActual==1){cerrarPregunta();setEstamosPregunta(false)}
             else {
               isRunningCerrarPregunta = false
               setIsRunningCerrarPregunta(isRunningCerrarPregunta)
@@ -957,7 +996,7 @@ const Tablero = () => {
   /* --- LANZAR DADO --- */
   function posicionElementos() {
     if (vectorJugadorTurno == "vector1"){
-      //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
+      console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
         <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> { } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
@@ -1384,7 +1423,7 @@ const Tablero = () => {
       
         {show4 ? (
           <div>
-            <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"714px", top:"2%", left:"31%",borderRadius:"5%", backgroundColor:"white"}} ><img src={URL + "/static/images/objetos/10.png"} style={{width:"100%",marginTop:"0%"} }/>
+            <div style={{ position: "absolute", zIndex: "2", height:"700px", width:"714px", top:"2%", left:"31%",borderRadius:"5%", backgroundColor:"white"}} ><img src={URL + tablero} style={{width:"100%",marginTop:"0%"} }/>
             </div>       
             <div style={{ position: "absolute", zIndex: "3", height:"700px", width:"700px", top:"9%", left:"30%"}}>
                 {/* --- TABLERO --- */}  
@@ -1446,7 +1485,7 @@ const Tablero = () => {
                 <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => {if (partidaPausada == false){ setShowChat(true)}}}/>
               )}
 
-              <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1 && !estamosPregunta){setShowPausa(true); pausarPartida();} }}>
+              <button className="App-boton" style= {{top: "87%", left: "30%", position:"absolute", zIndex:"6"}} onClick={() => {if (jugadorActual == 1 && !estamosPregunta){setShowPausa(true); pausarPartida();}}}>
                   Pausar Partida
               </button>
               <button className="App-boton" style= {{top: "87%", left: "53%", position:"absolute", zIndex:"6"}} onClick={() => {setShow2(!show2)}}>
