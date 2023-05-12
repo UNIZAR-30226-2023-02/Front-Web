@@ -511,6 +511,7 @@ const Tablero = () => {
                 switch(data.subtype) {
                   //Queremos tirar los dados
                   case "Dados":
+                    
                     //vaciarRespuestas()
                     setEstamosEliguiendoCasilla(false)
                     pulsadoDados = 0
@@ -532,6 +533,7 @@ const Tablero = () => {
 
               //Nos llega un mensaje del chat
               case "Chat":
+                console.log("Entramos en el caso del chat ")
                 mensajeAux.mensaje = data.mensage_chat
                 mensajeAux.username = data.jugador
                 setMensajeAux(mensajeAux)
@@ -1366,6 +1368,7 @@ const Tablero = () => {
 
   /* --- CHAT --- */
   function enviarMensajeChat () {
+    console.log("Función enviar Mensaje")
     chat.push(mensaje)
     setChat(chat)
     type = "Chat"
@@ -1475,11 +1478,7 @@ const Tablero = () => {
 
               {showChat ? (
                 <div>
-                  {showChat2 ? (
                       <div> {scrollChat()} </div>
-                  ) : (
-                      <div> {scrollChat()}</div>
-                  )}
                 </div>
               ) : (
                 <img style={{ position:"absolute", left:"93%", height:"80px", width:"110px", top:"1%", zIndex: "4", cursor:"pointer"}} src={ChatImg}onClick={() => {if (partidaPausada == false){ setShowChat(true)}}}/>
