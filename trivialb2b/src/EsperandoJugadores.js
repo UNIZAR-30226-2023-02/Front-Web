@@ -39,6 +39,7 @@ const EsperandoJugadores = () => {
   let noCreador = cookies.get('noCreador');
   const contraseña = cookies.get('password_sala');
   const numJugadores = cookies.get('n_jugadores');
+  const tipoPartida = cookies.get('tipo_partida');
   jRestantes = numJugadores;
 
   function invitar () {
@@ -97,11 +98,15 @@ const EsperandoJugadores = () => {
         }
         else if (data.accion == "empezar_partida") {
           cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
-          chatSocketRef.current.close();
-          navigate(process.env.PUBLIC_URL+ '/Tablero');
-          
+          chatSocketRef.current.close()
+          console.log(tipoPartida)
+          if (tipoPartida == "Clasico") {
+            navigate(process.env.PUBLIC_URL+ '/Tablero');
+          }
+          else if (tipoPartida == "Tematico") {
+            navigate(process.env.PUBLIC_URL+ '/TableroTematica');
+          }
         }
-
       } catch (err) {
         console.log(err);
       }

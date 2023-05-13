@@ -16,7 +16,7 @@ const ModoClasico = () => {
   const [contraseña, setContraseña] = useState("");
 
   const [sala, setSala] = useState({ nombre: "", tiempo: "", numJugadores: "", password: "", creador: "", modo: "", tipo: ""});
-  const [pet, setPet] = useState({ me_invita: "", ws: "" });
+  const [pet, setPet] = useState({ me_invita: "", ws: "", nombre_sala: "", tipo_partida: "", n_jugadores: "" });
   const [peticiones, setPeticiones] = useState([]);
   const [salas, setSalas] = useState([]);
 
@@ -24,6 +24,7 @@ const ModoClasico = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const [webs, setWeb] = useState();
+  const [tipo, setTipo] = useState();
 
 
 
@@ -77,6 +78,7 @@ const ModoClasico = () => {
       .then((data) => {console.log(data)
         if (data.OK == "True") {
           setWeb(data.ws_partida)
+          setTipo(data.tipo)
           setShow4(true)
         }
         
@@ -102,6 +104,9 @@ const ModoClasico = () => {
     setPet({
       ...pet,
       ["me_invita"]: e.me_invita,
+      ["nombre_sala"]: e.nombre_sala,
+      ["tipo_partida"]: e.tipo_partida,
+      ["n_jugadores"]: e.n_jugadores,
       ["ws"]: e.ws,
     })
   };  
@@ -154,6 +159,7 @@ const ModoClasico = () => {
         cookies.set('n_jugadores', sala.numJugadores, {path: '/'})
         cookies.set('noCreador', 1, {path: '/'})
         cookies.set('WebSocketEsperando', data.ws, {path: '/'})
+        cookies.set('tipo_partida', sala.modo, {path: '/'})
         navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
       }
       else {
@@ -167,14 +173,16 @@ const ModoClasico = () => {
   }
 
   function funcionEntrar2() {
-    cookies.set('n_jugadores', 4, {path: '/'})  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+    cookies.set('n_jugadores', pet.n_jugadores, {path: '/'})  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     cookies.set('noCreador', 1, {path: '/'})
     cookies.set('WebSocketEsperando', pet.ws, {path: '/'})
+    cookies.set('tipo_partida', pet.tipo_partida, {path: '/'})
     navigate(process.env.PUBLIC_URL+'/EsperandoJugadores');
   }
 
   function funcionEntrar3() {
     cookies.set('WebSocketTablero', webs, {path: '/'})
+    cookies.set('tipo_partida', tipo, {path: '/'})
     navigate(process.env.PUBLIC_URL+ '/Tablero');
   }
 
@@ -210,13 +218,13 @@ const ModoClasico = () => {
     return peticiones.map(elemento  => (
       <div className="App-CuadradoBlanco" style={{ width: "99.6%", height: "15%", position: "relative", left: "0%",cursor: "pointer"}}onClick={() => {handleChange2(elemento);setShow3(true)}}>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "5%"}}>
-          {elemento.me_invita}
+          {elemento.nombre_sala}
         </a>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "25%"}}>
-          {elemento.ws}
+          {elemento.tipo_partida}
         </a>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "45%"}}>
-          {elemento.me_invita}
+          {elemento.n_jugadores}
         </a>
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "15%", left: "70%"}}>
           {elemento.me_invita}
@@ -302,7 +310,7 @@ const ModoClasico = () => {
                     Jugadores
                 </a>
                 <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic" ,position: "absolute", top: "1%", left: "70%"}}>
-                    Amigo
+                    Invitado por
                 </a>
               </div>
               <div className="App-CuadradoBlanco" style={{ width: "100%", height: "73%", position: "absolute", top: "27%", left: "-0.2%"}}>
@@ -325,13 +333,16 @@ const ModoClasico = () => {
                     Invitación Sala
                   </a>
                   <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "30%", left: "10%"}}>
-                    Nombre de la sala: {peticiones.me_invita}
+                    Nombre de la sala: {pet.nombre_sala}
                   </a>
                   <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "40%", left: "10%"}}>
-                    Modo de juego: {peticiones.me_invita}
+                    Modo de juego: {pet.tipo_partida}
                   </a>
                   <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "50%", left: "10%"}}>
-                    Jugadores: {peticiones.me_invita}
+                    Jugadores: {pet.n_jugadores}
+                  </a>
+                  <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic" ,position: "absolute", top: "60%", left: "10%"}}>
+                    Invitado por: {pet.me_invita}
                   </a>
                   <button className="App-botonConfirmar" style= {{top: "75%", left: "20%" , position:"absolute"}} onClick={funcionEntrar2} >
                     Entrar
