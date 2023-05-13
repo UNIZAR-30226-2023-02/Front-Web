@@ -26,6 +26,7 @@ let URL = "";
     const [cie, setCie] = useState({total:"", bien:"", mal:"", porcentaje:""});
     const [dep, setDep] = useState({total:"", bien:"", mal:"", porcentaje:""});
     const [est, setEst] = useState({quesitos_totales:"", total_preguntas:"", total_respuestas_correctas: "",total_respuestas_incorrectas: "", porcentaje_respuestas: ""});
+    const [partidas, setPartidas] = useState({total:"", victorias:"", derrotas:"", porcentaje:""});
 
     useEffect(() => {
       if (usuario == usuario_est){
@@ -80,9 +81,13 @@ let URL = "";
               total_respuestas_incorrectas: data.total_respuestas_incorrectas,
               porcentaje_respuestas: data.porcentaje_respuestas
             })
-  
+            setPartidas({
+              total: data.total_partidas,
+              victorias: data.total_partidas_ganadas,
+              derrotas: data.total_partidas_perdidas,
+              porcentaje: data.porcentaje_partidas,
+            })
           }
-            
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -142,7 +147,12 @@ let URL = "";
               total_respuestas_incorrectas: data.total_respuestas_incorrectas,
               porcentaje_respuestas: data.porcentaje_respuestas
             })
-  
+            setPartidas({
+              total: data.total_partidas,
+              victorias: data.total_partidas_ganadasl,
+              derrotas: data.total_partidas_perdidas,
+              porcentaje: data.porcentaje_partidas,
+            })
           }
             
         })
@@ -185,20 +195,37 @@ let URL = "";
         </div>
 
 
-        <div className="App-CuadradoNegro" style={{ width: "850px", height: "600px", position: "absolute", top: "25%", left: "50%", border: "2px solid white"}}>
+        <div className="App-CuadradoNegro" style={{ width: "840px", height: "600px", position: "absolute", top: "25%", left: "51%", background: "none"}}>
 
-          <div className="App-CuadradoNegro" style={{ width: "100%", height: "50%", position: "absolute", top: "-0.3%", left: "-0.2%", borderRadius: "50px 50px 0px 0px", border: "2px solid white", textAlign:"center"}}>
-            <a  style= {{ color: "white", fontSize: "50px", fontStyle: "italic"}}> Total de preguntas <br></br>{est.total_preguntas} </a>
-          </div>
-          <div className="App-CuadradoNegro" style={{ width: "260px", height: "260px", position: "absolute", top: "27%", left: "35%", borderRadius: "50%", border: "2px solid white", backgroundColor:"gray", zIndex:"1"}}>
-            <a  style= {{ color: "white", fontSize: "50px", fontStyle: "italic" , position: "absolute", top: "25%", left: "17%"}}> Aciertos <br></br>{est.porcentaje_respuestas}% </a>
-          </div>
-          <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", top: "50%", left: "-0.2%", borderRadius: "0px 0px 0px 50px", border: "2px solid white", backgroundColor:"green"}}>
-            <a  style= {{ color: "white", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "30%", left: "-5%"}}> Total de respuestas correctas <br></br>{est.total_respuestas_correctas} </a>
-          </div>
-          <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", top: "50%", left: "50%", borderRadius: "0px 0px 50px 0px", border: "2px solid white", backgroundColor:"red"}}>
-          <a  style= {{ color: "white", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "30%", left: "15%"}}> Total de respuestas incorrectas <br></br>{est.total_respuestas_incorrectas} </a>
-          </div>
+            <div className="App-CuadradoNegro" style={{ width: "50%", height: "100%", position: "absolute", top: "-0.3%", left: "-0.1%", borderRadius: "50px 50px 50px 50px", border: "2px solid white", textAlign:"center"}}>
+                <div style={{marginTop:"10%"}}>
+                  <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic"}}> Total de preguntas <br></br>{est.total_preguntas} </a>
+                </div>
+              <div className="App-CuadradoNegro" style={{ width: "200px", height: "200px", position: "absolute", top: "30%", left: "25%", borderRadius: "50%", border: "2px solid white", backgroundColor:"gray", zIndex:"1"}}>
+                <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic" , position: "absolute", top: "25%", left: "25%"}}> Aciertos <br></br>{est.porcentaje_respuestas}% </a>
+              </div>
+              <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", top: "50%", left: "-0.2%", borderRadius: "0px 0px 0px 50px", border: "2px solid white", backgroundColor:"green"}}>
+                <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic", position: "absolute", top: "30%", left: "-5%"}}> Total de respuestas correctas <br></br>{est.total_respuestas_correctas} </a>
+              </div>
+              <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", top: "50%", left: "50%", borderRadius: "0px 0px 50px 0px", border: "2px solid white", backgroundColor:"red"}}>
+                <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic", position: "absolute", top: "30%", left: "5%"}}> Total de respuestas incorrectas <br></br>{est.total_respuestas_incorrectas} </a>
+              </div>
+            </div>
+
+              <div className="App-CuadradoNegro" style={{ width: "50%", height: "100%", position: "absolute", top: "-0.3%", left: "50%", borderRadius: "50px 50px 50px 50px", border: "2px solid white", textAlign:"center"}}>
+                  <div style={{marginTop:"10%"}}>
+                    <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic"}}> Total de partidas jugadas <br></br>{partidas.total} </a>
+                  </div>    
+                <div className="App-CuadradoNegro" style={{ width: "200px", height: "200px", position: "absolute", top: "30%", left: "25%", borderRadius: "50%", border: "2px solid white", backgroundColor:"gray", zIndex:"1"}}>
+                  <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic" , position: "absolute", top: "25%", left: "25%"}}> Victorias <br></br>{partidas.porcentaje}% </a>
+                </div>
+                <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", top: "50%", left: "-0.2%", borderRadius: "0px 0px 0px 50px", border: "2px solid white", backgroundColor:"green"}}>
+                  <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic", position: "absolute", top: "30%", left: "22%"}}> Total de <br></br> victorias <br></br>{partidas.victorias} </a>
+                </div>
+                <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", top: "50%", left: "50%", borderRadius: "0px 0px 50px 0px", border: "2px solid white", backgroundColor:"red"}}>
+                  <a  style= {{ color: "white", fontSize: "30px", fontStyle: "italic", position: "absolute", top: "30%", left: "5%"}}> Total de derrotas <br></br>{partidas.derrotas} </a>
+                </div>
+              </div>
 
         </div>
         <img src={Atras} style={{width:"150px", height:"150px", top:"5%", left:"5%", cursor: "pointer", position: "absolute"}} onClick={() => flechaAtras()}/>

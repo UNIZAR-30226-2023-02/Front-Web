@@ -132,8 +132,8 @@ const ModoTematica = () => {
   let [contestada, setContestada] = useState(false)
   //Variable que utilizamos para saber si estamos en una pregunta o no, de esta manera inhabilitamos el botón de pausa
   let [estamosPregunta, setEstamosPregunta] = useState(false)
-  //Variable que utilizamos para saber si estamos eliguiendo una casilla o no, de esta manera inhabilitamos el botón de pausa
-  let [estamosEliguiendoCasilla, setEstamosEliguiendoCasilla] = useState(false)
+  //Variable que utilizamos para saber si estamos eligiendo una casilla o no, de esta manera inhabilitamos el botón de pausa
+  let [estamosEligiendoCasilla, setEstamosEligiendoCasilla] = useState(false)
   //Variable que me indica si la partida ha terminado
   let [finPartida, setFinPartida] = useState(false)
   //Variable de las monedas para el ganador
@@ -672,7 +672,7 @@ const ModoTematica = () => {
                     casillas.forEach(element => {
                       aux[element] = "parpadea"
                     });
-                    setEstamosEliguiendoCasilla(true)
+                    setEstamosEligiendoCasilla(true)
                     setVprap(aux)
                     pulsarDado()
                     setShow4(false)
@@ -726,7 +726,7 @@ const ModoTematica = () => {
                     setShowDado(true)
                     setShowDado(false)
                     //vaciarRespuestas()
-                    setEstamosEliguiendoCasilla(false)
+                    setEstamosEligiendoCasilla(false)
                     pulsadoDados = 0
                     setIsRunningJugada(true)
                     setPulsadoDados(pulsadoDados)
@@ -786,7 +786,7 @@ const ModoTematica = () => {
                   //El jugador con el turno actual, ha pulsado los dados
                   case "Tirar_dado":
                     setIsRunningJugada(false)
-                    setEstamosEliguiendoCasilla(true)
+                    setEstamosEligiendoCasilla(true)
                     setPulsadoDados(1)
                     break
 
@@ -824,8 +824,8 @@ const ModoTematica = () => {
                     console.log("Actualizacion --> Continuar-partida")
                     setPartidaPausada(false)
                     setIsRunningPausa(false)
-                    console.log(estamosEliguiendoCasilla)
-                    if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+                    console.log(estamosEligiendoCasilla)
+                    if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
                     setShowPausa(false)
                     break
                     
@@ -1133,7 +1133,7 @@ const ModoTematica = () => {
                   subtype = "Tirar_dado"
                   console.log("Envio Tirar_dado")
                   enviarMensaje()
-                  setEstamosEliguiendoCasilla(true)
+                  setEstamosEligiendoCasilla(true)
                 } else {
                   console.log("Esperando a que pulse el dado el jugador que le toca")
                 }
@@ -1191,7 +1191,7 @@ const ModoTematica = () => {
               setShowPausa(false)
               setPartidaPausada(false)
               setIsRunningPausa(false)
-              if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+              if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
             }}
         >
             {({ remainingTime }) => remainingTime}
@@ -1247,7 +1247,7 @@ const ModoTematica = () => {
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
-                setEstamosEliguiendoCasilla(true)
+                setEstamosEligiendoCasilla(true)
                 setIsRunningJugada(false)
                 setPulsadoDados(1)
                 type = "Peticion"
@@ -1275,7 +1275,7 @@ const ModoTematica = () => {
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
-                setEstamosEliguiendoCasilla(true)
+                setEstamosEligiendoCasilla(true)
                 setIsRunningJugada(false)
                 setPulsadoDados(1)
                 type = "Peticion"
@@ -1327,7 +1327,7 @@ const ModoTematica = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:`4%`, left:"3%"}}>  
         <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"0%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1350,7 +1350,7 @@ const ModoTematica = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:"4%", left:"3%"}}>  
           <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"70%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1528,7 +1528,7 @@ const ModoTematica = () => {
   function continuarPartida() {
     setPartidaPausada(false)
     setIsRunningPausa(false)
-    if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+    if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
     setShowPausa(false)
     type = "Actualizacion"
     subtype = "Continuar_partida"
@@ -1564,15 +1564,15 @@ const ModoTematica = () => {
 
   /* --- MENSAJE POR PANTALLA --- */
   function mensajePantalla(props) {
-    if (estamosEliguiendoCasilla) {
+    if (estamosEligiendoCasilla) {
       if (vectorJugadorTurno == "vector1"){
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
       else {
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
     }
@@ -1686,12 +1686,12 @@ const ModoTematica = () => {
                 <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/> 
                 
                 
-                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
-                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
-                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
-                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
+                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
+                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
+                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
+                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
                 
                   
                 
