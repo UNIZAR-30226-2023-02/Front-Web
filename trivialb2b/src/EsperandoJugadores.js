@@ -5,8 +5,11 @@ import { useSession, setSession } from 'react-session';
 import Usuario from'./Imagenes/Usuario.png';
 import Tablero1 from'./Imagenes/Tablero1.png';
 import Cookies from 'universal-cookie';
+import Cristiano from'./Imagenes/Usuario.png';
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 const URL = "http://51.142.118.71:8000/api/salas/enviar-peticion/";
+const URL1 = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
 
 const EsperandoJugadores = () => {
 
@@ -26,6 +29,9 @@ const EsperandoJugadores = () => {
   const nombreAñadir = (e) => {
     setNuevoA(e.target.value)
   };
+
+  let [soli, setSoli] = useState("");
+  const [solicitudes, setSolicitudes] = useState([]);
   
   let [vectorJugadores2, setVectorJugadores2 ] = useState(["", ""]);
   let [vectorJugadores4, setVectorJugadores4 ] = useState(["", "", "", ""]);
@@ -42,11 +48,11 @@ const EsperandoJugadores = () => {
   const tipoPartida = cookies.get('tipo_partida');
   jRestantes = numJugadores;
 
-  function invitar () {
+  function invitar (a) {
     fetch(URL, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify({"username_amigo": nuevoA}),
+      body: JSON.stringify({"username_amigo": a}),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
@@ -137,6 +143,45 @@ const EsperandoJugadores = () => {
     ));
   }
 
+  function listar_amigos () {
+    fetch(URL1, {
+      method: "POST",
+      headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)
+        if (data.OK == "True"){
+          solicitudes.length = 0
+          data.amigos.forEach(element => {
+            solicitudes.push(element);
+          });
+          setSolicitudes(solicitudes);
+          setShow1(!show1)
+        }
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  }
+
+  function f_invitaciones() {
+    return solicitudes.map((solicitud, elemento) => (
+      <div key={elemento} className="App-CuadradoBlanco" style={{ width: "90%", height: "40%", position: "relative", left: "0%", border: "0px black"}}  onClick={() => {}}>
+        <a  style= {{ color: "black", fontSize: "30px", fontStyle: "italic", position: "absolute", top: "35%", left: "20%"}} >
+          {solicitud}
+        </a>
+        <img src={Cristiano} style= {{width:"auto", height:"70%",position: "absolute", top: "15%", left: "0%"}}/>
+        <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "70%", left: "0%"}}>
+          ________________________________________________________
+        </a>
+        <button className="App-botonConfirmar" style= {{fontSize:"32px", top: "33%", left: "65%", position:"absolute"}} onClick={() =>{invitar(solicitud)}} >
+          Invitar
+        </button>
+      </div>
+    ));
+  }
+
+
   return (
     <div className="App">
       {show ? (
@@ -156,7 +201,7 @@ const EsperandoJugadores = () => {
             </div>
           </div>
           <button className="App-botonCancelar" style= {{position: "absolute", top: "70%", left: "41.5%", zIndex: "5"}} onClick={() => setShow(!show) } > Abandonar Sala </button> 
-          <button className="App-botonConfirmar" style= {{position: "absolute", top: "20%", left: "70%", zIndex: "5"}} onClick={() => setShow1(!show1) } > Invitar Amigos </button>
+          <button className="App-botonConfirmar" style= {{position: "absolute", top: "20%", left: "70%", zIndex: "5"}} onClick={() => listar_amigos() } > Invitar Amigos </button>
 
           {show1 ? (
           <div className="App-CuadradoNegro" style={{ width: "1000px", height: "600px", position: "absolute", zIndex: "1", top: "18%", left: "25%", zIndex: "5",   backgroundColor:"#303030"}}>
@@ -164,19 +209,19 @@ const EsperandoJugadores = () => {
               <a style={{color:"white", fontSize:"40px"}}>Invitar Amigo </a>
               <div style={{marginTop:"30px", color: "white"}}>
                 <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
-              </div>
-              <a style={{position: "absolute", top: "30%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Escribe a continuacion el nombre del amigo que quieres añadir: </a>
-              <a style={{position: "absolute", top: "50%", left: "17%",color:"white", fontSize:"30px"}}> Nombre: </a>
-              <input className="App-textoNegro"
-                type="nombre"
-                label="nombre"
-                name="nombre"
-                onChange={nombreAñadir}
-                style={{position: "absolute", top: "48%", left: "30%"}}
-              />
-              <div> 
-                <button className="App-botonCancelar" style= {{position: "absolute", top: "75%", left: "30%"}} onClick={() => setShow1(!show1) } > Cancelar </button>
-                <button className="App-botonConfirmar" style= {{position: "absolute", top: "75%", left: "56%"}} onClick={() => invitar() } > Añadir </button>
+                <div className="App-CuadradoBlanco" style={{ width: "90%", height: "70%", position: "absolute", top: "25%", left: "5%", borderRadius: "50px 0px 0px 50px"}}>
+                  <InfiniteScroll
+                    dataLength={solicitudes.length}
+                    pageStart={0}
+                    loadMore={f_invitaciones}
+                    hasMore={true || false}
+                    useWindow={false}
+                    style={{position:"absolute", width: "95%", height: "99.7%", top:"0.1%", left:"5%"}}
+                  >
+                    {f_invitaciones()}
+                  </InfiniteScroll>
+                </div>
+                <button className="App-botonCancelar" style= {{position: "absolute", top: "4%", left: "75%"}} onClick={() => setShow1(!show1) } > Cancelar </button>
               </div>
             </div>
           </div>
