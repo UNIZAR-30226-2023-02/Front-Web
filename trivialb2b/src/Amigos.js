@@ -30,7 +30,7 @@ const Amigos = () => {
   const [errores, setErroes] = useState();
   const [amigos, setAmigos] = useState([]);
 
-  const [soli, setSoli] = useState({amigo: ""});
+  let [soli, setSoli] = useState("");
   const [solicitudes, setSolicitudes] = useState([]);
 
   const [show, setShow] = useState(true);
@@ -78,6 +78,7 @@ const Amigos = () => {
             solicitudes.push(element);
           });
           setSolicitudes(solicitudes);
+          console.log(solicitudes)
           setShow4(true)
         }
     })
@@ -124,8 +125,9 @@ const Amigos = () => {
     });
   };
 
-  function aceptar () {
-    console.log(soli)
+  function aceptar (a) {
+    soli=a
+    setSoli(a)
     fetch(URL6, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -145,8 +147,9 @@ const Amigos = () => {
     });
   };
 
-  function rechazar () {
-    console.log(soli)
+  function rechazar (a) {
+    soli=a
+    setSoli(a)
     fetch(URL7, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -237,10 +240,10 @@ const Amigos = () => {
         <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "70%", left: "0%"}}>
           ________________________________________________________
         </a>
-        <button className="App-botonConfirmar" style= {{fontSize:"32px", top: "33%", left: "55%", position:"absolute"}} onClick={() =>{setErroes("");setSoli(solicitud);aceptar()}} >
+        <button className="App-botonConfirmar" style= {{fontSize:"32px", top: "33%", left: "55%", position:"absolute"}} onClick={() =>{setErroes("");  aceptar(solicitud)}} >
           Aceptar
         </button>
-        <button className="App-botonCancelar" style= {{fontSize:"32px", top: "33%", left: "78%", position:"absolute"}} onClick={() =>{setErroes("");setSoli(solicitud);rechazar()}} >
+        <button className="App-botonCancelar" style= {{fontSize:"32px", top: "33%", left: "78%", position:"absolute"}} onClick={() =>{setErroes("");  rechazar(solicitud)}} >
           Rechazar
         </button>
       </div>
