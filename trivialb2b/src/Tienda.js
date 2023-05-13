@@ -57,6 +57,7 @@ const Tienda = () => {
         fichas.push(element);
       });
       setFichas(fichas);
+      console.log(fichas)
       data.tableros.forEach(element => {
         tableros.push(element);
       });
@@ -68,7 +69,7 @@ const Tienda = () => {
     });
   },[]);
 
-  const [visibleItems, setVisibleItems] = useState(6);
+  const [visibleItems, setVisibleItems] = useState(11);
   const containerRef = useRef(null);
 
   useEffect(() => {

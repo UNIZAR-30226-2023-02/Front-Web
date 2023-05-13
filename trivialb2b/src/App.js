@@ -26,8 +26,8 @@ import CerrarSesion from './CerrarSesion';
 import RedesSociales from './RedesSociales';
 import DarDeBaja from './DarDeBaja';
 import EsperandoJugadores from './EsperandoJugadores';
-import JuegoModoClasico from './JuegoModoClasico';
 import Tablero from './Tablero';
+import TableroTematica from './TableroTematica';
 
 
 const App = () => {
@@ -54,8 +54,8 @@ const App = () => {
       <Route path= '/CerrarSesion' Component={CerrarSesion} /> 
       <Route path= '/DarDeBaja' Component={DarDeBaja} /> 
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
-      <Route path= '/JuegoModoClasico' Component={JuegoModoClasico} /> 
       <Route path= '/Tablero' Component={Tablero} />
+      <Route path= '/TableroTematica' Component={TableroTematica} />
     </Routes>
     </BrowserRouter>
   );

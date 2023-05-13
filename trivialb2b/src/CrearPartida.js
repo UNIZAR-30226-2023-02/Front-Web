@@ -72,7 +72,7 @@ const CrearPartida = () => {
     navigate(process.env.PUBLIC_URL + '/ModoEquipos');
   };
   const onSubmit3 = async (event) => {
-    navigate(process.env.PUBLIC_URL + '/Tablero');
+    navigate(process.env.PUBLIC_URL + '/ModoTematica');
   };
   const onPerfil = async (event) => {
     navigate(process.env.PUBLIC_URL + '/Perfil');
@@ -107,16 +107,16 @@ const CrearPartida = () => {
         </button> 
         {show ? (
           <div className="App-Imagenes">   
-            <Modo texto="Modo Clasico"funcion={onSubmit1} img={Clasico}/>
-            <Modo texto="Modo Equipos"funcion={onSubmit2} img={Equipos}/>
-            <Modo texto="Modo Tematica"funcion={onSubmit3} img={Tematica}/> 
+            <Modo texto="Modo Clasico" funcion={onSubmit1} img={Clasico}/>
+            <Modo texto="Modo Equipos" funcion={onSubmit2} img={Equipos}/>
+            <Modo texto="Modo Tematica" funcion={onSubmit3} img={Tematica}/> 
           </div>
         ) : (
           <div>
             <div className="App-Imagenes">   
-              <Modo texto="Modo Clasico"funcion={onSubmit1} img={Clasico}/>
-              <Modo texto="Modo Equipos"funcion={onSubmit2} img={Equipos}/>
-              <Modo texto="Modo Tematica"funcion={onSubmit3} img={Tematica}/> 
+              <Modo texto="Modo Clasico" funcion={onSubmit1} img={Clasico}/>
+              <Modo texto="Modo Equipos" funcion={onSubmit2} img={Equipos}/>
+              <Modo texto="Modo Tematica" funcion={onSubmit3} img={Tematica}/> 
             </div>
             <Desplegable funcionShow={setShow} functionP={onPerfil} functionH={onDarDeBaja} functionC={onContacto} functionR={onRedesSociales} functionE={onEstadisticas} funcionCerrarS={onCerrarSesion} img1={Perfil} img2={Logo}/>
           </div>

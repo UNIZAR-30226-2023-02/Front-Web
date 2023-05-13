@@ -22,7 +22,7 @@ return (
 
 const ModoClasico = () => {
     
-  const [body, setBody] = useState({ nombre_sala: "", tiempo_respuesta: "15", password_sala: "", n_jugadores: "2", tipo_partida: "Clasico" });
+  const [body, setBody] = useState({ nombre_sala: "", tiempo_respuesta: "10", password_sala: "", n_jugadores: "2", tipo_partida: "Clasico" });
   const [errores, setErorres] = useState("");
   
   const navigate = useNavigate();

@@ -163,7 +163,7 @@ let URL = "";
 
         <a  style= {{ color: "white", fontSize: "20px", fontStyle: "italic" ,position: "absolute", top: "50%", left: "10%"}}> Respuestas <font color="red">falladas</font>: {props.fallos} </a>
         <br></br>
-        <a  style= {{ color: "white", fontSize: "20px", fontStyle: "italic" ,position: "absolute", top: "70%", left: "15%"}}> Porcentajes de acierto: {props.porcentaje} </a>
+        <a  style= {{ color: "white", fontSize: "20px", fontStyle: "italic" ,position: "absolute", top: "70%", left: "15%"}}> Porcentajes de acierto: {props.porcentaje}% </a>
       </div>
       );
     }
@@ -191,7 +191,7 @@ let URL = "";
             <a  style= {{ color: "white", fontSize: "50px", fontStyle: "italic"}}> Total de preguntas <br></br>{est.total_preguntas} </a>
           </div>
           <div className="App-CuadradoNegro" style={{ width: "260px", height: "260px", position: "absolute", top: "27%", left: "35%", borderRadius: "50%", border: "2px solid white", backgroundColor:"gray", zIndex:"1"}}>
-            <a  style= {{ color: "white", fontSize: "50px", fontStyle: "italic" , position: "absolute", top: "25%", left: "17%"}}> Aciertos <br></br>{est.porcentaje_respuestas} </a>
+            <a  style= {{ color: "white", fontSize: "50px", fontStyle: "italic" , position: "absolute", top: "25%", left: "17%"}}> Aciertos <br></br>{est.porcentaje_respuestas}% </a>
           </div>
           <div className="App-CuadradoNegro" style={{ width: "50%", height: "50%", position: "absolute", top: "50%", left: "-0.2%", borderRadius: "0px 0px 0px 50px", border: "2px solid white", backgroundColor:"green"}}>
             <a  style= {{ color: "white", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "30%", left: "-5%"}}> Total de respuestas correctas <br></br>{est.total_respuestas_correctas} </a>

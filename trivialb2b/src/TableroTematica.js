@@ -34,7 +34,7 @@ const URL = "http://51.142.118.71:8000";
 //const URL = "http://85be-146-158-156-138.ngrok-free.app/";
 
 
-const Tablero = () => {
+const ModoTematica = () => {
 
   /* --- VARIABLES Y CONSTANTES --- */
   const navigate = useNavigate();
@@ -82,8 +82,6 @@ const Tablero = () => {
   let [tematicaPregunta, setTematicaPregunta] = useState("")
   let [casillas, setCasillas] = useState("")
   let [esCorrecta, setEsCorrecta] = useState(0)
-  //Variable para guardar el color de la temática
-  let [colorTematica, setColorTematica] = useState("")
   //Variable utilizada para guardar el quesito
   let [varAux, setVarAux] = useState("") 
   //Variable que evita que un usuario pulse varias veces seguidas el dado
@@ -103,6 +101,18 @@ const Tablero = () => {
 
   //Variable que me indica si estamos en el chat o no
   let estamosChat = false
+
+
+  /***** ----------------------------------------------------VARIABLE PROPIAS DE TEMATICA  ------------------------------------------------------- *****/
+  //Variable para guardar la esquina de la tematica
+  let [esquinaTematica, setEsquinaTematica] = useState()
+  //Variable para guardar la imagen del quesito durante toda la partida
+  let [quesitoTematica, setQuesitoTematica] = useState()
+  //Variable para guardar el color de la temática
+   let [colorTematica, setColorTematica] = useState("")
+   //Variable para guardar el nombre de la temática
+   let [nombreTematica, setNombreTematica] = useState("")
+
 
   let [vectorJugadores, setVectorJugadores ]  = useState([]);
   let [indice, setIndice] = useState(0)
@@ -312,6 +322,50 @@ const Tablero = () => {
             tiempoLanzarDado = data.tiempo_elegir_casilla;
             setTiempoLanzarDado(tiempoLanzarDado)
             setTiempoPregunta(tiempoPregunta)
+            setNombreTematica(data.tematica)
+            
+            switch(data.tematica) {
+              case "Ciencia":
+                esquinaTematica = Esquina_verde
+                quesitoTematica = QuesoVerde
+                colorTematica = "#73fc67"
+              break
+              case "Arte":
+                esquinaTematica = Esquina_roja
+                quesitoTematica = QuesoRojo
+                colorTematica = "#fc6767"
+
+              break
+              case "Deportes":
+                esquinaTematica = Esquina_naranja
+                quesitoTematica = QuesoNaranja
+                colorTematica = "#fcbb67"
+              break
+
+              case "Entretenimiento":
+                esquinaTematica = Esquina_rosa
+                quesitoTematica = QuesoRosa
+                colorTematica = "pink"
+              break
+
+              case "Geografia":
+                esquinaTematica = Esquina_azul
+                quesitoTematica = QuesoAzul 
+                colorTematica = "#61dafb"
+              break
+
+              case "Historia":
+                esquinaTematica = Esquina_amarilla
+                quesitoTematica = QuesoAmarillo
+                colorTematica = "#fcf267"
+              break
+            }  
+            setColorTematica(colorTematica)  
+            setQuesitoTematica(quesitoTematica)
+            setEsquinaTematica(esquinaTematica)
+
+            console.log(esquinaTematica + " " + quesitoTematica + " " + colorTematica )
+
             errorPartida = data.error;
             msgIni=1
             let jugadores = data.jugadores
@@ -580,7 +634,6 @@ const Tablero = () => {
                     quesito = data.quesito
                     tematicaPregunta = data.tematica
                     setContestada(false)
-                    fun_colorTematica(tematicaPregunta)
                     setTematicaPregunta(tematicaPregunta)
                     setR1(r1)
                     setR2(r2)
@@ -1375,31 +1428,6 @@ const Tablero = () => {
     console.log("HA TERMINADO ES_CORRECTA") 
   }
 
-  function fun_colorTematica(tematicaPregunta){
-    switch(tematicaPregunta){
-      case "Ciencia":
-        setColorTematica("green")
-      break
-      case "Arte":
-        setColorTematica("red")
-      break
-      case "Deportes":
-        setColorTematica("orange")
-      break
-      case "Entretenimiento":
-        setColorTematica("pink")
-      break
-      case "Geografia":
-        setColorTematica("blue")
-      break
-      case "Historia":
-        setColorTematica("yellow")
-      break
-      
-
-    }
-  }
-
   /* --- NO HA CONTESTADO LA PREGUNTA --- */
   function finTiempoRespuesta() {
     console.log("ENTRAMOS EN FIN TIEMPO RESPUESTA")
@@ -1587,29 +1615,29 @@ const Tablero = () => {
             </div>       
             <div style={{ position: "absolute", zIndex: "3", height:"700px", width:"700px", top:"7%", left:"30%"}}>
                 {/* --- TABLERO --- */}  
-                <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1="#61dafb" c2="white" c3="#fc6767" c4="#fcf267" c5="white" c6="#fcbb67" width1="15%" transform="rotate(180deg)" v1={1} v2={2} v3={3} v4={4} v5={5} v6={6}/> 
-                <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1="#fc6767" c2="white" c3="#73fc67" c4="#fcbb67" c5="white" c6="#61dafb" width1="15%" transform="rotate(120deg)" v1={8} v2={9} v3={10} v4={11} v5={12} v6={13}/>  
-                <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1="#73fc67" c2="white" c3="pink" c4="#61dafb" c5="white" c6="#fc6767" width1="15%" transform="rotate(60deg)" v1={15} v2={16} v3={17} v4={18} v5={19} v6={20}/> 
-                <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1="pink" c2="white" c3="#fcf267" c4="#fc6767" c5="white" c6="#73fc67" width1="15%" transform="" v1={22} v2={23} v3={24} v4={25} v5={26} v6={27}/>  
-                <Linea height="10.5%" width="37%" top="14%" left="0%" c1="#fcf267" c2="white" c3="#fcbb67" c4="#73fc67" c5="white" c6="pink" width1="15%" transform="rotate(-60deg)" v1={29} v2={30} v3={31} v4={32} v5={33} v6={34}/>
-                <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1="#fcbb67" c2="white" c3="#61dafb" c4="pink" c5="white" c6="#fcf267" width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/> 
+                <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(180deg)" v1={1} v2={2} v3={3} v4={4} v5={5} v6={6}/> 
+                <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(120deg)" v1={8} v2={9} v3={10} v4={11} v5={12} v6={13}/>  
+                <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(60deg)" v1={15} v2={16} v3={17} v4={18} v5={19} v6={20}/> 
+                <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="" v1={22} v2={23} v3={24} v4={25} v5={26} v6={27}/>  
+                <Linea height="10.5%" width="37%" top="14%" left="0%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(-60deg)" v1={29} v2={30} v3={31} v4={32} v5={33} v6={34}/>
+                <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/> 
                 
                 
-                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2="#fcbb67" c3="#fcf267" c4="#61dafb" c5="#fc6767" c6="pink" width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
-                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2="#61dafb" c3="#fcbb67" c4="#fc6767" c5="#73fc67" c6="#fcf267" width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2="#fc6767" c3="#61dafb" c4="#73fc67" c5="pink" c6="#fcbb67" width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
-                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2="#73fc67" c3="#fc6767" c4="pink" c5="#fcf267" c6="#61dafb" width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
-                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2="pink" c3="#73fc67" c4="#fcf267" c5="#fcbb67" c6="#fc6767" width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2="#fcf267" c3="pink" c4="#fcbb67" c5="#61dafb" c6="#73fc67" width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
+                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
+                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
+                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
+                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
                 
                   
                 
-                <img className={vparp[28]} style={{ position:"absolute", transform: "rotate(-2deg)", left:"20.9%", height:"15%", width:"19%", top:"-6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_azul} onClick={() => { if (jugadorActual==1 && (vparp[28] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(28); moverFicha(28) }}}/>
-                <img className={vparp[21]} style={{ position:"absolute", transform: "rotate(+59.5deg)", left:"66%", height:"15%", width:"19%", top:"-6.9%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_naranja} onClick={() => { if (jugadorActual==1 && (vparp[21] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(21); moverFicha(21) }}}/>
-                <img className={vparp[14]} style={{ position:"absolute", transform: "rotate(+118deg)", left:"89.8%", height:"14%", width:"18%", top:"32%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_amarilla} onClick={() => { if (jugadorActual==1 && (vparp[14] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(14); moverFicha(14) }}}/>
-                <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-182deg)", left:"68.3%", height:"14%", width:"18%", top:"71.5%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_rosa} onClick={() => { if (jugadorActual==1 && (vparp[7] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(7); moverFicha(7) }}}/>
-                <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_verde} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
-                <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={Esquina_roja} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
+                <img className={vparp[28]} style={{ position:"absolute", transform: "rotate(-2deg)", left:"20.9%", height:"15%", width:"19%", top:"-6%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[28] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(28); moverFicha(28) }}}/>
+                <img className={vparp[21]} style={{ position:"absolute", transform: "rotate(+59.5deg)", left:"66%", height:"15%", width:"19%", top:"-6.9%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[21] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(21); moverFicha(21) }}}/>
+                <img className={vparp[14]} style={{ position:"absolute", transform: "rotate(+118deg)", left:"89.8%", height:"14%", width:"18%", top:"32%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[14] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(14); moverFicha(14) }}}/>
+                <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-182deg)", left:"68.3%", height:"14%", width:"18%", top:"71.5%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[7] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(7); moverFicha(7) }}}/>
+                <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
+                <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
 
                 <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0", cursor:"pointer" }} onClick={() => { if (jugadorActual==1 && (vparp[72] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(72); moverFicha(72) }}}>
                     <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
@@ -1653,7 +1681,7 @@ const Tablero = () => {
               {/* --- PREGUNTA --- */}  
               {show ? (
               <div className="App-CuadradoBlanco"  style= {{width:"70%", height:"70%", top: "10%", left: "15%", position:"absolute", zIndex:"6", backgroundColor: "rgba(0, 0, 0, 0)", border:"none"}}>
-                <Respuesta width="100%" height="12%" left="-0.2%" top="-5.5%" size="50px" respuesta={tematicaPregunta} border= "40px 40px 0px 0px" marginTop="0%" color={colorTematica} bool="false"/>
+                <Respuesta width="100%" height="12%" left="-0.2%" top="-5.5%" size="50px" respuesta={nombreTematica} border= "40px 40px 0px 0px" marginTop="0%" color={colorTematica} bool="false"/>
                 <Respuesta width="100%" height="20%" left="-0.2%" top="7%" size="30px" respuesta={enunciado} border= "0px 0px 0px 0px" marginTop="1.2%" color={colorTematica} res="" bool="false"/>
                 <Respuesta width="70%" height="19%" left="-0.2%" top="27%" letra="A)" size="30px" respuesta={r1} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[0]} num={0} bool="true"/>
                 <Respuesta width="70%" height="19%" left="-0.2%" top="46%" letra="B)" size="30px" respuesta={r2} border= "0px 0px 0px 0px" marginTop="4%" color={colorPregunta[1]} num={1} bool="true"/>
@@ -1796,4 +1824,4 @@ const Tablero = () => {
     </div> 
   );
 };
-export default Tablero;
+export default ModoTematica;
