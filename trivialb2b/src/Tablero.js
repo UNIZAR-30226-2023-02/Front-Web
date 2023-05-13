@@ -92,8 +92,8 @@ const Tablero = () => {
   let [contestada, setContestada] = useState(false)
   //Variable que utilizamos para saber si estamos en una pregunta o no, de esta manera inhabilitamos el botón de pausa
   let [estamosPregunta, setEstamosPregunta] = useState(false)
-  //Variable que utilizamos para saber si estamos eliguiendo una casilla o no, de esta manera inhabilitamos el botón de pausa
-  let [estamosEliguiendoCasilla, setEstamosEliguiendoCasilla] = useState(false)
+  //Variable que utilizamos para saber si estamos eligiendo una casilla o no, de esta manera inhabilitamos el botón de pausa
+  let [estamosEligiendoCasilla, setEstamosEligiendoCasilla] = useState(false)
   //Variable que me indica si la partida ha terminado
   let [finPartida, setFinPartida] = useState(false)
   //Variable de las monedas para el ganador
@@ -559,7 +559,7 @@ const Tablero = () => {
                     casillas.forEach(element => {
                       aux[element] = "parpadea"
                     });
-                    setEstamosEliguiendoCasilla(true)
+                    setEstamosEligiendoCasilla(true)
                     setVprap(aux)
                     pulsarDado()
                     setShow4(false)
@@ -614,7 +614,7 @@ const Tablero = () => {
                     setShowDado(true)
                     setShowDado(false)
                     //vaciarRespuestas()
-                    setEstamosEliguiendoCasilla(false)
+                    setEstamosEligiendoCasilla(false)
                     pulsadoDados = 0
                     setIsRunningJugada(true)
                     setPulsadoDados(pulsadoDados)
@@ -674,7 +674,7 @@ const Tablero = () => {
                   //El jugador con el turno actual, ha pulsado los dados
                   case "Tirar_dado":
                     setIsRunningJugada(false)
-                    setEstamosEliguiendoCasilla(true)
+                    setEstamosEligiendoCasilla(true)
                     setPulsadoDados(1)
                     break
 
@@ -712,8 +712,8 @@ const Tablero = () => {
                     console.log("Actualizacion --> Continuar-partida")
                     setPartidaPausada(false)
                     setIsRunningPausa(false)
-                    console.log(estamosEliguiendoCasilla)
-                    if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+                    console.log(estamosEligiendoCasilla)
+                    if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
                     setShowPausa(false)
                     break
                     
@@ -1017,7 +1017,7 @@ const Tablero = () => {
                   subtype = "Tirar_dado"
                   console.log("Envio Tirar_dado")
                   enviarMensaje()
-                  setEstamosEliguiendoCasilla(true)
+                  setEstamosEligiendoCasilla(true)
                 } else {
                   console.log("Esperando a que pulse el dado el jugador que le toca")
                 }
@@ -1075,7 +1075,7 @@ const Tablero = () => {
               setShowPausa(false)
               setPartidaPausada(false)
               setIsRunningPausa(false)
-              if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+              if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
             }}
         >
             {({ remainingTime }) => remainingTime}
@@ -1131,7 +1131,7 @@ const Tablero = () => {
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
-                setEstamosEliguiendoCasilla(true)
+                setEstamosEligiendoCasilla(true)
                 setIsRunningJugada(false)
                 setPulsadoDados(1)
                 type = "Peticion"
@@ -1159,7 +1159,7 @@ const Tablero = () => {
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
-                setEstamosEliguiendoCasilla(true)
+                setEstamosEligiendoCasilla(true)
                 setIsRunningJugada(false)
                 setPulsadoDados(1)
                 type = "Peticion"
@@ -1211,7 +1211,7 @@ const Tablero = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:`4%`, left:"3%"}}>  
         <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"0%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1234,7 +1234,7 @@ const Tablero = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:"4%", left:"3%"}}>  
           <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"70%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1437,7 +1437,7 @@ const Tablero = () => {
   function continuarPartida() {
     setPartidaPausada(false)
     setIsRunningPausa(false)
-    if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+    if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
     setShowPausa(false)
     type = "Actualizacion"
     subtype = "Continuar_partida"
@@ -1473,15 +1473,15 @@ const Tablero = () => {
 
   /* --- MENSAJE POR PANTALLA --- */
   function mensajePantalla(props) {
-    if (estamosEliguiendoCasilla) {
+    if (estamosEligiendoCasilla) {
       if (vectorJugadorTurno == "vector1"){
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
       else {
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
     }

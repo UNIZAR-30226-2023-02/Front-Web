@@ -23,6 +23,48 @@ import QuesoRosa from './Imagenes/QuesitoRosa.png';
 import QuesitosGeneral from './Imagenes/QuesitosGeneral.png';
 import Moneda from './Imagenes/Moneda.png';
 
+import QuesoAzul1 from './Imagenes/QuesitosReact/QuesitoAzul1.png';
+import QuesoAmarillo1 from './Imagenes/QuesitosReact/QuesitoAmarillo1.png';
+import QuesoNaranja1 from './Imagenes/QuesitosReact/QuesitoNaranja1.png';
+import QuesoRojo1 from './Imagenes/QuesitosReact/QuesitoRoja1.png';
+import QuesoVerde1 from './Imagenes/QuesitosReact/QuesitoVerde1.png';
+import QuesoRosa1 from './Imagenes/QuesitosReact/QuesitoRosa1.png';
+
+import QuesoAzul2 from './Imagenes/QuesitosReact/QuesitoAzul2.png';
+import QuesoAmarillo2 from './Imagenes/QuesitosReact/QuesitoAmarillo2.png';
+import QuesoNaranja2 from './Imagenes/QuesitosReact/QuesitoNaranja2.png';
+import QuesoRojo2 from './Imagenes/QuesitosReact/QuesitoRoja2.png';
+import QuesoVerde2 from './Imagenes/QuesitosReact/QuesitoVerde2.png';
+import QuesoRosa2 from './Imagenes/QuesitosReact/QuesitoRosa2.png';
+
+import QuesoAzul3 from './Imagenes/QuesitosReact/QuesitoAzul3.png';
+import QuesoAmarillo3 from './Imagenes/QuesitosReact/QuesitoAmarillo3.png';
+import QuesoNaranja3 from './Imagenes/QuesitosReact/QuesitoNaranja3.png';
+import QuesoRojo3 from './Imagenes/QuesitosReact/QuesitoRojo3.png';
+import QuesoVerde3 from './Imagenes/QuesitosReact/QuesitoVerde3.png';
+import QuesoRosa3 from './Imagenes/QuesitosReact/QuesitoRosa3.png';
+
+import QuesoAzul4 from './Imagenes/QuesitosReact/QuesitoAzul4.png';
+import QuesoAmarillo4 from './Imagenes/QuesitosReact/QuesitoAmarillo4.png';
+import QuesoNaranja4 from './Imagenes/QuesitosReact/QuesitoNaranja4.png';
+import QuesoRojo4 from './Imagenes/QuesitosReact/QuesitoRoja4.png';
+import QuesoVerde4 from './Imagenes/QuesitosReact/QuesitoVerde4.png';
+import QuesoRosa4 from './Imagenes/QuesitosReact/QuesitoRosa4.png';
+
+import QuesoAzul5 from './Imagenes/QuesitosReact/QuesitoAzul5.png';
+import QuesoAmarillo5 from './Imagenes/QuesitosReact/QuesitoAmarillo5.png';
+import QuesoNaranja5 from './Imagenes/QuesitosReact/QuesitoNaranja5.png';
+import QuesoRojo5 from './Imagenes/QuesitosReact/QuesitoRojo5.png';
+import QuesoVerde5 from './Imagenes/QuesitosReact/QuesitoVerde5.png';
+import QuesoRosa5 from './Imagenes/QuesitosReact/QuesitoRosa5.png';
+
+import QuesoAzul6 from './Imagenes/QuesitosReact/QuesitoAzul6.png';
+import QuesoAmarillo6 from './Imagenes/QuesitosReact/QuesitoAmarillo6.png';
+import QuesoNaranja6 from './Imagenes/QuesitosReact/QuesitoNaranja6.png';
+import QuesoRojo6 from './Imagenes/QuesitosReact/QuesitoRoja6.png';
+import QuesoVerde6 from './Imagenes/QuesitosReact/QuesitoVerde6.png';
+import QuesoRosa6 from './Imagenes/QuesitosReact/QuesitoRosa6.png';
+
 import Cruz from './Imagenes/Cruz.png';
 import ChatImg from './Imagenes/Chat.png';
 import B2B from './Imagenes/Logo.png';
@@ -90,8 +132,8 @@ const ModoTematica = () => {
   let [contestada, setContestada] = useState(false)
   //Variable que utilizamos para saber si estamos en una pregunta o no, de esta manera inhabilitamos el botón de pausa
   let [estamosPregunta, setEstamosPregunta] = useState(false)
-  //Variable que utilizamos para saber si estamos eliguiendo una casilla o no, de esta manera inhabilitamos el botón de pausa
-  let [estamosEliguiendoCasilla, setEstamosEliguiendoCasilla] = useState(false)
+  //Variable que utilizamos para saber si estamos eligiendo una casilla o no, de esta manera inhabilitamos el botón de pausa
+  let [estamosEligiendoCasilla, setEstamosEligiendoCasilla] = useState(false)
   //Variable que me indica si la partida ha terminado
   let [finPartida, setFinPartida] = useState(false)
   //Variable de las monedas para el ganador
@@ -124,7 +166,14 @@ const ModoTematica = () => {
   const contraseña = cookies.get('password_sala');
   const websocket = cookies.get('WebSocketTablero');
 
-  const quesitosFinal = [QuesitosGeneral,QuesoAzul, QuesoAmarillo, QuesoNaranja, QuesoRojo, QuesoRosa, QuesoVerde]
+  let [quesitosFinal, setQuesitosFinal] = useState(["","","", "", "", "", ""])
+
+  const quesitosFinalRojo = [QuesitosGeneral, QuesoRojo1, QuesoRojo2, QuesoRojo3, QuesoRojo4, QuesoRojo5, QuesoRojo6]
+  const quesitosFinalVerde = [QuesitosGeneral, QuesoVerde1, QuesoVerde2, QuesoVerde3, QuesoVerde4, QuesoVerde5, QuesoVerde6]
+  const quesitosFinalAmarillo = [QuesitosGeneral, QuesoAmarillo1, QuesoAmarillo2, QuesoAmarillo3, QuesoAmarillo4, QuesoAmarillo5, QuesoAmarillo6]
+  const quesitosFinalRosa = [QuesitosGeneral, QuesoRosa1, QuesoRosa2, QuesoRosa3, QuesoRosa4, QuesoRosa5, QuesoRosa6]
+  const quesitosFinalNaranja = [QuesitosGeneral, QuesoNaranja1, QuesoNaranja2, QuesoNaranja3, QuesoNaranja4, QuesoNaranja5, QuesoNaranja6]
+  const quesitosFinalAzul = [QuesitosGeneral, QuesoAzul1, QuesoAzul2, QuesoAzul3, QuesoAzul4, QuesoAzul5, QuesoAzul6]
 
   let errorPartida = "";
   let type, subtype; 
@@ -329,42 +378,51 @@ const ModoTematica = () => {
                 esquinaTematica = Esquina_verde
                 quesitoTematica = QuesoVerde
                 colorTematica = "#73fc67"
+                setQuesitosFinal(quesitosFinalVerde)
+
               break
               case "Arte":
                 esquinaTematica = Esquina_roja
                 quesitoTematica = QuesoRojo
                 colorTematica = "#fc6767"
+                setQuesitosFinal(quesitosFinalRojo)
 
               break
               case "Deportes":
                 esquinaTematica = Esquina_naranja
                 quesitoTematica = QuesoNaranja
                 colorTematica = "#fcbb67"
+                setQuesitosFinal(quesitosFinalNaranja)
+
               break
 
               case "Entretenimiento":
                 esquinaTematica = Esquina_rosa
                 quesitoTematica = QuesoRosa
                 colorTematica = "pink"
+                setQuesitosFinal(quesitosFinalRosa)
+
               break
 
               case "Geografia":
                 esquinaTematica = Esquina_azul
                 quesitoTematica = QuesoAzul 
                 colorTematica = "#61dafb"
+                setQuesitosFinal(quesitosFinalAzul)
+
               break
 
               case "Historia":
                 esquinaTematica = Esquina_amarilla
                 quesitoTematica = QuesoAmarillo
                 colorTematica = "#fcf267"
+                setQuesitosFinal(quesitosFinalAmarillo)
+
               break
             }  
             setColorTematica(colorTematica)  
             setQuesitoTematica(quesitoTematica)
             setEsquinaTematica(esquinaTematica)
-
-            console.log(esquinaTematica + " " + quesitoTematica + " " + colorTematica )
 
             errorPartida = data.error;
             msgIni=1
@@ -383,22 +441,22 @@ const ModoTematica = () => {
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
-                        vector1[indice].quesitos.push(QuesoVerde)
+                        vector1[indice].quesitos.push(quesitosFinal[1])
                       break
                       case "Arte":
-                        vector1[indice].quesitos.push(QuesoRojo)
+                        vector1[indice].quesitos.push(quesitosFinal[2])
                       break
                       case "Deportes":
-                        vector1[indice].quesitos.push(QuesoNaranja)
+                        vector1[indice].quesitos.push(quesitosFinal[3])
                       break
                       case "Entretenimiento":
-                        vector1[indice].quesitos.push(QuesoRosa)
+                        vector1[indice].quesitos.push(quesitosFinal[4])
                       break
                       case "Geografia":
-                        vector1[indice].quesitos.push(QuesoAzul)
+                        vector1[indice].quesitos.push(quesitosFinal[5])
                       break
                       case "Historia":
-                        vector1[indice].quesitos.push(QuesoAmarillo)
+                        vector1[indice].quesitos.push(quesitosFinal[6])
                       break
                     }    
 
@@ -416,26 +474,27 @@ const ModoTematica = () => {
                     vector1Aux.activo = element.activo
                     vector1Aux.ficha = element.ficha
                     vector1Aux.turno = element.turno
-                    vector1Aux.posicion = element.posicion   
+                    vector1Aux.posicion = element.posicion  
+                    console.log(quesitosFinal) 
                     element.quesitos.forEach(ele => {
                       switch(ele) {
                         case "Ciencia":
-                          vector1Aux.quesitos.push(QuesoVerde)
+                          vector1Aux.quesitos.push(quesitosFinal[1])
                         break
                         case "Arte":
-                          vector1Aux.quesitos.push(QuesoRojo)
+                          vector1Aux.quesitos.push(quesitosFinal[2])
                         break
                         case "Deportes":
-                          vector1Aux.quesitos.push(QuesoNaranja)
+                          vector1Aux.quesitos.push(quesitosFinal[3])
                         break
                         case "Entretenimiento":
-                          vector1Aux.quesitos.push(QuesoRosa)
+                          vector1Aux.quesitos.push(quesitosFinal[4])
                         break
                         case "Geografia":
-                          vector1Aux.quesitos.push(QuesoAzul)
+                          vector1Aux.quesitos.push(quesitosFinal[5])
                         break
                         case "Historia":
-                          vector1Aux.quesitos.push(QuesoAmarillo)
+                          vector1Aux.quesitos.push(quesitosFinal[6])
                         break
                       }  
                     })
@@ -462,22 +521,22 @@ const ModoTematica = () => {
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
-                        vector2[indice].quesitos.push(QuesoVerde)
+                        vector2[indice].quesitos.push(quesitosFinal[1])
                       break
                       case "Arte":
-                        vector2[indice].quesitos.push(QuesoRojo)
+                        vector2[indice].quesitos.push(quesitosFinal[2])
                       break
                       case "Deportes":
-                        vector2[indice].quesitos.push(QuesoNaranja)
+                        vector2[indice].quesitos.push(quesitosFinal[3])
                       break
                       case "Entretenimiento":
-                        vector2[indice].quesitos.push(QuesoRosa)
+                        vector2[indice].quesitos.push(quesitosFinal[4])
                       break
                       case "Geografia":
-                        vector2[indice].quesitos.push(QuesoAzul)
+                        vector2[indice].quesitos.push(quesitosFinal[5])
                       break
                       case "Historia":
-                        vector2[indice].quesitos.push(QuesoAmarillo)
+                        vector2[indice].quesitos.push(quesitosFinal[6])
                       break
                     }
                   })         
@@ -497,22 +556,22 @@ const ModoTematica = () => {
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
-                        vector2Aux.quesitos.push(QuesoVerde)
+                        vector2Aux.quesitos.push(quesitosFinal[1])
                       break
                       case "Arte":
-                        vector2Aux.quesitos.push(QuesoRojo)
+                        vector2Aux.quesitos.push(quesitosFinal[2])
                       break
                       case "Deportes":
-                        vector2Aux.quesitos.push(QuesoNaranja)
+                        vector2Aux.quesitos.push(quesitosFinal[3])
                       break
                       case "Entretenimiento":
-                        vector2Aux.quesitos.push(QuesoRosa)
+                        vector2Aux.quesitos.push(quesitosFinal[4])
                       break
                       case "Geografia":
-                        vector2Aux.quesitos.push(QuesoAzul)
+                        vector2Aux.quesitos.push(quesitosFinal[5])
                       break
                       case "Historia":
-                        vector2Aux.quesitos.push(QuesoAmarillo)
+                        vector2Aux.quesitos.push(quesitosFinal[6])
                       break
                     }  
                   })      
@@ -613,7 +672,7 @@ const ModoTematica = () => {
                     casillas.forEach(element => {
                       aux[element] = "parpadea"
                     });
-                    setEstamosEliguiendoCasilla(true)
+                    setEstamosEligiendoCasilla(true)
                     setVprap(aux)
                     pulsarDado()
                     setShow4(false)
@@ -667,7 +726,7 @@ const ModoTematica = () => {
                     setShowDado(true)
                     setShowDado(false)
                     //vaciarRespuestas()
-                    setEstamosEliguiendoCasilla(false)
+                    setEstamosEligiendoCasilla(false)
                     pulsadoDados = 0
                     setIsRunningJugada(true)
                     setPulsadoDados(pulsadoDados)
@@ -727,7 +786,7 @@ const ModoTematica = () => {
                   //El jugador con el turno actual, ha pulsado los dados
                   case "Tirar_dado":
                     setIsRunningJugada(false)
-                    setEstamosEliguiendoCasilla(true)
+                    setEstamosEligiendoCasilla(true)
                     setPulsadoDados(1)
                     break
 
@@ -765,8 +824,8 @@ const ModoTematica = () => {
                     console.log("Actualizacion --> Continuar-partida")
                     setPartidaPausada(false)
                     setIsRunningPausa(false)
-                    console.log(estamosEliguiendoCasilla)
-                    if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+                    console.log(estamosEligiendoCasilla)
+                    if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
                     setShowPausa(false)
                     break
                     
@@ -794,28 +853,30 @@ const ModoTematica = () => {
                     else {
                       //Comprobamos si el jugador al que le tocaba ha respondido bien y ha ganado un quesito
                       if(data.quesito == true && data.esCorrecta == "true"){
+                        console.log(data.tematica)
                         switch(data.tematica) {
                           case "Ciencia":
-                            varAux = QuesoVerde
+                            setVarAux(quesitosFinal[1])
                             break
                           case "Arte":
-                            varAux = QuesoRojo
+                            setVarAux(quesitosFinal[2])
                             break
                           case "Deportes":
-                            varAux = QuesoNaranja
+                            setVarAux(quesitosFinal[3])
                             break
                           case "Entretenimiento":
-                            varAux = QuesoRosa
+                            setVarAux(quesitosFinal[4])
                             break
                           case "Geografia":
-                            varAux = QuesoAzul
+                            setVarAux(quesitosFinal[5])
                             break
                           case "Historia":
-                            varAux = QuesoAmarillo
+                            setVarAux(quesitosFinal[6])                          
                             break
                         }
                         //Miramos a quen le toca el turno y actualizamos los vector de quesitos
                         setVarAux(varAux)
+                        console.log(varAux)
                         //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
                         if (vectorJugadorTurno == "vector1"){
                           vector1[indiceJugadorTurno].quesitos.push(varAux)
@@ -825,6 +886,8 @@ const ModoTematica = () => {
                         }
                         setV1(vector1)
                         setV2(vector2)
+                        console.log(vector1)
+                        console.log(vector2)
 
                       }
                       //ponemos biec las preguntas
@@ -1070,7 +1133,7 @@ const ModoTematica = () => {
                   subtype = "Tirar_dado"
                   console.log("Envio Tirar_dado")
                   enviarMensaje()
-                  setEstamosEliguiendoCasilla(true)
+                  setEstamosEligiendoCasilla(true)
                 } else {
                   console.log("Esperando a que pulse el dado el jugador que le toca")
                 }
@@ -1128,7 +1191,7 @@ const ModoTematica = () => {
               setShowPausa(false)
               setPartidaPausada(false)
               setIsRunningPausa(false)
-              if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+              if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
             }}
         >
             {({ remainingTime }) => remainingTime}
@@ -1184,7 +1247,7 @@ const ModoTematica = () => {
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
-                setEstamosEliguiendoCasilla(true)
+                setEstamosEligiendoCasilla(true)
                 setIsRunningJugada(false)
                 setPulsadoDados(1)
                 type = "Peticion"
@@ -1212,7 +1275,7 @@ const ModoTematica = () => {
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
                 //Peticion para que nos envien el dado y las casillas
-                setEstamosEliguiendoCasilla(true)
+                setEstamosEligiendoCasilla(true)
                 setIsRunningJugada(false)
                 setPulsadoDados(1)
                 type = "Peticion"
@@ -1246,8 +1309,8 @@ const ModoTematica = () => {
   }
 
   function quesitosFin() {
-    return quesitosFinal.map((elemento) => (
-      <img src={elemento} className="App-imagenJugador" style={{ width: "25%", height: "32%", position: "absolute", top:"34%", left:"55%", backgroundColor:"none"}}/>
+    return quesitosFinal.map((elemento)=> (
+      <img src={elemento} className="App-imagenJugador" style={{ width: "25%", height: "32%", position: "absolute", top:"34%", left:"55%", backgroundColor:"none" }}/>
     ));
   }      
   
@@ -1264,7 +1327,7 @@ const ModoTematica = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:`4%`, left:"3%"}}>  
         <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"0%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1287,7 +1350,7 @@ const ModoTematica = () => {
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:"4%", left:"3%"}}>  
           <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"70%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
                     <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
                 <br></br>
             </div>
@@ -1369,22 +1432,22 @@ const ModoTematica = () => {
     if(quesito == true && esCorrecta == "true"){
       switch(tematicaPregunta) {
         case "Ciencia":
-          varAux = QuesoVerde
+          varAux = quesitosFinal[1]
         break
         case "Arte":
-          varAux = QuesoRojo
+          varAux = quesitosFinal[2]
         break
         case "Deportes":
-          varAux = QuesoNaranja
+          varAux = quesitosFinal[3]
         break
         case "Entretenimiento":
-          varAux = QuesoRosa
+          varAux = quesitosFinal[4]
         break
         case "Geografia":
-          varAux = QuesoAzul
+          varAux = quesitosFinal[5]
         break
         case "Historia":
-          varAux = QuesoAmarillo
+          varAux = quesitosFinal[6]
         break
       }
       setVarAux(varAux)
@@ -1465,7 +1528,7 @@ const ModoTematica = () => {
   function continuarPartida() {
     setPartidaPausada(false)
     setIsRunningPausa(false)
-    if (!estamosEliguiendoCasilla) {setIsRunningJugada(true)}
+    if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
     setShowPausa(false)
     type = "Actualizacion"
     subtype = "Continuar_partida"
@@ -1501,15 +1564,15 @@ const ModoTematica = () => {
 
   /* --- MENSAJE POR PANTALLA --- */
   function mensajePantalla(props) {
-    if (estamosEliguiendoCasilla) {
+    if (estamosEligiendoCasilla) {
       if (vectorJugadorTurno == "vector1"){
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
       else {
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eliguiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
     }
@@ -1623,12 +1686,12 @@ const ModoTematica = () => {
                 <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/> 
                 
                 
-                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
-                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
-                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
-                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2={colorTematica} c3={colorTematica} c4={colorTematica} c5={colorTematica} c6={colorTematica} width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
+                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
+                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
+                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
+                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
                 
                   
                 

@@ -167,15 +167,14 @@ const Tienda = () => {
           <div style={{border: "2px solid white", height:"97.9%"}} >
             <div style={{ height:"20%", width:"100%", alignItems:"center", marginTop:"2%"}}>
               <a style={{color:"white", fontSize:"20px"}}>
-                Tablero {item.id}
               </a>
             </div>
             {item.adquirido ? (
-            <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
+            <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"1%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
-                <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
-                <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
+                <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"-5%", left:"34%", backgroundColor:"white"}}/>
+                <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"10%", left:"33%"}}/>
               </div>
             )} 
           </div>
@@ -191,17 +190,12 @@ const Tienda = () => {
       {fichas.slice(0, visibleItems).map((item) => (
         <div key={item.id} className="horizontal-list__item" onClick={() => seleccionar(item)}>
           <div style={{border: "2px solid white", height:"97.9%"}} >
-            <div style={{ height:"20%", width:"100%", alignItems:"center", marginTop:"2%"}}>
-              <a style={{color:"white", fontSize:"20px"}}>
-                Ficha {item.id}
-              </a>
-            </div>
             {item.adquirido ? (
-            <img src={'http://51.142.118.71:8000' + item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"5%", backgroundColor:"white"}}/>
+            <img src={'http://51.142.118.71:8000' + item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"relative", top:"25%", backgroundColor:"white"}}/>
             ) : (
               <div style={{position:"relative", top:"5%", left:"1%"}}>
-                <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"10%", left:"34%", backgroundColor:"white"}}/>
-                <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"37%", left:"33%"}}/>
+                <img src={'http://51.142.118.71:8000'+ item.imagen} className="App-imagenJugador"  style= {{ width:"100px", height:"100px", position:"absolute", top:"70%", left:"34%", backgroundColor:"white"}}/>
+                <img src={Candado} className="App-imagenJugador"  style= {{width:"50px", height:"50px", position:"relative", top:"60%", left:"33%"}}/>
               </div>
             )} 
           </div>
@@ -223,7 +217,7 @@ const Tienda = () => {
         <div className="App-CuadradoNegro"  style= {{width:"100%", height:"30%", top: "0%", left: "-0.2%", position:"relative", border: "2px solid white", borderRadius: "50px 50px 0px 0px"}}>
           <div style={{marginTop:"1%"}}>
             <a style={{color:"white",fontSize:"40px"}}>
-                  Tablero
+              Tablero
             </a>
           </div>
         </div>
@@ -256,7 +250,8 @@ const Tienda = () => {
 
       {show1 ? ( 
         <div style={{position:"absolute", top:"50%", left:"75%",  width:"20%", height:"20%", position:"absolute"}}>
-          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>{itemSeleccionado.nombre} cuesta: {itemSeleccionado.valor} monedas</a>
+          <img src={'http://51.142.118.71:8000'+ itemSeleccionado.imagen} className="App-imagenJugador"  style= {{ width:"50px", height:"50px", position:"absolute", top:"0%", left:"18%"}}/>
+          <a style={{color:"white",fontSize:"40px", fontStyle: "italic"}}>  Cuesta: <br></br>{itemSeleccionado.valor} monedas</a>
         </div>
       ) : (
         <div/>
