@@ -1,14 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import './Estilos/index.css';
 import App from './App';
-import Registrarse from './Registrarse';
-import InicioSesion from './InicioSesion';
-import MenuJuego from './MenuJuego';
-import BuscarPartida from './BuscarPartida';
-import Amigos from './Amigos';
-import Tienda from './Tienda';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
