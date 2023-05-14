@@ -295,12 +295,14 @@ const Tablero = () => {
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
-        // console.log(data)
+        console.log("Mensaje del Backend:")
+        console.log(data)
         if (String(data.type) == ""){
           console.log("Mensaje vacio que no tratamos")
         }
         else {
           if (msgIni==0) {
+            console.log("Mensaje inicial")
             setIsRunningJugada(true)
             indiceJugadorTurno = 0
             vectorJugadorTurno = "vector1"
@@ -313,7 +315,10 @@ const Tablero = () => {
             errorPartida = data.error;
             msgIni=1
             let jugadores = data.jugadores
+            console.log("Carga de jugadores")
+            console.log(jugadores)
             jugadores.forEach(element => {
+              console.log(indice)
               if (indice < (jugadores.length/2)) {
                 if (indice == 0){
                   vector1[indice].nombre = element.jugador
@@ -468,13 +473,18 @@ const Tablero = () => {
                   vector2Aux = limpiarVector2Aux
                 }
               }
+              console.log(indice)
               indice = indice+1;
               setIndice(indice)
             });
+            console.log("Despues de la carga de jugadores")
             setV1(vector1)
             setV2(vector2)
             setJugadorActual(jugadorActual)
             setTablero(tablero)
+            console.log(jugadorActual)
+            console.log(vector1)
+            console.log(vector2)
             //Actualizamos la persona que tiene el turno y en que vector está
             for (let i = 0; i < vector1.length; i++) {
               if (vector1[i].turno == "1"){
@@ -497,6 +507,8 @@ const Tablero = () => {
             setShowDado(true)
             setShow4(false)
             setShow4(true)
+            console.log(indiceJugadorTurno)
+            console.log(vectorJugadorTurno)
           }
           else {
             if (data.type != "Chat"){
@@ -535,6 +547,7 @@ const Tablero = () => {
                 switch(data.subtype) {
                   //Nos devuelven las casillas que puede seleccionar el usuario, tras haber lanzado el dado
                   case "Dado_casillas":
+                    console.log("Respuesta --> Dado Casillas")
                     valor_dado = data.valor_dado
                     for (let i = 0; i < aux.legth; i++) {
                       if (vector1[i].nombre == String(data.jugador)){
@@ -555,6 +568,7 @@ const Tablero = () => {
 
                   //Nos llega una pregunta
                   case "Pregunta":   
+                    console.log("Respuesta --> Pregunta")
                     setShowDado(false)  
                     setEstamosPregunta(true)          
                     enunciado = data.enunciado
@@ -578,6 +592,7 @@ const Tablero = () => {
                     //Vaciamos las casillas
                     vaciarRespuestas()
                     //Activamos el reloj
+                    //setShow3(true)
                     setShow5(false)
                     setShow3(true)
                     setIsRunningRespuesta(true)
@@ -592,10 +607,13 @@ const Tablero = () => {
                 switch(data.subtype) {
                   //Queremos tirar los dados
                   case "Dados":
+                    console.log("Accion --> Dados")
+                    console.log("Casillas nuevas: " + data.casillas_nuevas)
                     setIsRunningJugada(false)
                     setShowDado(false)
                     setShowDado(true)
                     setShowDado(false)
+                    //vaciarRespuestas()
                     setEstamosEligiendoCasilla(false)
                     pulsadoDados = 0
                     setIsRunningJugada(true)
@@ -609,6 +627,7 @@ const Tablero = () => {
                 break
                 
               case "Fin":
+                console.log("Accion --> FIN")
                   ganador = data.jugador
                   setGanador(ganador)
 
@@ -617,6 +636,7 @@ const Tablero = () => {
                   setMonedasGanador(monedasGanador)
                   monedasJugador = data.moneda_resto
                   setMonedasJugador(monedasJugador)
+                  console.log(monedasGanador + " " + monedasJugador + " " + ganador + " " + usuario)
                   if (ganador == usuario) {
                     setMonedasFin(monedasGanador)
                   } else {
@@ -633,6 +653,10 @@ const Tablero = () => {
 
               //Nos llega un mensaje del chat
               case "Chat":
+                /*setIsRunningJugada(true)
+                setShowDado(!showDado)
+                setShowDado(!showDado)*/
+                console.log("Accion --> CHAT")
                 mensajeAux.mensaje = data.mensage_chat
                 mensajeAux.username = data.jugador
                 setMensajeAux(mensajeAux)
@@ -645,6 +669,7 @@ const Tablero = () => {
               
 
               case "Peticion":
+                console.log("Peticion --> Tirar_dado")
                 switch(data.subtype) {
                   //El jugador con el turno actual, ha pulsado los dados
                   case "Tirar_dado":
@@ -655,6 +680,7 @@ const Tablero = () => {
 
                   //El jugador con el turno actual, ha seleccionado la casilla y movemos su ficha
                   case "Movimiento_casilla":
+                    console.log("Peticion --> Movimiento_Casilla")
                     setShowDado(false)
                     if (vectorJugadorTurno == "vector1"){
                       vector1[indiceJugadorTurno].posicion = String(data.casilla_elegida)
@@ -673,6 +699,7 @@ const Tablero = () => {
                 switch(data.subtype) {
                   //Caso de pausar la partida
                   case "Pausar_partida":
+                    console.log("Actualizacion --> Actualización")
                     setShowPausa(true)
                     setPartidaPausada(true)
                     setIsRunningPausa(true)
@@ -682,14 +709,17 @@ const Tablero = () => {
     
                   //Caso de continuar la partida
                   case "Continuar_partida":
+                    console.log("Actualizacion --> Continuar-partida")
                     setPartidaPausada(false)
                     setIsRunningPausa(false)
+                    console.log(estamosEligiendoCasilla)
                     if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
                     setShowPausa(false)
                     break
                     
                   //Caso de contestar la pregunta (nos llegan los datos del que ha contestado, pero no cambiamos de turno ni nada)
                   case "Contestar_pregunta":
+                    console.log("Actualizacion --> Tirar_dado")
                     if (String(data.enunciado) == "noContestada") {
                       aux2[data.rc-1] = "green"
                       for (let i = 0; i < 4; i++){
@@ -699,8 +729,10 @@ const Tablero = () => {
                       }                      
                       setColorPregunta(aux2)
                       vaciarCasillas()
+                      console.log("Antes de entrar en CerrarPregunta NO contestada")
                       isRunningCerrarPregunta = true
                       setIsRunningCerrarPregunta(isRunningCerrarPregunta)
+                      //setShow3(false)
                       setShow3(false)
                       setShow5(true)
                       setShow4(false)
@@ -731,6 +763,7 @@ const Tablero = () => {
                         }
                         //Miramos a quen le toca el turno y actualizamos los vector de quesitos
                         setVarAux(varAux)
+                        //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
                         if (vectorJugadorTurno == "vector1"){
                           vector1[indiceJugadorTurno].quesitos.push(varAux)
                         }
@@ -750,20 +783,25 @@ const Tablero = () => {
                         aux2[data.r1-1] = "red"
                       }
                       setColorPregunta(aux2)
+                      console.log("Antes de entrar en CerrarPregunta NO contestada")
                       isRunningCerrarPregunta = true
                       setIsRunningCerrarPregunta(isRunningCerrarPregunta)
+                      //setShow3(false)
                       setShow3(false)
                       setShow5(true)
                       setShow4(false)
                       setShow4(true)
                     }
                     break
+
                   case "Fin_pregunta":
+                    console.log("Actualizacion --> Fin_pregunta")
                     setShowDado(true)
                     break
                 } 
             }
           }
+          console.log("Sale del autómata")
         }
       } catch (err) {
         console.log(err);
@@ -782,6 +820,27 @@ const Tablero = () => {
 
   //Función que envía un mensaje con los campos siguientes al Backend
   const enviarMensaje = () => {
+    console.log("Enviar mensaje al backend ")
+    console.log(JSON.stringify({
+      OK:"true",
+      jugador:usuario,
+      type:type,
+      subtype: subtype,
+      valor_dado: valor_dado,
+      casilla_elegida: casilla_elegida,
+      casillas_nuevas: casillas_nuevas,
+      enunciado: enunciado,
+      tematica: tematicaPregunta,
+      r1: r1,
+      r2: r2,
+      r3: r3,
+      r4: r4,
+      rc: rc,
+      quesito: quesito,
+      esCorrecta: esCorrecta,
+      mensage_chat: mensage_chat,
+      error: errorPartida
+    }))
     chatSocketRef.current.send(
       JSON.stringify({
         OK:"true",
@@ -822,6 +881,7 @@ const Tablero = () => {
         ...cubeStyle,
         transition: `transform ${time}s` 
       });
+      console.log("Valor del dado en la función del Dado: " + valor_dado)
       switch(valor_dado) {
         case "1":
           setCubeStyle({
@@ -947,6 +1007,7 @@ const Tablero = () => {
               size={100}
               onComplete={() => {
                 // Detiene el reloj
+                console.log("RELOJ LANZAR DADO ha finalizado");
                 // Lanzar el dado aleatorimente
                 if (jugadorActual==1 && pulsadoDados == 0){
                   //Peticion para que nos envien el dado y las casillas
@@ -954,6 +1015,7 @@ const Tablero = () => {
                   setPulsadoDados(1)
                   type = "Peticion"
                   subtype = "Tirar_dado"
+                  console.log("Envio Tirar_dado")
                   enviarMensaje()
                   setEstamosEligiendoCasilla(true)
                 } else {
@@ -970,6 +1032,8 @@ const Tablero = () => {
 
   //Reloj que trata el tiempo de respuesta del jugador a una respuesta
   const RelojRespuesta = () => {
+    console.log("HE ENTRADO EN RELOJ RESPUESTA")
+    //setIsRunningRespuesta(true)
       return (    
       <div>
           <CountdownCircleTimer
@@ -980,9 +1044,12 @@ const Tablero = () => {
               size={100}
               onComplete={() => {
               // Detiene el reloj
+              console.log("RELOJ RESPUESTA ha finalizado");
               // Se da la pregunta por fallada y se cambia de turno + mensjae de fin de pregunta 
+
               if(jugadorActual ==1){finTiempoRespuesta()}
               setIsRunningRespuesta(false)
+
             }}
           >
               {({ remainingTime }) => remainingTime}
@@ -1003,6 +1070,7 @@ const Tablero = () => {
             size={100}
             onComplete={() => {
               //Paramos el reloj
+              console.log("RELOJ PAUSAR PARTIDA ha finalizado");
               //Quitamos la pausa y seguimos jugando
               setShowPausa(false)
               setPartidaPausada(false)
@@ -1018,6 +1086,7 @@ const Tablero = () => {
 
   //Reloj que se al tiempo para quitar en todos los usuarios el div de la pregunta
   const RelojCerrarPregunta = () => {
+    console.log("HE ENTRADO EN RELOJ CERRAR PREGUNTA" + "isrunning ")
     return (    
     <div>
       <CountdownCircleTimer
@@ -1028,6 +1097,7 @@ const Tablero = () => {
           size={100}
           onComplete={() => {
             //Paramos el reloj
+            console.log("RELOJ CERRAR PREGUNTA HA finalizado, el jugador actual es:" + jugadorActual);
             //Quitamos la pausa y seguimos jugando
             if (jugadorActual==1){cerrarPregunta();setEstamosPregunta(false)}
             else {
@@ -1054,6 +1124,8 @@ const Tablero = () => {
       return (
         <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> { } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
+                {console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)}
+                {console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " Tiemporespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)}
                 {RelojJugada()}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
@@ -1064,6 +1136,7 @@ const Tablero = () => {
                 setPulsadoDados(1)
                 type = "Peticion"
                 subtype = "Tirar_dado"
+                console.log("Envio Tirar_dado")
                 enviarMensaje()
               } else {
                 console.log("Esperando a que pulse el dado el jugador que le toca")
@@ -1075,10 +1148,13 @@ const Tablero = () => {
       )
     }
     else {
+      //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
         <div style={{ position:"absolute", top:posv2[indiceJugadorTurno].top, left:posv2[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
+                {console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)}
+                {console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " Tiemporespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
@@ -1088,6 +1164,7 @@ const Tablero = () => {
                 setPulsadoDados(1)
                 type = "Peticion"
                 subtype = "Tirar_dado"
+                console.log("Envio Tirar_dado")
                 enviarMensaje()
               } else {
                 console.log("Esperando a que pulse el dado el jugador que le toca")
@@ -1111,6 +1188,7 @@ const Tablero = () => {
     type = "Peticion"
     subtype = "Movimiento_casilla"
     casilla_elegida = props
+    console.log("Envio Mover casilla" + casillaSeleccionada + " " + props)
     enviarMensaje()
   }
 
@@ -1208,6 +1286,7 @@ const Tablero = () => {
 
     type = "Actualizacion"
     subtype = "Fin_pregunta"
+    console.log("Envio Fin de pregunta a todos, para que vuelvan a lanzar los dados")
     enviarMensaje()
 
     //vaciarRespuestas()
@@ -1293,6 +1372,7 @@ const Tablero = () => {
     type = "Actualizacion"
     subtype = "Contestar_pregunta"
     enviarMensaje()
+    console.log("HA TERMINADO ES_CORRECTA") 
   }
 
   function fun_colorTematica(tematicaPregunta){
@@ -1320,6 +1400,7 @@ const Tablero = () => {
 
   /* --- NO HA CONTESTADO LA PREGUNTA --- */
   function finTiempoRespuesta() {
+    console.log("ENTRAMOS EN FIN TIEMPO RESPUESTA")
     aux2[rc-1] = "green"
     for (let i = 0; i < 4; i++){
       if (i != (rc-1) ){
@@ -1328,6 +1409,7 @@ const Tablero = () => {
     }      
     setColorPregunta(aux2)
     vaciarCasillas()
+    console.log("Estamos en FIN DE PREGUNTA")
     esCorrecta = "false"
     setEsCorrecta(esCorrecta)
     setContestada(true)
@@ -1357,6 +1439,7 @@ const Tablero = () => {
     setShowPausa(false)
     type = "Actualizacion"
     subtype = "Continuar_partida"
+    console.log("Continuamos la partida")
     enviarMensaje()
   }
 
@@ -1369,6 +1452,7 @@ const Tablero = () => {
     RelojPausa()
     type = "Actualizacion"
     subtype = "Pausar_partida"
+    console.log("Pausamos la partida")
     enviarMensaje()
   }
 
@@ -1439,6 +1523,7 @@ const Tablero = () => {
 
   /* --- CHAT --- */
   function enviarMensajeChat () {
+    console.log("Función enviar Mensaje")
     chat.push(mensaje)
     setChat(chat)
     type = "Chat"
@@ -1459,6 +1544,7 @@ const Tablero = () => {
   }
 
   function scrollChat() {      
+    console.log(chat)
     return (
       <div style={{position:"absolute", top:"0%", left:"75.2%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"rgb(62, 108, 133)", borderRadius:"0px 0px 0px 30px", zIndex:"10"}}>
         <a style={{color:"black", fontSize:"30px"}}> CHAT </a>
@@ -1581,6 +1667,7 @@ const Tablero = () => {
                     {show3 ? (
                       <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
                         {RelojRespuesta()}
+                        {console.log("Realizao la función relojRespuesta")}
                       </div>
                     ) : ( 
                       <div >
@@ -1589,6 +1676,7 @@ const Tablero = () => {
                     {show5 ? (
                       <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
                         {RelojCerrarPregunta()}
+                        {console.log("Realizao la función relojCerrarPregunta")}
                       </div>
                     ) : ( 
                       <div >

@@ -78,7 +78,7 @@ const ModoClasico = () => {
       .then((data) => {console.log(data)
         if (data.OK == "True") {
           setWeb(data.ws_partida)
-          setTipo(data.tipo)
+          setTipo(data.Tipo)
           setShow4(true)
         }
         
@@ -183,7 +183,15 @@ const ModoClasico = () => {
   function funcionEntrar3() {
     cookies.set('WebSocketTablero', webs, {path: '/'})
     cookies.set('tipo_partida', tipo, {path: '/'})
-    navigate(process.env.PUBLIC_URL+ '/Tablero');
+    if (tipo == "Clasico") {
+      navigate(process.env.PUBLIC_URL+ '/Tablero');
+    }
+    else if (tipo == "Tematico") {
+      navigate(process.env.PUBLIC_URL+ '/TableroTematica');
+    }
+    else if (tipo == "Equipo") {
+      navigate(process.env.PUBLIC_URL+ '/TableroEquipos');
+    }
   }
 
 

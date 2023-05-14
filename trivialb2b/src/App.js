@@ -28,6 +28,7 @@ import DarDeBaja from './DarDeBaja';
 import EsperandoJugadores from './EsperandoJugadores';
 import Tablero from './Tablero';
 import TableroTematica from './TableroTematica';
+import TableroEquipos from './TableroEquipos';
 
 
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
       <Route path= '/EsperandoJugadores' Component={EsperandoJugadores} /> 
       <Route path= '/Tablero' Component={Tablero} />
       <Route path= '/TableroTematica' Component={TableroTematica} />
+      <Route path= '/TableroEquipos' Component={TableroEquipos} />
     </Routes>
     </BrowserRouter>
   );
