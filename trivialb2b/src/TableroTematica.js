@@ -13,6 +13,7 @@ import Esquina_naranja from './Imagenes/Esquina_naranja.png';
 import Esquina_roja from './Imagenes/Esquina_roja.png';
 import Esquina_verde from './Imagenes/Esquina_verde.png';
 import Esquina_rosa from './Imagenes/Esquina_rosa.png';
+import Esquina_gris from './Imagenes/Esquina_gris.png';
 
 import QuesoAzul from './Imagenes/QuesitoAzul.png';
 import QuesoAmarillo from './Imagenes/QuesitoAmarillo.png';
@@ -166,7 +167,9 @@ const ModoTematica = () => {
   const contraseña = cookies.get('password_sala');
   const websocket = cookies.get('WebSocketTablero');
 
-  let [quesitosFinal, setQuesitosFinal] = useState(["","","", "", "", "", ""])
+  let [quesitosFinal, setQuesitosFinal] = useState(["","","","","","",""])
+
+  let [esquinasFinal, setEsquinasFinal] = useState(["","","","","",""])
 
   const quesitosFinalRojo = [QuesitosGeneral, QuesoRojo1, QuesoRojo2, QuesoRojo3, QuesoRojo4, QuesoRojo5, QuesoRojo6]
   const quesitosFinalVerde = [QuesitosGeneral, QuesoVerde1, QuesoVerde2, QuesoVerde3, QuesoVerde4, QuesoVerde5, QuesoVerde6]
@@ -207,7 +210,6 @@ const ModoTematica = () => {
 
   //variables del chat
   const [showChat, setShowChat] = useState(false)
-  const [showChat2, setShowChat2] = useState(false)
   const [mensaje, setMensaje] = useState({username: "", mensaje: "" })
   let [mensajeAux, setMensajeAux] = useState({username: "", mensaje: "" })
   let [chat, setChat] = useState([])
@@ -354,14 +356,12 @@ const ModoTematica = () => {
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
-        console.log("Mensaje del Backend:")
-        console.log(data)
+        // console.log(data)
         if (String(data.type) == ""){
           console.log("Mensaje vacio que no tratamos")
         }
         else {
           if (msgIni==0) {
-            console.log("Mensaje inicial")
             setIsRunningJugada(true)
             indiceJugadorTurno = 0
             vectorJugadorTurno = "vector1"
@@ -378,21 +378,33 @@ const ModoTematica = () => {
                 esquinaTematica = Esquina_verde
                 quesitoTematica = QuesoVerde
                 colorTematica = "#73fc67"
-                setQuesitosFinal(quesitosFinalVerde)
-
+                for (let i = 0; i < quesitosFinal.length;i++){
+                  quesitosFinal[i] = quesitosFinalVerde[i]
+                }
+                setQuesitosFinal(quesitosFinal)
+                //setQuesitosFinal(quesitosFinalVerde)
+                
               break
               case "Arte":
                 esquinaTematica = Esquina_roja
                 quesitoTematica = QuesoRojo
                 colorTematica = "#fc6767"
-                setQuesitosFinal(quesitosFinalRojo)
+                for (let i = 0; i < quesitosFinal.length;i++){
+                  quesitosFinal[i] = quesitosFinalRojo[i]
+                }
+                setQuesitosFinal(quesitosFinal)
+                //setQuesitosFinal(quesitosFinalRojo)
 
               break
               case "Deportes":
                 esquinaTematica = Esquina_naranja
                 quesitoTematica = QuesoNaranja
                 colorTematica = "#fcbb67"
-                setQuesitosFinal(quesitosFinalNaranja)
+                for (let i = 0; i < quesitosFinal.length;i++){
+                  quesitosFinal[i] = quesitosFinalNaranja[i]
+                }
+                setQuesitosFinal(quesitosFinal)
+                //setQuesitosFinal(quesitosFinalNaranja)
 
               break
 
@@ -400,7 +412,11 @@ const ModoTematica = () => {
                 esquinaTematica = Esquina_rosa
                 quesitoTematica = QuesoRosa
                 colorTematica = "pink"
-                setQuesitosFinal(quesitosFinalRosa)
+                for (let i = 0; i < quesitosFinal.length;i++){
+                  quesitosFinal[i] = quesitosFinalRosa[i]
+                }
+                setQuesitosFinal(quesitosFinal)
+                //setQuesitosFinal(quesitosFinalRosa)
 
               break
 
@@ -408,7 +424,11 @@ const ModoTematica = () => {
                 esquinaTematica = Esquina_azul
                 quesitoTematica = QuesoAzul 
                 colorTematica = "#61dafb"
-                setQuesitosFinal(quesitosFinalAzul)
+                for (let i = 0; i < quesitosFinal.length;i++){
+                  quesitosFinal[i] = quesitosFinalAzul[i]
+                }
+                setQuesitosFinal(quesitosFinal)
+                //setQuesitosFinal(quesitosFinalAzul)
 
               break
 
@@ -416,21 +436,24 @@ const ModoTematica = () => {
                 esquinaTematica = Esquina_amarilla
                 quesitoTematica = QuesoAmarillo
                 colorTematica = "#fcf267"
-                setQuesitosFinal(quesitosFinalAmarillo)
+                for (let i = 0; i < quesitosFinal.length;i++){
+                  quesitosFinal[i] = quesitosFinalAmarillo[i]
+                }
+                //setQuesitosFinal(quesitosFinalAmarillo)
 
               break
             }  
             setColorTematica(colorTematica)  
             setQuesitoTematica(quesitoTematica)
             setEsquinaTematica(esquinaTematica)
+            for (let i = 0; i < esquinasFinal.length; i++){
+              esquinasFinal[i] = esquinaTematica
+            }
 
             errorPartida = data.error;
             msgIni=1
             let jugadores = data.jugadores
-            console.log("Carga de jugadores")
-            console.log(jugadores)
             jugadores.forEach(element => {
-              console.log(indice)
               if (indice < (jugadores.length/2)) {
                 if (indice == 0){
                   vector1[indice].nombre = element.jugador
@@ -441,27 +464,44 @@ const ModoTematica = () => {
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
-                        vector1[indice].quesitos.push(quesitosFinal[1])
+                        vector1[indice].quesitos.push(quesitosFinal[4])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[0] = Esquina_gris
+                        }
                       break
                       case "Arte":
-                        vector1[indice].quesitos.push(quesitosFinal[2])
+                        vector1[indice].quesitos.push(quesitosFinal[5])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[1] = Esquina_gris
+                        }
                       break
                       case "Deportes":
-                        vector1[indice].quesitos.push(quesitosFinal[3])
+                        vector1[indice].quesitos.push(quesitosFinal[1])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[2] = Esquina_gris
+                        }
                       break
                       case "Entretenimiento":
-                        vector1[indice].quesitos.push(quesitosFinal[4])
+                        vector1[indice].quesitos.push(quesitosFinal[3])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[3] = Esquina_gris
+                        }
                       break
                       case "Geografia":
-                        vector1[indice].quesitos.push(quesitosFinal[5])
+                        vector1[indice].quesitos.push(quesitosFinal[6])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[4] = Esquina_gris
+                        }
                       break
                       case "Historia":
-                        vector1[indice].quesitos.push(quesitosFinal[6])
+                        vector1[indice].quesitos.push(quesitosFinal[2])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[5] = Esquina_gris
+                        }
                       break
                     }    
-
                   })
- 
+                  setEsquinasFinal(esquinasFinal)
                   vector1[indice].tablero = element.tablero  
                   if (vector1[indice].nombre == usuario) {
                     tablero = vector1[indice].tablero 
@@ -474,30 +514,48 @@ const ModoTematica = () => {
                     vector1Aux.activo = element.activo
                     vector1Aux.ficha = element.ficha
                     vector1Aux.turno = element.turno
-                    vector1Aux.posicion = element.posicion  
-                    console.log(quesitosFinal) 
+                    vector1Aux.posicion = element.posicion   
                     element.quesitos.forEach(ele => {
                       switch(ele) {
                         case "Ciencia":
-                          vector1Aux.quesitos.push(quesitosFinal[1])
+                          vector1Aux.quesitos.push(quesitosFinal[4])
+                          if (vector1[indice].nombre == usuario){
+                            esquinasFinal[0] = Esquina_gris
+                          }
                         break
                         case "Arte":
-                          vector1Aux.quesitos.push(quesitosFinal[2])
+                          vector1Aux.quesitos.push(quesitosFinal[5])
+                          if (vector1[indice].nombre == usuario){
+                            esquinasFinal[1] = Esquina_gris
+                          }
                         break
                         case "Deportes":
-                          vector1Aux.quesitos.push(quesitosFinal[3])
+                          vector1Aux.quesitos.push(quesitosFinal[1])
+                          if (vector1[indice].nombre == usuario){
+                            esquinasFinal[2] = Esquina_gris
+                          }
                         break
                         case "Entretenimiento":
-                          vector1Aux.quesitos.push(quesitosFinal[4])
+                          vector1Aux.quesitos.push(quesitosFinal[3])
+                          if (vector1[indice].nombre == usuario){
+                            esquinasFinal[3] = Esquina_gris
+                          }
                         break
                         case "Geografia":
-                          vector1Aux.quesitos.push(quesitosFinal[5])
+                          vector1Aux.quesitos.push(quesitosFinal[6])
+                          if (vector1[indice].nombre == usuario){
+                            esquinasFinal[4] = Esquina_gris
+                          }
                         break
                         case "Historia":
-                          vector1Aux.quesitos.push(quesitosFinal[6])
+                          vector1Aux.quesitos.push(quesitosFinal[2])
+                          if (vector1[indice].nombre == usuario){
+                            esquinasFinal[5] = Esquina_gris
+                          }
                         break
                       }  
                     })
+                    setEsquinasFinal(esquinasFinal)
                     vector1Aux.tablero = element.tablero     
                     if (vector1Aux.nombre == usuario) {
                       tablero = vector1Aux.tablero 
@@ -521,25 +579,44 @@ const ModoTematica = () => {
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
-                        vector2[indice].quesitos.push(quesitosFinal[1])
+                        vector2[indice].quesitos.push(quesitosFinal[4])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[0] = Esquina_gris
+                        }
                       break
                       case "Arte":
-                        vector2[indice].quesitos.push(quesitosFinal[2])
+                        vector2[indice].quesitos.push(quesitosFinal[5])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[1] = Esquina_gris
+                        }
                       break
                       case "Deportes":
-                        vector2[indice].quesitos.push(quesitosFinal[3])
+                        vector2[indice].quesitos.push(quesitosFinal[1])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[2] = Esquina_gris
+                        }
                       break
                       case "Entretenimiento":
-                        vector2[indice].quesitos.push(quesitosFinal[4])
+                        vector2[indice].quesitos.push(quesitosFinal[3])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[3] = Esquina_gris
+                        }
                       break
                       case "Geografia":
-                        vector2[indice].quesitos.push(quesitosFinal[5])
+                        vector2[indice].quesitos.push(quesitosFinal[6])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[4] = Esquina_gris
+                        }
                       break
                       case "Historia":
-                        vector2[indice].quesitos.push(quesitosFinal[6])
+                        vector2[indice].quesitos.push(quesitosFinal[2])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[5] = Esquina_gris
+                        }
                       break
                     }
                   })         
+                  setEsquinasFinal(esquinasFinal)
                   vector2[indiceAux].tablero = element.tablero  
                   if (vector2[indiceAux].nombre == usuario) {
                     tablero = vector2[indiceAux].tablero 
@@ -556,25 +633,44 @@ const ModoTematica = () => {
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
-                        vector2Aux.quesitos.push(quesitosFinal[1])
+                        vector2Aux.quesitos.push(quesitosFinal[4])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[0] = Esquina_gris
+                        }
                       break
                       case "Arte":
-                        vector2Aux.quesitos.push(quesitosFinal[2])
+                        vector2Aux.quesitos.push(quesitosFinal[5])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[1] = Esquina_gris
+                        }
                       break
                       case "Deportes":
-                        vector2Aux.quesitos.push(quesitosFinal[3])
+                        vector2Aux.quesitos.push(quesitosFinal[1])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[2] = Esquina_gris
+                        }
                       break
                       case "Entretenimiento":
-                        vector2Aux.quesitos.push(quesitosFinal[4])
+                        vector2Aux.quesitos.push(quesitosFinal[3])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[3] = Esquina_gris
+                        }
                       break
                       case "Geografia":
-                        vector2Aux.quesitos.push(quesitosFinal[5])
+                        vector2Aux.quesitos.push(quesitosFinal[6])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[4] = Esquina_gris
+                        }
                       break
                       case "Historia":
-                        vector2Aux.quesitos.push(quesitosFinal[6])
+                        vector2Aux.quesitos.push(quesitosFinal[2])
+                        if (vector1[indice].nombre == usuario){
+                          esquinasFinal[5] = Esquina_gris
+                        }
                       break
                     }  
                   })      
+                  setEsquinasFinal(esquinasFinal)
                   vector2Aux.tablero = element.tablero     
                   if (vector2Aux.nombre == usuario) {
                     tablero = vector2Aux.tablero 
@@ -586,18 +682,13 @@ const ModoTematica = () => {
                   vector2Aux = limpiarVector2Aux
                 }
               }
-              console.log(indice)
               indice = indice+1;
               setIndice(indice)
             });
-            console.log("Despues de la carga de jugadores")
             setV1(vector1)
             setV2(vector2)
             setJugadorActual(jugadorActual)
             setTablero(tablero)
-            console.log(jugadorActual)
-            console.log(vector1)
-            console.log(vector2)
             //Actualizamos la persona que tiene el turno y en que vector está
             for (let i = 0; i < vector1.length; i++) {
               if (vector1[i].turno == "1"){
@@ -615,13 +706,10 @@ const ModoTematica = () => {
                 setVectorJugadorTurno(vectorJugadorTurno)
               }
             }
-
             //Logica del mensaje inicial
             setShowDado(true)
             setShow4(false)
             setShow4(true)
-            console.log(indiceJugadorTurno)
-            console.log(vectorJugadorTurno)
           }
           else {
             if (data.type != "Chat"){
@@ -660,7 +748,6 @@ const ModoTematica = () => {
                 switch(data.subtype) {
                   //Nos devuelven las casillas que puede seleccionar el usuario, tras haber lanzado el dado
                   case "Dado_casillas":
-                    console.log("Respuesta --> Dado Casillas")
                     valor_dado = data.valor_dado
                     for (let i = 0; i < aux.legth; i++) {
                       if (vector1[i].nombre == String(data.jugador)){
@@ -681,7 +768,6 @@ const ModoTematica = () => {
 
                   //Nos llega una pregunta
                   case "Pregunta":   
-                    console.log("Respuesta --> Pregunta")
                     setShowDado(false)  
                     setEstamosPregunta(true)          
                     enunciado = data.enunciado
@@ -704,7 +790,6 @@ const ModoTematica = () => {
                     //Vaciamos las casillas
                     vaciarRespuestas()
                     //Activamos el reloj
-                    //setShow3(true)
                     setShow5(false)
                     setShow3(true)
                     setIsRunningRespuesta(true)
@@ -719,8 +804,6 @@ const ModoTematica = () => {
                 switch(data.subtype) {
                   //Queremos tirar los dados
                   case "Dados":
-                    console.log("Accion --> Dados")
-                    console.log("Casillas nuevas: " + data.casillas_nuevas)
                     setIsRunningJugada(false)
                     setShowDado(false)
                     setShowDado(true)
@@ -739,16 +822,13 @@ const ModoTematica = () => {
                 break
                 
               case "Fin":
-                console.log("Accion --> FIN")
                   ganador = data.jugador
                   setGanador(ganador)
-
                   //Tratamiento de las monedas
                   monedasGanador = data.moneda_ganador
                   setMonedasGanador(monedasGanador)
                   monedasJugador = data.moneda_resto
                   setMonedasJugador(monedasJugador)
-                  console.log(monedasGanador + " " + monedasJugador + " " + ganador + " " + usuario)
                   if (ganador == usuario) {
                     setMonedasFin(monedasGanador)
                   } else {
@@ -765,10 +845,6 @@ const ModoTematica = () => {
 
               //Nos llega un mensaje del chat
               case "Chat":
-                /*setIsRunningJugada(true)
-                setShowDado(!showDado)
-                setShowDado(!showDado)*/
-                console.log("Accion --> CHAT")
                 mensajeAux.mensaje = data.mensage_chat
                 mensajeAux.username = data.jugador
                 setMensajeAux(mensajeAux)
@@ -781,7 +857,6 @@ const ModoTematica = () => {
               
 
               case "Peticion":
-                console.log("Peticion --> Tirar_dado")
                 switch(data.subtype) {
                   //El jugador con el turno actual, ha pulsado los dados
                   case "Tirar_dado":
@@ -792,7 +867,6 @@ const ModoTematica = () => {
 
                   //El jugador con el turno actual, ha seleccionado la casilla y movemos su ficha
                   case "Movimiento_casilla":
-                    console.log("Peticion --> Movimiento_Casilla")
                     setShowDado(false)
                     if (vectorJugadorTurno == "vector1"){
                       vector1[indiceJugadorTurno].posicion = String(data.casilla_elegida)
@@ -811,7 +885,6 @@ const ModoTematica = () => {
                 switch(data.subtype) {
                   //Caso de pausar la partida
                   case "Pausar_partida":
-                    console.log("Actualizacion --> Actualización")
                     setShowPausa(true)
                     setPartidaPausada(true)
                     setIsRunningPausa(true)
@@ -821,17 +894,14 @@ const ModoTematica = () => {
     
                   //Caso de continuar la partida
                   case "Continuar_partida":
-                    console.log("Actualizacion --> Continuar-partida")
                     setPartidaPausada(false)
                     setIsRunningPausa(false)
-                    console.log(estamosEligiendoCasilla)
                     if (!estamosEligiendoCasilla) {setIsRunningJugada(true)}
                     setShowPausa(false)
                     break
                     
                   //Caso de contestar la pregunta (nos llegan los datos del que ha contestado, pero no cambiamos de turno ni nada)
                   case "Contestar_pregunta":
-                    console.log("Actualizacion --> Tirar_dado")
                     if (String(data.enunciado) == "noContestada") {
                       aux2[data.rc-1] = "green"
                       for (let i = 0; i < 4; i++){
@@ -841,7 +911,6 @@ const ModoTematica = () => {
                       }                      
                       setColorPregunta(aux2)
                       vaciarCasillas()
-                      console.log("Antes de entrar en CerrarPregunta NO contestada")
                       isRunningCerrarPregunta = true
                       setIsRunningCerrarPregunta(isRunningCerrarPregunta)
                       //setShow3(false)
@@ -853,42 +922,37 @@ const ModoTematica = () => {
                     else {
                       //Comprobamos si el jugador al que le tocaba ha respondido bien y ha ganado un quesito
                       if(data.quesito == true && data.esCorrecta == "true"){
-                        console.log(data.tematica)
+                        let var1 
                         switch(data.tematica) {
                           case "Ciencia":
-                            setVarAux(quesitosFinal[1])
+                            var1 = quesitosFinal[4]
                             break
                           case "Arte":
-                            setVarAux(quesitosFinal[2])
+                            var1 = quesitosFinal[5]
                             break
                           case "Deportes":
-                            setVarAux(quesitosFinal[3])
+                            var1 = quesitosFinal[1]
                             break
                           case "Entretenimiento":
-                            setVarAux(quesitosFinal[4])
+                            var1 = quesitosFinal[3]
                             break
                           case "Geografia":
-                            setVarAux(quesitosFinal[5])
+                            var1 = quesitosFinal[6]
                             break
                           case "Historia":
-                            setVarAux(quesitosFinal[6])                          
+                            var1 = quesitosFinal[2]                  
                             break
                         }
+                        setEsquinasFinal(esquinasFinal)
                         //Miramos a quen le toca el turno y actualizamos los vector de quesitos
-                        setVarAux(varAux)
-                        console.log(varAux)
-                        //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
                         if (vectorJugadorTurno == "vector1"){
-                          vector1[indiceJugadorTurno].quesitos.push(varAux)
+                          vector1[indiceJugadorTurno].quesitos.push(var1)
                         }
                         else {
-                          vector2[indiceJugadorTurno].quesitos.push(varAux)
+                          vector2[indiceJugadorTurno].quesitos.push(var1)
                         }
                         setV1(vector1)
                         setV2(vector2)
-                        console.log(vector1)
-                        console.log(vector2)
-
                       }
                       //ponemos biec las preguntas
                       if (data.esCorrecta == "true"){
@@ -899,7 +963,6 @@ const ModoTematica = () => {
                         aux2[data.r1-1] = "red"
                       }
                       setColorPregunta(aux2)
-                      console.log("Antes de entrar en CerrarPregunta NO contestada")
                       isRunningCerrarPregunta = true
                       setIsRunningCerrarPregunta(isRunningCerrarPregunta)
                       //setShow3(false)
@@ -911,13 +974,11 @@ const ModoTematica = () => {
                     break
 
                   case "Fin_pregunta":
-                    console.log("Actualizacion --> Fin_pregunta")
                     setShowDado(true)
                     break
                 } 
             }
           }
-          console.log("Sale del autómata")
         }
       } catch (err) {
         console.log(err);
@@ -936,27 +997,6 @@ const ModoTematica = () => {
 
   //Función que envía un mensaje con los campos siguientes al Backend
   const enviarMensaje = () => {
-    console.log("Enviar mensaje al backend ")
-    console.log(JSON.stringify({
-      OK:"true",
-      jugador:usuario,
-      type:type,
-      subtype: subtype,
-      valor_dado: valor_dado,
-      casilla_elegida: casilla_elegida,
-      casillas_nuevas: casillas_nuevas,
-      enunciado: enunciado,
-      tematica: tematicaPregunta,
-      r1: r1,
-      r2: r2,
-      r3: r3,
-      r4: r4,
-      rc: rc,
-      quesito: quesito,
-      esCorrecta: esCorrecta,
-      mensage_chat: mensage_chat,
-      error: errorPartida
-    }))
     chatSocketRef.current.send(
       JSON.stringify({
         OK:"true",
@@ -997,7 +1037,6 @@ const ModoTematica = () => {
         ...cubeStyle,
         transition: `transform ${time}s` 
       });
-      console.log("Valor del dado en la función del Dado: " + valor_dado)
       switch(valor_dado) {
         case "1":
           setCubeStyle({
@@ -1123,7 +1162,6 @@ const ModoTematica = () => {
               size={100}
               onComplete={() => {
                 // Detiene el reloj
-                console.log("RELOJ LANZAR DADO ha finalizado");
                 // Lanzar el dado aleatorimente
                 if (jugadorActual==1 && pulsadoDados == 0){
                   //Peticion para que nos envien el dado y las casillas
@@ -1131,7 +1169,6 @@ const ModoTematica = () => {
                   setPulsadoDados(1)
                   type = "Peticion"
                   subtype = "Tirar_dado"
-                  console.log("Envio Tirar_dado")
                   enviarMensaje()
                   setEstamosEligiendoCasilla(true)
                 } else {
@@ -1148,8 +1185,6 @@ const ModoTematica = () => {
 
   //Reloj que trata el tiempo de respuesta del jugador a una respuesta
   const RelojRespuesta = () => {
-    console.log("HE ENTRADO EN RELOJ RESPUESTA")
-    //setIsRunningRespuesta(true)
       return (    
       <div>
           <CountdownCircleTimer
@@ -1160,9 +1195,7 @@ const ModoTematica = () => {
               size={100}
               onComplete={() => {
               // Detiene el reloj
-              console.log("RELOJ RESPUESTA ha finalizado");
               // Se da la pregunta por fallada y se cambia de turno + mensjae de fin de pregunta 
-
               if(jugadorActual ==1){finTiempoRespuesta()}
               setIsRunningRespuesta(false)
 
@@ -1186,7 +1219,6 @@ const ModoTematica = () => {
             size={100}
             onComplete={() => {
               //Paramos el reloj
-              console.log("RELOJ PAUSAR PARTIDA ha finalizado");
               //Quitamos la pausa y seguimos jugando
               setShowPausa(false)
               setPartidaPausada(false)
@@ -1202,7 +1234,6 @@ const ModoTematica = () => {
 
   //Reloj que se al tiempo para quitar en todos los usuarios el div de la pregunta
   const RelojCerrarPregunta = () => {
-    console.log("HE ENTRADO EN RELOJ CERRAR PREGUNTA" + "isrunning ")
     return (    
     <div>
       <CountdownCircleTimer
@@ -1213,7 +1244,6 @@ const ModoTematica = () => {
           size={100}
           onComplete={() => {
             //Paramos el reloj
-            console.log("RELOJ CERRAR PREGUNTA HA finalizado, el jugador actual es:" + jugadorActual);
             //Quitamos la pausa y seguimos jugando
             if (jugadorActual==1){cerrarPregunta();setEstamosPregunta(false)}
             else {
@@ -1240,8 +1270,6 @@ const ModoTematica = () => {
       return (
         <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> { } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
-                {console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)}
-                {console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " Tiemporespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)}
                 {RelojJugada()}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
@@ -1252,7 +1280,6 @@ const ModoTematica = () => {
                 setPulsadoDados(1)
                 type = "Peticion"
                 subtype = "Tirar_dado"
-                console.log("Envio Tirar_dado")
                 enviarMensaje()
               } else {
                 console.log("Esperando a que pulse el dado el jugador que le toca")
@@ -1264,13 +1291,10 @@ const ModoTematica = () => {
       )
     }
     else {
-      //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
         <div style={{ position:"absolute", top:posv2[indiceJugadorTurno].top, left:posv2[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
-                {console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)}
-                {console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " Tiemporespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
@@ -1280,7 +1304,6 @@ const ModoTematica = () => {
                 setPulsadoDados(1)
                 type = "Peticion"
                 subtype = "Tirar_dado"
-                console.log("Envio Tirar_dado")
                 enviarMensaje()
               } else {
                 console.log("Esperando a que pulse el dado el jugador que le toca")
@@ -1304,7 +1327,6 @@ const ModoTematica = () => {
     type = "Peticion"
     subtype = "Movimiento_casilla"
     casilla_elegida = props
-    console.log("Envio Mover casilla" + casillaSeleccionada + " " + props)
     enviarMensaje()
   }
 
@@ -1356,7 +1378,7 @@ const ModoTematica = () => {
             </div>
             <div style={{marginTop:"3%"}}>
               <img src={Cristiano} className="App-imagenJugador" style={{width: "25%", height: "55%", position: "absolute", top:"25%", left:"72%", backgroundColor:"white"}} /><br></br>
-              <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none"}}/>
+              <img src={QuesitosGeneral} className="App-imagenJugador" style={{ width: "25%", height: "50%", position: "absolute", top:"25%", left:"40%", backgroundColor:"none", zIndex: "0"}}/>
               {
               quesitos(props.quesitos)
               }
@@ -1415,7 +1437,6 @@ const ModoTematica = () => {
     setShow4(true)
   }
 
-
   //Verificación de la respuesta
   function esCorrectaRespuesta(num) {
     let a = num + 1
@@ -1432,24 +1453,31 @@ const ModoTematica = () => {
     if(quesito == true && esCorrecta == "true"){
       switch(tematicaPregunta) {
         case "Ciencia":
-          varAux = quesitosFinal[1]
+          varAux = quesitosFinal[4]
+          esquinasFinal[0] = Esquina_gris
         break
         case "Arte":
-          varAux = quesitosFinal[2]
+          varAux = quesitosFinal[5]
+          esquinasFinal[1] = Esquina_gris
         break
         case "Deportes":
-          varAux = quesitosFinal[3]
+          varAux = quesitosFinal[1]
+          esquinasFinal[2] = Esquina_gris
         break
         case "Entretenimiento":
-          varAux = quesitosFinal[4]
+          varAux = quesitosFinal[3]
+          esquinasFinal[3] = Esquina_gris
         break
         case "Geografia":
-          varAux = quesitosFinal[5]
+          varAux = quesitosFinal[6]
+          esquinasFinal[4] = Esquina_gris
         break
         case "Historia":
-          varAux = quesitosFinal[6]
+          varAux = quesitosFinal[2]
+          esquinasFinal[5] = Esquina_gris
         break
       }
+      setEsquinasFinal(esquinasFinal)
       setVarAux(varAux)
       if (vectorJugadorTurno == "vector1"){
         vector1[indiceJugadorTurno].quesitos.push(varAux)
@@ -1488,12 +1516,10 @@ const ModoTematica = () => {
     type = "Actualizacion"
     subtype = "Contestar_pregunta"
     enviarMensaje()
-    console.log("HA TERMINADO ES_CORRECTA") 
   }
 
   /* --- NO HA CONTESTADO LA PREGUNTA --- */
   function finTiempoRespuesta() {
-    console.log("ENTRAMOS EN FIN TIEMPO RESPUESTA")
     aux2[rc-1] = "green"
     for (let i = 0; i < 4; i++){
       if (i != (rc-1) ){
@@ -1502,7 +1528,6 @@ const ModoTematica = () => {
     }      
     setColorPregunta(aux2)
     vaciarCasillas()
-    console.log("Estamos en FIN DE PREGUNTA")
     esCorrecta = "false"
     setEsCorrecta(esCorrecta)
     setContestada(true)
@@ -1532,7 +1557,6 @@ const ModoTematica = () => {
     setShowPausa(false)
     type = "Actualizacion"
     subtype = "Continuar_partida"
-    console.log("Continuamos la partida")
     enviarMensaje()
   }
 
@@ -1545,7 +1569,6 @@ const ModoTematica = () => {
     RelojPausa()
     type = "Actualizacion"
     subtype = "Pausar_partida"
-    console.log("Pausamos la partida")
     enviarMensaje()
   }
 
@@ -1567,12 +1590,12 @@ const ModoTematica = () => {
     if (estamosEligiendoCasilla) {
       if (vectorJugadorTurno == "vector1"){
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"78%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector1[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
       else {
         return (
-          <div style={{position:"absolute", top:"74%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
+          <div style={{position:"absolute", top:"78%", left: "40%", color:"white", fontSize:"30px"}}><a> {vector2[indiceJugadorTurno].nombre} está eligiendo la casilla</a></div>
         );
       }
     }
@@ -1603,12 +1626,12 @@ const ModoTematica = () => {
     else {
       if (vectorJugadorTurno == "vector1"){
         return (
-          <div style={{position:"absolute", top:"74%", left: "42%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector1[indiceJugadorTurno].nombre}</a></div>
+          <div style={{position:"absolute", top:"78%", left: "43%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector1[indiceJugadorTurno].nombre}</a></div>
         );
       }
       else {
         return (
-          <div style={{position:"absolute", top:"74%", left: "42%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector2[indiceJugadorTurno].nombre}</a></div>
+          <div style={{position:"absolute", top:"78%", left: "43%", color:"white", fontSize:"30px"}}><a> Es el turno de {vector2[indiceJugadorTurno].nombre}</a></div>
         );
       }
     }
@@ -1616,7 +1639,6 @@ const ModoTematica = () => {
 
   /* --- CHAT --- */
   function enviarMensajeChat () {
-    console.log("Función enviar Mensaje")
     chat.push(mensaje)
     setChat(chat)
     type = "Chat"
@@ -1637,7 +1659,6 @@ const ModoTematica = () => {
   }
 
   function scrollChat() {      
-    console.log(chat)
     return (
       <div style={{position:"absolute", top:"0%", left:"75.2%", width:"24.8%", height:"100%", zIndex:"5", backgroundColor:"rgb(62, 108, 133)", borderRadius:"0px 0px 0px 30px", zIndex:"10"}}>
         <a style={{color:"black", fontSize:"30px"}}> CHAT </a>
@@ -1678,29 +1699,26 @@ const ModoTematica = () => {
             </div>       
             <div style={{ position: "absolute", zIndex: "3", height:"700px", width:"700px", top:"7%", left:"30%"}}>
                 {/* --- TABLERO --- */}  
-                <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(180deg)" v1={1} v2={2} v3={3} v4={4} v5={5} v6={6}/> 
-                <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(120deg)" v1={8} v2={9} v3={10} v4={11} v5={12} v6={13}/>  
-                <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(60deg)" v1={15} v2={16} v3={17} v4={18} v5={19} v6={20}/> 
-                <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="" v1={22} v2={23} v3={24} v4={25} v5={26} v6={27}/>  
-                <Linea height="10.5%" width="37%" top="14%" left="0%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(-60deg)" v1={29} v2={30} v3={31} v4={32} v5={33} v6={34}/>
-                <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1={colorTematica} c2="white" c3={colorTematica} c4={colorTematica} c5="white" c6={colorTematica} width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/> 
+                <Linea height="10.5%" width="37%" top="75.5%" left="35%" c1={colorTematica} c2="#DCDCDC" c3={colorTematica} c4={colorTematica} c5="#DCDCDC" c6={colorTematica} width1="15%" transform="rotate(180deg)" v1={1} v2={2} v3={3} v4={4} v5={5} v6={6}/> 
+                <Linea height="10.5%" width="37%" top="55.5%" left="70.5%" c1={colorTematica} c2="#DCDCDC" c3={colorTematica} c4={colorTematica} c5="#DCDCDC" c6={colorTematica} width1="15%" transform="rotate(120deg)" v1={8} v2={9} v3={10} v4={11} v5={12} v6={13}/>  
+                <Linea height="10.5%" width="37%" top="14%" left="70.5%" c1={colorTematica} c2="#DCDCDC" c3={colorTematica} c4={colorTematica} c5="#DCDCDC" c6={colorTematica} width1="15%" transform="rotate(60deg)" v1={15} v2={16} v3={17} v4={18} v5={19} v6={20}/> 
+                <Linea height="10.5%" width="37%" top="-6.5%" left="35.5%" c1={colorTematica} c2="#DCDCDC" c3={colorTematica} c4={colorTematica} c5="#DCDCDC" c6={colorTematica} width1="15%" transform="" v1={22} v2={23} v3={24} v4={25} v5={26} v6={27}/>  
+                <Linea height="10.5%" width="37%" top="14%" left="0%" c1={colorTematica} c2="#DCDCDC" c3={colorTematica} c4={colorTematica} c5="#DCDCDC" c6={colorTematica} width1="15%" transform="rotate(-60deg)" v1={29} v2={30} v3={31} v4={32} v5={33} v6={34}/>
+                <Linea height="10.5%" width="37%" top="55.5%" left="0%" c1={colorTematica} c2="#DCDCDC" c3={colorTematica} c4={colorTematica} c5="#DCDCDC" c6={colorTematica} width1="15%" transform="rotate(-120deg)" v1={36} v2={37} v3={38} v4={39} v5={40} v6={41}/>                
                 
+                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="#DCDCDC" c2={colorTematica} c3={colorTematica} c4="#DCDCDC" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
+                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="#DCDCDC" c2={colorTematica} c3={colorTematica} c4="#DCDCDC" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="62%" c1="#DCDCDC" c2={colorTematica} c3={colorTematica} c4="#DCDCDC" c5={colorTematica} c6={colorTematica} width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
+                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="#DCDCDC" c2={colorTematica} c3={colorTematica} c4="#DCDCDC" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
+                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="#DCDCDC" c2={colorTematica} c3={colorTematica} c4="#DCDCDC" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
+                <Linea height="10%" width="41%" top="35%" left="4%" c1="#DCDCDC" c2={colorTematica} c3={colorTematica} c4="#DCDCDC" c5={colorTematica} c6={colorTematica} width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
                 
-                <Linea height="10%" width="41%" top="60%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-60deg)" v1={46} v2={45} v3={44} v4={43} v5={42} v6=""/> 
-                <Linea height="10%" width="41%" top="60%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(-120deg)" v1={51} v2={50} v3={49} v4={48} v5={47} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="62%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="scaleX(-1)" v1={56} v2={55} v3={54} v4={53} v5={52} v6=""/> 
-                <Linea height="10%" width="41%" top="9.7%" left="47.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+120deg)" v1={61} v2={60} v3={59} v4={58} v5={57} v6="" /> 
-                <Linea height="10%" width="41%" top="9.7%" left="18.6%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="rotate(+60deg)" v1={66} v2={65} v3={64} v4={63} v5={62} v6=""/> 
-                <Linea height="10%" width="41%" top="35%" left="4%" c1="white" c2={colorTematica} c3={colorTematica} c4="white" c5={colorTematica} c6={colorTematica} width1="25%" transform="0" v1={71} v2={70} v3={69} v4={68} v5={67} v6=""/>
-                
-                  
-                
-                <img className={vparp[28]} style={{ position:"absolute", transform: "rotate(-2deg)", left:"20.9%", height:"15%", width:"19%", top:"-6%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[28] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(28); moverFicha(28) }}}/>
-                <img className={vparp[21]} style={{ position:"absolute", transform: "rotate(+59.5deg)", left:"66%", height:"15%", width:"19%", top:"-6.9%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[21] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(21); moverFicha(21) }}}/>
-                <img className={vparp[14]} style={{ position:"absolute", transform: "rotate(+118deg)", left:"89.8%", height:"14%", width:"18%", top:"32%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[14] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(14); moverFicha(14) }}}/>
-                <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-182deg)", left:"68.3%", height:"14%", width:"18%", top:"71.5%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[7] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(7); moverFicha(7) }}}/>
-                <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
-                <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinaTematica} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
+                <img className={vparp[28]} style={{ position:"absolute", transform: "rotate(-2deg)", left:"20.9%", height:"15%", width:"19%", top:"-6%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinasFinal[4]} onClick={() => { if (jugadorActual==1 && (vparp[28] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(28); moverFicha(28) }}}/>
+                <img className={vparp[21]} style={{ position:"absolute", transform: "rotate(+59.5deg)", left:"66%", height:"15%", width:"19%", top:"-6.9%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinasFinal[2]} onClick={() => { if (jugadorActual==1 && (vparp[21] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(21); moverFicha(21) }}}/>
+                <img className={vparp[14]} style={{ position:"absolute", transform: "rotate(+118deg)", left:"89.8%", height:"14%", width:"18%", top:"32%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinasFinal[5]} onClick={() => { if (jugadorActual==1 && (vparp[14] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(14); moverFicha(14) }}}/>
+                <img className={vparp[7]} style={{ position:"absolute", transform: "rotate(-182deg)", left:"68.3%", height:"14%", width:"18%", top:"71.5%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinasFinal[3]} onClick={() => { if (jugadorActual==1 && (vparp[7] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(7); moverFicha(7) }}}/>
+                <img className={vparp[0]} style={{ position:"absolute", transform: "rotate(237deg)", left:"23%", height:"14%", width:"18%", top:"72.6%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinasFinal[0]} onClick={() => { if (jugadorActual==1 && (vparp[0] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(0); moverFicha(0) }}}/>
+                <img className={vparp[35]} style={{ position:"absolute", transform: "rotate(297deg)", left:"-1%", height:"14%", width:"18%", top:"34%", zIndex: "3", border:"", cursor:"pointer"}} src={esquinasFinal[1]} onClick={() => { if (jugadorActual==1 && (vparp[35] == "parpadea") && partidaPausada == false && finPartida == false){ vaciarCasillas(); setCasillaSeleccionada(35); moverFicha(35) }}}/>
 
                 <div className={vparp[72]} style={{width:"17%", height:"20%", left:"44%", top:"29%", position:"absolute", zIndex: "0", cursor:"pointer" }} onClick={() => { if (jugadorActual==1 && (vparp[72] == "parpadea") && partidaPausada == false){ vaciarCasillas(); setCasillaSeleccionada(72); moverFicha(72) }}}>
                     <img src={B2B} style={{width:"110%",marginTop:"0%"} }/>
@@ -1717,7 +1735,6 @@ const ModoTematica = () => {
               ) : (
                 <div style= {{zIndex:"0", }}/>
               )}
-
 
               {jugadores1()}
               {jugadores2()}
@@ -1760,7 +1777,6 @@ const ModoTematica = () => {
                     {show3 ? (
                       <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
                         {RelojRespuesta()}
-                        {console.log("Realizao la función relojRespuesta")}
                       </div>
                     ) : ( 
                       <div >
@@ -1769,7 +1785,6 @@ const ModoTematica = () => {
                     {show5 ? (
                       <div style={{top: "40%", left: "32%", position:"absolute", colorText:"white"}}>
                         {RelojCerrarPregunta()}
-                        {console.log("Realizao la función relojCerrarPregunta")}
                       </div>
                     ) : ( 
                       <div >

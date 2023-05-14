@@ -18,6 +18,7 @@ const EsperandoJugadores = () => {
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
+  const [show3, setShow3] = useState(true);
 
   const navigate = useNavigate();
 
@@ -46,7 +47,6 @@ const EsperandoJugadores = () => {
   const contraseña = cookies.get('password_sala');
   const numJugadores = cookies.get('n_jugadores');
   const tipoPartida = cookies.get('tipo_partida');
-  jRestantes = numJugadores;
 
   function invitar (a) {
     fetch(URL, {
@@ -81,9 +81,13 @@ const EsperandoJugadores = () => {
       try {
         console.log(data)
         if (data.accion == "actualizar_lista") {
-          jRestantes=jRestantes-1
+          let var1 = data.usernames.split(",");
+          console.log(numJugadores)
+          console.log(var1.length)
+          jRestantes = numJugadores - var1.length
           setjRestantes(jRestantes)
           console.log(jRestantes)
+          setShow3(!show3)
           if (numJugadores == 2) {
             vectorJugadores2 = data.usernames.split(",");
             console.log(vectorJugadores2)
@@ -111,6 +115,9 @@ const EsperandoJugadores = () => {
           }
           else if (tipoPartida == "Tematico") {
             navigate(process.env.PUBLIC_URL+ '/TableroTematica');
+          }
+          else if (tipoPartida == "Equipo") {
+            navigate(process.env.PUBLIC_URL+ '/TableroEquipos');
           }
         }
       } catch (err) {
@@ -188,7 +195,11 @@ const EsperandoJugadores = () => {
         <div>
           <div className="App-CuadradoNegro" style={{ width: "80%", height: "70%", position: "absolute", zIndex: "3", top: "15%", left: "10%"}}>
             <div style={{marginTop: "3%"}}>                
-              <a style={{color:"white", fontSize:"50px"}}>Esperando a {jRestantes} jugadores</a>
+              {show3 ? (  
+                <a style={{color:"white", fontSize:"50px"}}>Esperando a {jRestantes} jugadores</a>
+              ) : (
+                <a style={{color:"white", fontSize:"50px"}}>Esperando a {jRestantes} jugadores</a>
+              )}
               {show2 ? (
                 <div style={{display:"flex", marginTop:"50px", placeContent:"center"}}>
                   {jugadores()}
@@ -205,7 +216,8 @@ const EsperandoJugadores = () => {
 
           {show1 ? (
           <div className="App-CuadradoNegro" style={{ width: "1000px", height: "600px", position: "absolute", zIndex: "1", top: "18%", left: "25%", zIndex: "5",   backgroundColor:"#303030"}}>
-            <div style={{marginTop: "3%"}}>                
+            <div style={{marginTop: "3%"}}>      
+        
               <a style={{color:"white", fontSize:"40px"}}>Invitar Amigo </a>
               <div style={{marginTop:"30px", color: "white"}}>
                 <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
