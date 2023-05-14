@@ -135,17 +135,23 @@ const Tablero = () => {
   const vectorPregunta = [{nombre:"Pregunta", texto:"¿Que año estamos?"}, {nombre:"Respuesta1", texto:"2001", respuesta:false}, {nombre:"Respuesta2", texto:"2011", respuesta:false}, {nombre:"Respuesta3", texto:"2021", respuesta:false}, {nombre:"Respuesta4", texto:"2022", respuesta:true}];
 
   // Vector de los jugadores
-  let vector1Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
-  let vector2Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
-  let limpiarVector1Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
-  let limpiarVector2Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }
-  let [vector1, setV1] = useState([ { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
-  let [vector2, setV2] = useState([ { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
+  let vector1Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"", equipo:"" }
+  let vector2Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"", equipo:"" }
+  let limpiarVector1Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"", equipo:"" }
+  let limpiarVector2Aux = { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"", equipo:"" }
+  let [vector1, setV1] = useState([ { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"", equipo:"" }])
+  let [vector2, setV2] = useState([ { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"", equipo:"" }])
+
+  /* -- VARIABLES PARA EL MODO POR EQUIPOS */
+  let [vectorEquipo1, setVectorEquipo1] = useState([ { nombre1:"", nombre2:"", quesitos:[], ficha1:"", ficha2:"" }, { nombre1:"", nombre2:"", quesitos:[], ficha1:"", ficha2:"" }])
+  let [vectorEquipo2, setVectorEquipo2] = useState([ { nombre1:"", nombre2:"", quesitos:[], ficha1:"", ficha2:"" }])
+  let [vectorEquipoTurno, setVectorEquipoTurno] = useState("");
+  let [indiceEquipoTurno, setIndiceEquipoTurno] = useState(0);
 
   //Posiciones fijas para colocar los temporizadores y los quesitos para cadajugador
-  const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"45%", left:"22%"}]
-  const posv2 = [{top:"5%", left:"70%"},{top:"29%", left:"70%"},{top:"57%", left:"70%"}]
-
+  const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"29%", left:"22%"}]
+  const posv2 = [{top:"5%", left:"70%"},{top:"5%", left:"70%"},{top:"57%", left:"70%"}]
+ 
   //variables del chat
   const [showChat, setShowChat] = useState(false)
   const [showChat2, setShowChat2] = useState(false)
@@ -319,6 +325,7 @@ const Tablero = () => {
             console.log(jugadores)
             jugadores.forEach(element => {
               console.log(indice)
+              //Actualizamos el vector de jugadores 1
               if (indice < (jugadores.length/2)) {
                 if (indice == 0){
                   vector1[indice].nombre = element.jugador
@@ -326,6 +333,7 @@ const Tablero = () => {
                   vector1[indice].ficha = element.ficha
                   vector1[indice].turno = element.turno
                   vector1[indice].posicion = element.posicion  
+                  vector1[indice].equipo = element.equipo
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
@@ -362,7 +370,8 @@ const Tablero = () => {
                     vector1Aux.activo = element.activo
                     vector1Aux.ficha = element.ficha
                     vector1Aux.turno = element.turno
-                    vector1Aux.posicion = element.posicion   
+                    vector1Aux.posicion = element.posicion  
+                    vector1Aux.equipo = element.equipo 
                     element.quesitos.forEach(ele => {
                       switch(ele) {
                         case "Ciencia":
@@ -404,8 +413,10 @@ const Tablero = () => {
                   vector2[indiceAux].activo = element.activo
                   vector2[indiceAux].ficha = element.ficha
                   vector2[indiceAux].turno = element.turno
-                  vector2[indiceAux].posicion = element.posicion  
+                  vector2[indiceAux].posicion = element.posicion 
+                  vector2[indiceAux].equipo = element.equipo 
                   element.quesitos.forEach(ele => {
+                    console.log(vector2[indice].quesitos)
                     switch(ele) {
                       case "Ciencia":
                         vector2[indice].quesitos.push(QuesoVerde)
@@ -439,7 +450,8 @@ const Tablero = () => {
                   vector2Aux.activo = element.activo
                   vector2Aux.ficha = element.ficha
                   vector2Aux.turno = element.turno
-                  vector2Aux.posicion = element.posicion  
+                  vector2Aux.posicion = element.posicion
+                  vector2Aux.equipo = element.equipo  
                   element.quesitos.forEach(ele => {
                     switch(ele) {
                       case "Ciencia":
@@ -480,26 +492,126 @@ const Tablero = () => {
             console.log("Despues de la carga de jugadores")
             setV1(vector1)
             setV2(vector2)
+            console.log(vector1)
+            console.log(vector2)
+            //Hacemos un for y rellenamos los equipos
+            let var0 = 0
+            let var1 = 0
+            let var2 = 0
+            for (let i=0; i < vector1.length; i++) {
+              console.log(vector1[i].equipo)
+              if (vector1[i].equipo == 0){
+                console.log("Entra en equipo 1")
+                if (var0 == 0){
+                  vectorEquipo1[0].nombre1 = vector1[i].nombre
+                  vectorEquipo1[0].ficha1 = vector1[i].ficha
+                  vectorEquipo1[0].quesitos = vector1[i].quesitos
+                } else {
+                  vectorEquipo1[0].nombre2 = vector1[i].nombre
+                  vectorEquipo1[0].ficha2 = vector1[i].ficha
+                }
+                var0 = var0 + 1
+              }
+              else if (vector1[i].equipo == 1) {
+                console.log("Entra en equipo 1")
+                if (var1 == 0){
+                  vectorEquipo2[0].nombre1 = vector1[i].nombre
+                  vectorEquipo2[0].ficha1 = vector1[i].ficha
+                  vectorEquipo2[0].quesitos = vector1[i].quesitos
+                } else {
+                  vectorEquipo2[0].nombre2 = vector1[i].nombre
+                  vectorEquipo2[0].ficha2 = vector1[i].ficha
+                }
+                var1 = var1 + 1
+              }
+              else if (vector1[i].equipo == 2) {
+                console.log("Entra en equipo 2")
+                if (var2 == 0){
+                  vectorEquipo1[1].nombre1 = vector1[i].nombre
+                  vectorEquipo1[1].ficha1 = vector1[i].ficha
+                  vectorEquipo1[1].quesitos = vector1[i].quesitos
+                } else {
+                  vectorEquipo1[1].nombre2 = vector1[i].nombre
+                  vectorEquipo1[1].ficha2 = vector1[i].ficha
+                }
+                var2 = var2 + 1
+              }
+            }
+            var0 = 0
+            var1 = 0
+            var2 = 0
+            for (let i=0; i < vector2.length; i++) {
+              console.log(vector2[i].equipo)
+              if (vector2[i].equipo == 0){
+                console.log("Entra en equipo 0")
+                if (var0 == 0){
+                  vectorEquipo1[0].nombre1 = vector2[i].nombre
+                  vectorEquipo1[0].ficha1 = vector2[i].ficha
+                  vectorEquipo1[0].quesitos = vector2[i].quesitos
+                } else {
+                  vectorEquipo1[0].nombre2 = vector2[i].nombre
+                  vectorEquipo1[0].ficha2 = vector2[i].ficha
+                }
+                var0 = var0 + 1
+              }
+              else if (vector2[i].equipo == 1) {
+                console.log("Entra en equipo 1")
+                if (var1 == 0){
+                  vectorEquipo2[0].nombre1 = vector2[i].nombre
+                  vectorEquipo2[0].ficha1 = vector2[i].ficha
+                  vectorEquipo2[0].quesitos = vector2[i].quesitos
+                } else {
+                  vectorEquipo2[0].nombre2 = vector2[i].nombre
+                  vectorEquipo2[0].ficha2 = vector2[i].ficha
+                }
+                var1 = var1 + 1
+              }
+              else if (vector2[i].equipo == 2) {
+                console.log("Entra en equipo 2")
+                if (var2 == 0){
+                  vectorEquipo1[1].nombre1 = vector2[i].nombre
+                  vectorEquipo1[1].ficha1 = vector2[i].ficha
+                  vectorEquipo1[1].quesitos = vector2[i].quesitos
+                } else {
+                  vectorEquipo1[1].nombre2 = vector2[i].nombre
+                  vectorEquipo1[1].ficha2 = vector2[i].ficha
+                }
+                var2 = var2 + 1
+              }
+            }
+            //setVectorEquipo1(vectorEquipo1)
+            //setVectorEquipo2(vectorEquipo2)
+
+            console.log(vectorEquipo1)
+            console.log(vectorEquipo2)
+
             setJugadorActual(jugadorActual)
             setTablero(tablero)
             console.log(jugadorActual)
-            console.log(vector1)
-            console.log(vector2)
+
             //Actualizamos la persona que tiene el turno y en que vector está
             for (let i = 0; i < vector1.length; i++) {
               if (vector1[i].turno == "1"){
                 indiceJugadorTurno = i
                 vectorJugadorTurno = "vector1"
+                vectorEquipoTurno = "equipo1"
+                indiceEquipoTurno = parseInt(vector1[i].equipo)
                 setIndiceJugadorTurno(indiceJugadorTurno)
                 setVectorJugadorTurno(vectorJugadorTurno)
+                setIndiceEquipoTurno(indiceEquipoTurno)
+                setVectorEquipoTurno(vectorEquipoTurno)
               }
             }
             for (let i = 0; i < vector2.length; i++) {
               if (vector2[i].turno == "1"){
                 indiceJugadorTurno = i
                 vectorJugadorTurno = "vector2"
+                vectorEquipoTurno = "equipo2"
+                indiceEquipoTurno = parseInt(vector2[i].equipo)
                 setIndiceJugadorTurno(indiceJugadorTurno)
                 setVectorJugadorTurno(vectorJugadorTurno)
+                setIndiceEquipoTurno(indiceEquipoTurno)
+                setVectorEquipoTurno(vectorEquipoTurno)
               }
             }
 
@@ -526,6 +638,10 @@ const Tablero = () => {
                   setIndiceJugadorTurno(indiceJugadorTurno)
                   vectorJugadorTurno = "vector1"
                   setVectorJugadorTurno(vectorJugadorTurno)
+                  vectorEquipoTurno = "equipo1"
+                  setVectorEquipoTurno(vectorEquipoTurno)
+                  indiceEquipoTurno = parseInt(vector1[i].equipo)
+                  setIndiceEquipoTurno(indiceEquipoTurno)
                 }
               }
               for (let i = 0; i < vector2.length; i++) {
@@ -536,6 +652,10 @@ const Tablero = () => {
                   setIndiceJugadorTurno(indiceJugadorTurno)
                   vectorJugadorTurno = "vector2"
                   setVectorJugadorTurno(vectorJugadorTurno)
+                  vectorEquipoTurno = "equipo2"
+                  setVectorEquipoTurno(vectorEquipoTurno)
+                  indiceEquipoTurno = parseInt(vector2[i].equipo)
+                  setIndiceEquipoTurno(indiceEquipoTurno)
                 }
               }
               setShow4(false)
@@ -772,7 +892,20 @@ const Tablero = () => {
                         }
                         setV1(vector1)
                         setV2(vector2)
-
+                        if (vectorEquipoTurno == "equipo1"){
+                          if (indiceEquipoTurno == 0){
+                            vectorEquipo1[0].quesitos.push(varAux)
+                          }
+                          else if (indiceEquipoTurno == 2){
+                            vectorEquipo1[1].quesitos.push(varAux)
+                          }
+                          
+                        }
+                        else {
+                          vectorEquipo2[0].quesitos.push(varAux)
+                        }
+                        setVectorEquipo1(vectorEquipo1)
+                        setVectorEquipo2(vectorEquipo2)
                       }
                       //ponemos biec las preguntas
                       if (data.esCorrecta == "true"){
@@ -1120,12 +1253,10 @@ const Tablero = () => {
 
   /* --- LANZAR DADO --- */
   function posicionElementos() {
-    if (vectorJugadorTurno == "vector1"){
+    if (vectorEquipoTurno == "equipo1"){
       return (
-        <div style={{ position:"absolute", top:posv1[indiceJugadorTurno].top, left:posv1[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> { } 
+        <div style={{ position:"absolute", top:posv1[indiceEquipoTurno].top, left:posv1[indiceEquipoTurno].left, height:"26.5%", width:"9%"}}> { } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
-                {console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)}
-                {console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " Tiemporespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)}
                 {RelojJugada()}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
@@ -1150,11 +1281,9 @@ const Tablero = () => {
     else {
       //console.log(indiceJugadorTurno + " " + vectorJugadorTurno)
       return (
-        <div style={{ position:"absolute", top:posv2[indiceJugadorTurno].top, left:posv2[indiceJugadorTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
+        <div style={{ position:"absolute", top:posv2[indiceEquipoTurno].top, left:posv2[indiceEquipoTurno].left, height:"26.5%", width:"9%"}}> {/*Nos falta añadir los porcentajes de top y left*/ } 
             <div style={{position:"absolute", left:"19%", top:"5%"}}>
                 {RelojJugada()}
-                {console.log("RunJugada " + isRunningJugada + " TiempoelegirCasilla " + tiempoElegirCasilla + " RunRespuesta " + isRunningRespuesta + " TiempoLanzardado: " + tiempoLanzarDado)}
-                {console.log("RunCerrarPregunta " +  isRunningCerrarPregunta + " Tiemporespuesta " + tiempoPregunta + "RunPausa " +isRunningPausa)}
             </div >
             <div style={{position:"absolute", left:"26%",top:"-100%", cursor:"pointer", zIndex:"5"}} onClick={() => {
               if (jugadorActual==1 && pulsadoDados == 0 && partidaPausada == false){
@@ -1207,12 +1336,13 @@ const Tablero = () => {
   
   /* --- JUGADORES IZQUIERDA --- */
   function jugadores1() {
-    return vector1.map((props, indice) => (
+    return vectorEquipo1.map((props, indice) => (
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:`4%`, left:"3%"}}>  
         <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"0%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
-                    <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
+                <img src={'http://51.142.118.71:8000' + props.ficha1} className="App-imagenQuesito" style={{marginRight:"0%", width: "35px", height: "35px"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha2} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
+                <a style={{color:"white", fontSize:"30px"}}>{props.nombre1}  {props.nombre2} </a>
                 <br></br>
             </div>
             <div style={{marginTop:"3%"}}>
@@ -1230,12 +1360,13 @@ const Tablero = () => {
 
   /* --- JUGADORES DERECHA --- */
   function jugadores2() {
-    return vector2.map((props, indice) => (
+    return vectorEquipo2.map((props, indice) => (
       <div style={{ width: "94%", height: "92%", position: "absolute", zIndex: "0", top:"4%", left:"3%"}}>  
           <div className='App-EsJugador' style={{top: `${(indice % 3) * 30}%`, left:"70%", width: "30%", height: "30%"}} >
             <div style={{marginTop: "2%"}}>
-                <img src={'http://51.142.118.71:8000' + props.ficha} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
-                    <a style={{color:"white", fontSize:"30px"}}>{props.nombre} </a>
+                <img src={'http://51.142.118.71:8000' + props.ficha1} className="App-imagenQuesito" style={{marginRight:"0%", width: "35px", height: "35px"}}/>
+                <img src={'http://51.142.118.71:8000' + props.ficha2} className="App-imagenQuesito" style={{marginRight:"2%", width: "35px", height: "35px"}}/>
+                    <a style={{color:"white", fontSize:"30px"}}>{props.nombre1}  {props.nombre2} </a>
                 <br></br>
             </div>
             <div style={{marginTop:"3%"}}>
@@ -1341,9 +1472,22 @@ const Tablero = () => {
       else {
         vector2[indiceJugadorTurno].quesitos.push(varAux)
       }
+      if (vectorEquipoTurno == "equipo1"){
+        if (indiceEquipoTurno == 0){
+          vectorEquipo1[0].quesitos.push(varAux)
+        }
+        else if (indiceEquipoTurno == 2){
+          vectorEquipo1[1].quesitos.push(varAux)
+        }
+      }
+      else {
+        vectorEquipo2[0].quesitos.push(varAux)
+      }
     }
     setV1(vector1)
     setV2(vector2)
+    setVectorEquipo1(vectorEquipo1)
+    setVectorEquipo2(vectorEquipo2)
     setContestada(true)
     setColorPregunta(aux2)
     vaciarCasillas()
