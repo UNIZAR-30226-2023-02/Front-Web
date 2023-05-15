@@ -515,8 +515,8 @@ const ModoTematica = () => {
                     vector1Aux.ficha = element.ficha
                     vector1Aux.turno = element.turno
                     vector1Aux.posicion = element.posicion   
-                    element.quesitos.forEach(ele => {
-                      switch(ele) {
+                    element.quesitos.forEach(ele1 => {
+                      switch(ele1) {
                         case "Ciencia":
                           vector1Aux.quesitos.push(quesitosFinal[4])
                           if (vector1[indice].nombre == usuario){
@@ -576,8 +576,8 @@ const ModoTematica = () => {
                   vector2[indiceAux].ficha = element.ficha
                   vector2[indiceAux].turno = element.turno
                   vector2[indiceAux].posicion = element.posicion  
-                  element.quesitos.forEach(ele => {
-                    switch(ele) {
+                  element.quesitos.forEach(ele2 => {
+                    switch(ele2) {
                       case "Ciencia":
                         vector2[indice].quesitos.push(quesitosFinal[4])
                         if (vector1[indice].nombre == usuario){
@@ -630,8 +630,8 @@ const ModoTematica = () => {
                   vector2Aux.ficha = element.ficha
                   vector2Aux.turno = element.turno
                   vector2Aux.posicion = element.posicion  
-                  element.quesitos.forEach(ele => {
-                    switch(ele) {
+                  element.quesitos.forEach(ele3 => {
+                    switch(ele3) {
                       case "Ciencia":
                         vector2Aux.quesitos.push(quesitosFinal[4])
                         if (vector1[indice].nombre == usuario){
@@ -682,7 +682,7 @@ const ModoTematica = () => {
                   vector2Aux = limpiarVector2Aux
                 }
               }
-              indice = indice+1;
+              indice = indice + 1;
               setIndice(indice)
             });
             setV1(vector1)
@@ -756,8 +756,8 @@ const ModoTematica = () => {
                     }
                     setCasillas(aux)
                     casillas = data.casillas_nuevas.split(",");
-                    casillas.forEach(element => {
-                      aux[element] = "parpadea"
+                    casillas.forEach(element1 => {
+                      aux[element1] = "parpadea"
                     });
                     setEstamosEligiendoCasilla(true)
                     setVprap(aux)
@@ -1810,7 +1810,7 @@ const ModoTematica = () => {
                 <br></br>
                 <br></br>
                 <a style={{color:"white",fontSize:"25px"}}>
-                Pulsa el botón para reanudar la partida, antes de que se acabe le tiempo, si no abandonarás la partida.
+                Pulsa el botón para reanudar la partida, cuando se acabe el tiempo se reanudara automaticamente.
                 </a>
                 <div style= {{top: "50%", left: "44%", position:"absolute"}}>
                     {RelojPausa()}

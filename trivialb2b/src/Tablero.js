@@ -72,6 +72,7 @@ const Tablero = () => {
   let [tiempoPausa, setTiempoPausa] = useState(10);
   let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(3);
   let [tiempoLanzarDado, setTiempoLanzarDado] = useState(0);
+  let jugadores
 
   //Variables usadas para activar los relojes
   let [isRunningJugada, setIsRunningJugada] = useState(false);
@@ -143,7 +144,7 @@ const Tablero = () => {
   let [vector2, setV2] = useState([ { nombre:"", posicion:"72", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
 
   //Posiciones fijas para colocar los temporizadores y los quesitos para cadajugador
-  const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"45%", left:"22%"}]
+  const posv1 = [{top:"5%", left:"22%"},{top:"29%", left:"22%"},{top:"57%", left:"22%"}]
   const posv2 = [{top:"5%", left:"70%"},{top:"29%", left:"70%"},{top:"57%", left:"70%"}]
 
   //variables del chat
@@ -295,7 +296,6 @@ const Tablero = () => {
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
-        // console.log(data)
         if (String(data.type) == ""){
           console.log("Mensaje vacio que no tratamos")
         }
@@ -312,7 +312,7 @@ const Tablero = () => {
             setTiempoPregunta(tiempoPregunta)
             errorPartida = data.error;
             msgIni=1
-            let jugadores = data.jugadores
+            jugadores = data.jugadores
             jugadores.forEach(element => {
               if (indice < (jugadores.length/2)) {
                 if (indice == 0){
@@ -342,10 +342,10 @@ const Tablero = () => {
                         vector1[indice].quesitos.push(QuesoAmarillo)
                       break
                     }    
-
                   })
  
                   vector1[indice].tablero = element.tablero  
+                  setV1(vector1)
                   if (vector1[indice].nombre == usuario) {
                     tablero = vector1[indice].tablero 
                     jugadorActual = vector1[indice].turno
@@ -358,8 +358,8 @@ const Tablero = () => {
                     vector1Aux.ficha = element.ficha
                     vector1Aux.turno = element.turno
                     vector1Aux.posicion = element.posicion   
-                    element.quesitos.forEach(ele => {
-                      switch(ele) {
+                    element.quesitos.forEach(ele1 => {
+                      switch(ele1) {
                         case "Ciencia":
                           vector1Aux.quesitos.push(QuesoVerde)
                         break
@@ -380,7 +380,7 @@ const Tablero = () => {
                         break
                       }  
                     })
-                    vector1Aux.tablero = element.tablero     
+                    vector1Aux.tablero = element.tablero 
                     if (vector1Aux.nombre == usuario) {
                       tablero = vector1Aux.tablero 
                       jugadorActual = vector1Aux.turno
@@ -390,6 +390,8 @@ const Tablero = () => {
                     vector1.push(vector1Aux)
                     vector1Aux = limpiarVector1Aux 
                   }
+                  setV1(vector1)
+                  setV2(vector2)
               }
               else {
                 indiceAux = indice - (jugadores.length/2)
@@ -400,8 +402,8 @@ const Tablero = () => {
                   vector2[indiceAux].ficha = element.ficha
                   vector2[indiceAux].turno = element.turno
                   vector2[indiceAux].posicion = element.posicion  
-                  element.quesitos.forEach(ele => {
-                    switch(ele) {
+                  element.quesitos.forEach(ele2 => {
+                    switch(ele2) {
                       case "Ciencia":
                         vector2[indice].quesitos.push(QuesoVerde)
                       break
@@ -429,14 +431,16 @@ const Tablero = () => {
                     setIndicePartida(indiceAux)
                     setTablero(tablero)
                   }
+                  setV1(vector1)
+                  setV2(vector2)
                 } else {
                   vector2Aux.nombre = element.jugador
                   vector2Aux.activo = element.activo
                   vector2Aux.ficha = element.ficha
                   vector2Aux.turno = element.turno
                   vector2Aux.posicion = element.posicion  
-                  element.quesitos.forEach(ele => {
-                    switch(ele) {
+                  element.quesitos.forEach(ele3 => {
+                    switch(ele3) {
                       case "Ciencia":
                         vector2Aux.quesitos.push(QuesoVerde)
                       break
@@ -543,8 +547,8 @@ const Tablero = () => {
                     }
                     setCasillas(aux)
                     casillas = data.casillas_nuevas.split(",");
-                    casillas.forEach(element => {
-                      aux[element] = "parpadea"
+                    casillas.forEach(element1 => {
+                      aux[element1] = "parpadea"
                     });
                     setEstamosEligiendoCasilla(true)
                     setVprap(aux)
@@ -1614,7 +1618,7 @@ const Tablero = () => {
                 <br></br>
                 <br></br>
                 <a style={{color:"white",fontSize:"25px"}}>
-                Pulsa el botón para reanudar la partida, antes de que se acabe le tiempo, si no abandonarás la partida.
+                Pulsa el botón para reanudar la partida, cuando se acabe el tiempo se reanudara automaticamente.
                 </a>
                 <div style= {{top: "50%", left: "44%", position:"absolute"}}>
                     {RelojPausa()}

@@ -134,7 +134,7 @@ const MenuAdmin = () => {
     fetch(URL5, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
-      body: JSON.stringify(editarP/*{"id": parseInt(editarP.id), "enunciado": editarP.enunciado, "r1": editarP.r1, "r2": editarP.r2, "r3": editarP.r3, "r4": editarP.r4, "rc": parseInt(editarP.rc), "categoria": editarP.categoria}*/),
+      body: JSON.stringify(/*editarP*/{"id": parseInt(editarP.id), "enunciado": editarP.enunciado, "r1": editarP.r1, "r2": editarP.r2, "r3": editarP.r3, "r4": editarP.r4, "rc": editarP.rc.toString(), "categoria": editarP.categoria}),
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
