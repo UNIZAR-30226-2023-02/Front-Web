@@ -379,8 +379,8 @@ const Tablero = () => {
                     vector1Aux.turno = element.turno
                     vector1Aux.posicion = element.posicion  
                     vector1Aux.equipo = element.equipo 
-                    element.quesitos.forEach(ele => {
-                      switch(ele) {
+                    element.quesitos.forEach(ele1 => {
+                      switch(ele1) {
                         case "Ciencia":
                           vector1Aux.quesitos.push(QuesoVerde)
                         break
@@ -422,9 +422,9 @@ const Tablero = () => {
                   vector2[indiceAux].turno = element.turno
                   vector2[indiceAux].posicion = element.posicion 
                   vector2[indiceAux].equipo = element.equipo 
-                  element.quesitos.forEach(ele => {
+                  element.quesitos.forEach(ele2 => {
                     console.log(vector2[indice].quesitos)
-                    switch(ele) {
+                    switch(ele2) {
                       case "Ciencia":
                         vector2[indice].quesitos.push(QuesoVerde)
                       break
@@ -459,8 +459,8 @@ const Tablero = () => {
                   vector2Aux.turno = element.turno
                   vector2Aux.posicion = element.posicion
                   vector2Aux.equipo = element.equipo  
-                  element.quesitos.forEach(ele => {
-                    switch(ele) {
+                  element.quesitos.forEach(ele3 => {
+                    switch(ele3) {
                       case "Ciencia":
                         vector2Aux.quesitos.push(QuesoVerde)
                       break
@@ -1933,7 +1933,7 @@ const Tablero = () => {
                 <br></br>
                 <br></br>
                 <a style={{color:"white",fontSize:"25px"}}>
-                Pulsa el botón para reanudar la partida, antes de que se acabe le tiempo, si no abandonarás la partida.
+                Pulsa el botón para reanudar la partida, cuando se acabe el tiempo se reanudara automaticamente.
                 </a>
                 <div style= {{top: "50%", left: "44%", position:"absolute"}}>
                     {RelojPausa()}
