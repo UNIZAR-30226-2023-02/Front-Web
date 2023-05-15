@@ -387,10 +387,10 @@ const Amigos = () => {
                   <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
               </div>
             </div>
-            <a style={{position: "absolute", top: "35%", left: "6%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Nombre: {amigo.nombre} </a>
-            <a style={{position: "absolute", top: "35%", left: "53%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Correo: {amigo.correo} </a>
-            <a style={{position: "absolute", top: "60%", left: "53%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Telefono: {amigo.telefono} </a>
-            <a style={{position: "absolute", top: "60%", left: "6%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Fecha de nacimiento: {amigo.fechaNac} </a>
+            <a style={{position: "absolute", top: "35%", left: "6%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Nombre:  {amigo.nombre}</a>
+            <a style={{position: "absolute", top: "35%", left: "53%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Correo:  {amigo.correo}</a>
+            <a style={{position: "absolute", top: "60%", left: "53%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Telefono:  {amigo.telefono} </a>
+            <a style={{position: "absolute", top: "60%", left: "6%", color:"white", fontSize:"30px", textAlign:"left", zIndex:"6"}}> Fecha de nacimiento:  {amigo.fechaNac} </a>
 
             <button className="App-botonCancelar" style= {{ top: "78%", left: "44%", position:"absolute"}}  onClick={() =>{setShow3(false)}}>
               Salir
