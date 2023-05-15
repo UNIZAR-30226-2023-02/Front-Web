@@ -29,7 +29,7 @@ function Cuadro(props) {
 
 const MenuAdmin = () => {
 
-  const [nuevaP, setNuevaP] = useState({enunciado: "", r1: "", r2: "", r3:"", r4:"",rc:"",categoria:""});
+  const [nuevaP, setNuevaP] = useState({enunciado: "", r1: "", r2: "", r3:"", r4:"",rc:"1",categoria:""});
 
   const [pregunta, setPregunta] = useState({id:"", enunciado: "", r1: "", r2: "", r3:"", r4:"",rc:"",categoria:""});
   const [editarP, setEditarP] = useState({id:"", enunciado: "", r1: "", r2: "", r3:"", r4:"",rc:"",categoria:""});
@@ -42,10 +42,30 @@ const MenuAdmin = () => {
   const [showEditar, setShowEditar] = useState(false);
   const [showAñadir, setShowAñadir] = useState(false);
   const [showPregunta, setShowPregunta] = useState(false);
+  const [showMensajeBusqueda, setShowMensajeBusqueda] = useState(true);
 
 
   const cookies= new Cookies();
   const token = cookies.get('token');
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleChange3 = event => {
+    setShowMensajeBusqueda(false)
+    setSearchTerm(event.target.value);
+     const results = listadoPregunta.filter(listadoPregunta =>
+      listadoPregunta["enunciado"].includes(event.target.value)
+    );
+    setSearchResults(results);
+  };
+
+  function fun (){
+    console.log(searchTerm)
+    if (searchTerm == ""){
+      setShowMensajeBusqueda(true)
+    }
+  }
 
   const navigate = useNavigate();
 
@@ -69,17 +89,23 @@ const MenuAdmin = () => {
   };
 
   useEffect(() => {
+    if (searchTerm == " "){
+      setShowMensajeBusqueda(true)
+    }
     fetch(URL1, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
       .then((data) => {console.log(data)
+        listadoPregunta.length=0
+        searchResults.length=0
         if (data.OK == "True"){
           data.preguntas.forEach(element => {
             listadoPregunta.push(element);
           });
           setListadoPregunta(listadoPregunta);
+          setSearchResults(listadoPregunta);
           setShowRecarga(!showRecarga);
         }
     })
@@ -164,7 +190,7 @@ const MenuAdmin = () => {
             id: usuario,
             enunciado: data.enunciado,
             r1: data.r1,
-            r2: data.r1,
+            r2: data.r2,
             r3: data.r3,
             r4: data.r4,
             rc: data.rc,
@@ -179,25 +205,35 @@ const MenuAdmin = () => {
   };
 
   
-   function f_preguntas() {
-      return listadoPregunta.map((pregunta, elemento) => (
-        <div key={elemento} className="App-CuadradoBlanco" style={{ width: "90%", height: "30%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}  onClick={() => {setShowPregunta(true); mostrarDatosPregunta(pregunta.id)}}>
-          <a  style= {{ color: "black", fontSize: "25px", fontStyle: "italic", position: "absolute", top: "15%", left: "5%", textAlign:"left"}} >
-            {pregunta.enunciado}
-          </a>
-          <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "50%", left: "0%"}}>
-            ________________________________________________________
-          </a>
-        </div>
-      ));
-    }
+  function f_preguntas() {
+    return searchResults.map((pregunta, elemento) => (
+      <div key={elemento} className="App-CuadradoBlanco" style={{ width: "90%", height: "30%", position: "relative", left: "0%",cursor: "pointer", border: "0px black"}}  onClick={() => {setShowPregunta(true); mostrarDatosPregunta(pregunta.id)}}>
+        <a  style= {{ color: "black", fontSize: "25px", fontStyle: "italic", position: "absolute", top: "15%", left: "5%", textAlign:"left"}} >
+          {pregunta.enunciado}
+        </a>
+        <a  style= {{ color: "black", fontSize: "40px", fontStyle: "italic", position: "absolute", top: "50%", left: "0%"}}>
+          ________________________________________________________
+        </a>
+      </div>
+    ));
+  }
   
   return (
     <div className="App">
         <div>
         {showRecarga ? (
           <div className="App-CuadradoAmarillo" style={{ width: "1500px", height: "600px", position: "absolute", top: "25%", left: "10%"}}>
-            <div className="App-CuadradoBlanco" style={{ width: "70%", height: "88%", position: "absolute", top: "5%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
+            {showMensajeBusqueda ? (
+              <div style={{ position: "absolute", top: "5.4%", left: "3.4%", zIndex:"5" }}>
+                <a style={{ color:"rgb(185, 185, 185)", fontSize:"40px" }}>
+                  Buscar
+                </a>
+              </div>
+            ) : (
+              <div/>
+            )}
+            <input className="App-textoNegro" label="pepe" name="pepe" onChange={handleChange3} onBlur={fun}  value={searchTerm} style= {{top: "4%", left: "2%", position:"absolute", width: "67.%", height: "50px", borderRadius:"50px 0px 0px 50px"}} />
+            <div className="App-CuadradoBlanco" style={{ width: "70%", height: "75%", position: "absolute", top: "20%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
             <InfiniteScroll
               dataLength={listadoPregunta.length}
               pageStart={0}
@@ -216,7 +252,17 @@ const MenuAdmin = () => {
           </div>
           ) : (
           <div className="App-CuadradoAmarillo" style={{ width: "1500px", height: "600px", position: "absolute", top: "25%", left: "10%"}}>
-            <div className="App-CuadradoBlanco" style={{ width: "70%", height: "88%", position: "absolute", top: "5%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
+            {showMensajeBusqueda ? (
+              <div style={{ position: "absolute", top: "5.4%", left: "3.4%", zIndex:"5" }}>
+                <a style={{ color:"rgb(185, 185, 185)", fontSize:"40px" }}>
+                  Buscar
+                </a>
+              </div>
+            ) : (
+              <div/>
+            )}
+            <input className="App-textoNegro" label="pepe" name="pepe" onChange={handleChange3} onBlur={fun} value={searchTerm} style= {{top: "4%", left: "2%", position:"absolute", width: "67.5%", height: "50px",borderRadius:"50px 0px 0px 50px"}} />
+            <div className="App-CuadradoBlanco" style={{ width: "70%", height: "75%", position: "absolute", top: "20%", left: "2%", borderRadius: "50px 0px 0px 50px"}}>
             <InfiniteScroll
               dataLength={listadoPregunta.length}
               pageStart={0}
@@ -456,7 +502,7 @@ const MenuAdmin = () => {
                 style={{ width: "27%", height: "8%", position: "absolute", top: "60%", left: "60%", fontSize:"20px", borderRadius: "10px 10px 10px 10px"}}
               />
             <a style={{position: "absolute", top: "82%", left: "7%", color:"white", fontSize:"27px"}}> Respuesta correcta:  </a>
-              <select name="rc" id="rc" className="App-textoNegro" style={{width:"24%", height: "15%", position: "absolute", top: "80%", left: "23%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}} 
+              <select name="rc" id="rc" className="App-textoNegro" style={{width:"24%", height: "15%", position: "absolute", top: "80%", left: "23%" , borderRadius: "10px 10px 10px 10px",fontSize:"20px"}} 
                 onChange={(event) => setNuevaP({
                   ...nuevaP,
                   [event.target.name]: event.target.value
@@ -467,7 +513,7 @@ const MenuAdmin = () => {
                   <option value="4">Respuesta 4</option>
               </select> 
               <a style={{position: "absolute", top: "82%", left: "50%", color:"white", fontSize:"27px"}}> Categoria:  </a>
-              <select name="categoria" id="categoria" className="App-textoNegro" style={{width:"30%", height: "15%", position: "absolute", top: "80%", left: "60%" , borderRadius: "10px 10px 10px 10px",fontSize:"30px"}}
+              <select name="categoria" id="categoria" className="App-textoNegro" style={{width:"30%", height: "15%", position: "absolute", top: "80%", left: "60%" , borderRadius: "10px 10px 10px 10px",fontSize:"20px"}}
                 onChange={(event) => setNuevaP({
                   ...nuevaP,
                   [event.target.name]: event.target.value
