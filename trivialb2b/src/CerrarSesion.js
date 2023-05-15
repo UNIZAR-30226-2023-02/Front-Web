@@ -1,10 +1,6 @@
-import React, { useState } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import { useSession, setSession } from 'react-session';
-import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 
@@ -17,9 +13,6 @@ const CerrarSesion = () => {
   const confirmar = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/');
   };
-  const cookies= new Cookies();
-  const usuario = cookies.get('tokenUsuario');
-  console.log(usuario)
 
   return (
     <div className="App">

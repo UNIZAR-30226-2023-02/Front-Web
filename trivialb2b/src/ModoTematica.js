@@ -3,7 +3,6 @@ import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/salas/crear/";
 
 function CuadroTexto(props) {
@@ -24,12 +23,10 @@ const ModoTematica = () => {
     
   const [body, setBody] = useState({ nombre_sala: "", tiempo_respuesta: "10", password_sala: "", n_jugadores: "2", tipo_partida: "Tematico", tematica: "Geografia" });
   const [errores, setErorres] = useState("");
-  
   const navigate = useNavigate();
   const cookies= new Cookies();
   const token = cookies.get('token');
   const usuario = cookies.get('tokenUsuario');
-  console.log(usuario)
 
   const handleChange = (e) => {
     setBody({
@@ -43,7 +40,6 @@ const ModoTematica = () => {
   };
 
   const onSubmit = () => {
-    console.log(body);
     fetch(URL, {
       method: "POST",
       headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -52,7 +48,6 @@ const ModoTematica = () => {
       .then((response) => response.json())
 
       .then((data) => { 
-        console.log(data)
         if (data.OK == "True"){
           setErorres("")
           cookies.set('nombre_sala', body.nombre_sala, {path: '/'})
@@ -91,7 +86,6 @@ const ModoTematica = () => {
         <div className="App-titulo"  style= {{top: "7%"}}> Modo Temática
           <div className="App-Quesitos" style= {{left: "36%"}}/> 
         </div>
-
         <div className="App-CuadradoAmarillo" style={{ width: "1730px", height: "620px", position: "absolute", zIndex: "1", top: "24%", left: "5%"}}>
           <div style={{marginTop:"4px"}}>
             <a  style= {{ color: "#174a67", fontSize: "60px", fontStyle: "italic" }}>
@@ -101,9 +95,7 @@ const ModoTematica = () => {
               <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
             </div>
           </div>
-
           <form className="App-Input" style={{marginTop:"2%"}}>
-
             <div className="App-CuadrosTextoIzq" > 
               <div style={{marginLeft: "3%"}}>
               <CuadroTexto texto="Nombre de la sala" label="nombre_sala" nombre="nombre_sala" valor={body.nombre_sala} funcion={handleChange} />
@@ -123,7 +115,6 @@ const ModoTematica = () => {
                 </select> 
                 </div>
             </div>
-{/*onClick={setBody(value)}*/}
             <div className="App-CuadrosTextoDer" style={{marginRight: "1%"}} > 
               <label for="numeroJugadores" style={{color: "#174a67"}}> Nº de jugadores: </label>
               <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}onChange={(event) => setBody({
@@ -140,7 +131,6 @@ const ModoTematica = () => {
 
             </div>
           </form>
-          
           <div style={{top:"59%", left: "25%", position: "absolute"}}>
             <label for="tematica" style={{color: "#174a67", fontSize:"40px"}}> Tematica: </label>
             <select name="tematica" id="tematica" className="App-textoNegro" style={{width:"530px", height:"70px" }}onChange={(event) => setBody({
@@ -155,15 +145,12 @@ const ModoTematica = () => {
                 <option value="Deportes">Deportes</option>
             </select> 
           </div>
-
           <div style={{fontSize:"23px", color:"red", position:"absolute", left:"45%", top:"65%"}}>
             <a  > {errores}</a>
           </div>
-
           <div style={{fontSize:"23px", color:"black", position:"absolute", left:"36%", top:"74%"}}> 
             <a >Los elementos con asterisco (*) son opcionales</a>
           </div>
-
           <div>
               <button className="App-botonCancelar" style= {{top: "83%", left: "33%", position:"absolute"}} onClick={() => cancelar()} >
                 Cancelar
@@ -172,7 +159,6 @@ const ModoTematica = () => {
                 Confirmar
               </button>
           </div>
-
         </div>
       </div>
     </div>

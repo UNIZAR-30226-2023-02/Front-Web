@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import Buscar from'./Imagenes/BuscarPartida.png';
-import Candado from'./Imagenes/Candado.png';
 import Atras from "./Imagenes/Atras.png";
 import Añadir from "./Imagenes/DatosUsuario.png";
 import Cristiano from'./Imagenes/Usuario.png';
@@ -50,7 +48,7 @@ const Amigos = () => {
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           amigos.length = 0
           data.amigos.forEach(element => {
@@ -71,14 +69,13 @@ const Amigos = () => {
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json()) 
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           solicitudes.length = 0
           data.amigos_pendientes.forEach(element => {
             solicitudes.push(element);
           });
           setSolicitudes(solicitudes);
-          console.log(solicitudes)
           setShow4(true)
         }
     })
@@ -112,7 +109,7 @@ const Amigos = () => {
       body: JSON.stringify({"amigo": nuevoA}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           window.location.reload(true);
         }
@@ -134,7 +131,7 @@ const Amigos = () => {
       body: JSON.stringify({"amigo": soli}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           window.location.reload(true);
         }
@@ -156,7 +153,7 @@ const Amigos = () => {
       body: JSON.stringify({"amigo": soli}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           window.location.reload(true);
         }
@@ -170,14 +167,13 @@ const Amigos = () => {
   };
 
   function eliminarAmigo () {
-    console.log(eliminarA)
     fetch(URL4, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
       body: JSON.stringify({"amigo": eliminarA}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           window.location.reload(true);
         }
@@ -197,7 +193,7 @@ const Amigos = () => {
       body: JSON.stringify({"username": usuario}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           setShow3(true)
           setAmigo({ 
@@ -314,7 +310,7 @@ const Amigos = () => {
                   <a style={{color:"white", fontSize:"50px"}}> Añadir Amigo </a>
                 </div>
                 <div style={{marginTop:"2%", color: "white"}}>
-                    <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
+                    <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
                 </div>
               </div>
               <a style={{position: "absolute", top: "30%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Escribe a continuacion el nombre del amigo que quieres añadir: </a>
@@ -350,7 +346,7 @@ const Amigos = () => {
                 <a style={{color:"white", fontSize:"50px"}}> Eliminar Amigo </a>
               </div>
               <div style={{marginTop:"2%", color: "white"}}>
-                  <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
+                  <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
               </div>
             </div>
             <a style={{position: "absolute", top: "30%", left: "6%", color:"white", fontSize:"30px", textAlign:"left"}}> Escriba a continuacion el nombre del amigo que quieres eliminar: </a>

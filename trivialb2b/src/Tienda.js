@@ -40,7 +40,7 @@ const Tienda = () => {
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
       setMonedas(data.monedas)
     })
     .catch((error) => {
@@ -52,12 +52,11 @@ const Tienda = () => {
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
       data.fichas.forEach(element => {
         fichas.push(element);
       });
       setFichas(fichas);
-      console.log(fichas)
       data.tableros.forEach(element => {
         tableros.push(element);
       });
@@ -131,7 +130,7 @@ const Tienda = () => {
       body: JSON.stringify({"objeto_id": itemSeleccionado.nombre}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           window.location.reload(true);
         }
@@ -142,14 +141,13 @@ const Tienda = () => {
   };
 
   function usar() {
-    console.log({"objeto_id": itemSeleccionado.nombre})
     fetch(URL3, {
       method: "POST",
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
       body: JSON.stringify({"objeto_id": itemSeleccionado.nombre}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           window.location.reload(true);
         }

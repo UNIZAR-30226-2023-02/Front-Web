@@ -1,7 +1,6 @@
 import React, { useState , useEffect, useRef } from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import { useSession, setSession } from 'react-session';
 import Usuario from'./Imagenes/Usuario.png';
 import Tablero1 from'./Imagenes/Tablero1.png';
 import Cookies from 'universal-cookie';
@@ -19,10 +18,7 @@ const EsperandoJugadores = () => {
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(true);
-
   const navigate = useNavigate();
-
-  const [jugadoresSala, setJugadoresSala] = useState([]);
   const [vectorJugadores, setVectorJugadores ]  = useState([]);
   let [jRestantes, setjRestantes ]  = useState([]);
 
@@ -37,7 +33,6 @@ const EsperandoJugadores = () => {
   let [vectorJugadores2, setVectorJugadores2 ] = useState(["", ""]);
   let [vectorJugadores4, setVectorJugadores4 ] = useState(["", "", "", ""]);
   let [vectorJugadores6, setVectorJugadores6 ] = useState(["", "", "", "", "", ""]);
-
 
   const cookies= new Cookies();
   const token = cookies.get('token');
@@ -55,7 +50,7 @@ const EsperandoJugadores = () => {
       body: JSON.stringify({"username_amigo": a}),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           setShow1(!show1)
         }
@@ -79,20 +74,14 @@ const EsperandoJugadores = () => {
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data)
       try {
-        console.log(data)
         if (data.accion == "actualizar_lista") {
           let var1 = data.usernames.split(",");
-          console.log(numJugadores)
-          console.log(var1.length)
           jRestantes = numJugadores - var1.length
           setjRestantes(jRestantes)
-          console.log(jRestantes)
           setShow3(!show3)
           if (numJugadores == 2) {
             vectorJugadores2 = data.usernames.split(",");
-            console.log(vectorJugadores2)
             setVectorJugadores(vectorJugadores2)
-            console.log(vectorJugadores)
             setShow2(true)
           }
           else if (numJugadores == 4) {
@@ -109,7 +98,6 @@ const EsperandoJugadores = () => {
         else if (data.accion == "empezar_partida") {
           cookies.set('WebSocketTablero', data.url_partida, {path: '/'})
           chatSocketRef.current.close()
-          console.log(tipoPartida)
           if (tipoPartida == "Clasico") {
             navigate(process.env.PUBLIC_URL+ '/Tablero');
           }
@@ -156,7 +144,7 @@ const EsperandoJugadores = () => {
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True"){
           solicitudes.length = 0
           data.amigos.forEach(element => {
