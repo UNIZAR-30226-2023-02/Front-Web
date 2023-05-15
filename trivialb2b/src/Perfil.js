@@ -1,14 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import './Estilos/App.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import Atras from './Imagenes/Atras.png';
-import CryptoJS from 'crypto-js';
 import Cookies from 'universal-cookie';
-import { TextField } from "@mui/material";
 
-//import {valorCifrado , clave} from './InicioSesion';
-
-//const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/datos/";
 const URL = "http://51.142.118.71:8000/api/usuarios/datos-yo/";
 const URL1 = "http://51.142.118.71:8000/api/usuarios/cambiar-datos/";
 
@@ -26,7 +21,6 @@ function CuadroTexto(props) {
   )
 }
 
-
 const Perfil = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
@@ -38,7 +32,6 @@ const Perfil = () => {
   const [errores, setErorres] = useState("");
   const [usuario, setUsuario] = useState("");
   
-
   const handleChange2 = () => {
   };
 
@@ -60,7 +53,7 @@ const Perfil = () => {
       body: JSON.stringify({username: cookies.get('tokenUsuario')})
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         setUsuario(data.username)
         setBody({ 
           fecha_nac: data.fecha_nac,
@@ -73,8 +66,6 @@ const Perfil = () => {
     });
   },[]);
   
-
-
   function VisualizarDatos() { 
   
     return (
@@ -99,22 +90,19 @@ const Perfil = () => {
       body: JSON.stringify(body),
     })
     .then((response) => response.json())
-    .then((data) => { console.log(data)
+    .then((data) => { 
       if (data.OK === "True"){
         setErorres(""); 
         setShow2(false);
       }
       else {
-        console.log("ERROR");
         setErorres(data.error_username || data.error_fecha_nac || data.error_correo || data.error_telefono);
       }
     })
     .catch((error) => console.error(error));
   }
 
-
   function ConfirmacionDatos() {
-    console.log("ConfirmarDatos");
     return (
       <div>
         <form className="App-Input" style={{left: "20%", top:"45%", height:"30%", width: "50%", position: "absolute"}}>
@@ -128,7 +116,6 @@ const Perfil = () => {
             </div>
           </div>
         </form>
-        
         <button
           className="App-botonCancelar" 
           style= {{top: "80%", left:"37%", position:"absolute" , filter: 'blur(5px)', pointerEvents:"none"}}

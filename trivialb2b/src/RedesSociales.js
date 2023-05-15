@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import './Estilos/App.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Instagram from'./Imagenes/Instagram.png';
 import Facebook from'./Imagenes/Facebook.png';
 import Twitter from'./Imagenes/Twitter.png';
-import { useSession, setSession } from 'react-session';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
-
 
 function Imagen (props) {
   return (
@@ -24,7 +21,6 @@ function Imagen (props) {
 const RedesSociales = () => {
   
   const navigate = useNavigate();
-
   const continuar = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };

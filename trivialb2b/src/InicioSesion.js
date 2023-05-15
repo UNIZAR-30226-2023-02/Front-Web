@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from "./Imagenes/Atras.png";
-import CryptoJS from 'crypto-js';
 import Cookies from 'universal-cookie';
-import { TextField } from "@mui/material";
 
-//const URL = "http://b64b-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/login/";
 
 function Boton(props) {
@@ -24,13 +21,10 @@ function Boton(props) {
   )
 }
 
-const InicioSesion = ({ miVariable, setMiVariable }) => {
+const InicioSesion = () => {
   const [body, setBody] = useState({ username: "", password: "" });
   const [errores, setErorres] = useState("");
-  const [usuario, setUsuario] = useState();
-
   const cookies= new Cookies();
-  
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -51,7 +45,7 @@ const InicioSesion = ({ miVariable, setMiVariable }) => {
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
        
         if ((body.username=="") && (body.password=="")) {
           setErorres("Algún campo está vacío");
@@ -83,13 +77,11 @@ const InicioSesion = ({ miVariable, setMiVariable }) => {
           <div style={{marginLeft:"4%", marginBottom:"2%"}}>
             <Boton texto="Usuario" label="username" nombre="username" valor={body.username} onchange={handleChange} />
           </div>
-          
           <Boton texto="Contraseña" type="password" label="password" nombre="password"  valor={body.password} onchange={handleChange}/>
           </form>
           <div style={{top:"62%", position:"absolute", fontSize:"33px"}}>
             <span style={{color:"red"}}>{errores}</span>
           </div>
-
         <br></br>
         <button className="App-boton" style= {{top: "70%", left: "auto", position:"absolute"}} onClick={() => IniciarSesion()} >
           Iniciar Sesion
@@ -100,5 +92,4 @@ const InicioSesion = ({ miVariable, setMiVariable }) => {
   );
 };
 
-//export  { valorCifrado, clave};
 export default InicioSesion;

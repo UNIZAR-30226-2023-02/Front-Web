@@ -9,10 +9,7 @@ import Logo from './Imagenes/Logo.png';
 import Atras from "./Imagenes/Atras.png";
 import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "https://51.142.118.71:8000/api/usuarios/login/";
-
-
 
 function CeldaDesplegable( props ) {
   return (
@@ -56,15 +53,12 @@ function CeldaDesplegable( props ) {
 const CrearPartida = () => {
   const cookies= new Cookies();
   const usuario = cookies.get('tokenUsuario');
-  console.log(usuario)
-
   const navigate = useNavigate();
   const [show, setShow] = useState(true);
 
   const flechaAtras = async (event) => {
     navigate(process.env.PUBLIC_URL+ '/MenuJuego');
   };
-
   const onSubmit1 = async (event) => {
     navigate(process.env.PUBLIC_URL + '/ModoClasico');
   };
@@ -94,7 +88,6 @@ const CrearPartida = () => {
   const onCerrarSesion = async (event) => {
     navigate(process.env.PUBLIC_URL + '/CerrarSesion');
   };
-
   
   return (
     <div className="App">

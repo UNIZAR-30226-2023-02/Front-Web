@@ -2,7 +2,6 @@ import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 
-
 function Boton (props) {
   return (
     <button className="App-boton" style= {{ marginBottom:props.style1, marginTop:props.style2 }} type="submit" onClick={props.function}>
@@ -14,7 +13,6 @@ function Boton (props) {
 const MenuPrincipal = () => {
   const cookies= new Cookies();
   const usuario = cookies.get('tokenUsuario');
-  console.log(usuario)
   const navigate = useNavigate();
 
   const IniciarSesion = async (event) => {
