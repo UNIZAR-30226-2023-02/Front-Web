@@ -4,7 +4,6 @@ import './Estilos/Estilo.css';
 import { useNavigate } from 'react-router-dom';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import InfiniteScroll from 'react-infinite-scroll-component'
-//npm install react-countdown-circle-timer
 
 import Cristiano from'./Imagenes/Usuario.png';
 import Esquina_azul from './Imagenes/Esquina_azul.png';
@@ -26,13 +25,9 @@ import Moneda from './Imagenes/Moneda.png';
 import Cruz from './Imagenes/Cruz.png';
 import ChatImg from './Imagenes/Chat.png';
 import B2B from './Imagenes/Logo.png';
-import Quesitos from './Imagenes/CrearPartida.png';
 import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000";
-//const URL = "http://85be-146-158-156-138.ngrok-free.app/";
-
 
 const Tablero = () => {
 
@@ -68,8 +63,7 @@ const Tablero = () => {
 
   //Tiempos de los usaurios
   let [tiempoPregunta, setTiempoPregunta] = useState(0);
-  let [tiempoElegirCasilla, setTiempoElegirCasilla] = useState(0);
-  let [tiempoPausa, setTiempoPausa] = useState(10);
+  let [tiempoPausa, setTiempoPausa] = useState(30);
   let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(3);
   let [tiempoLanzarDado, setTiempoLanzarDado] = useState(0);
   let jugadores
@@ -122,12 +116,9 @@ const Tablero = () => {
   let valor_dado, casilla_elegida = 0;
   let casillas_nuevas = [];
   let msgIni = 0;
-
   let [indicePartida, setIndicePartida] = useState(0)
-
   let [colorPregunta, setColorPregunta] = useState("white", "white", "white", "white")
   let aux2 = ["white", "white", "white", "white"]
-  
   let [jugadorPrueba, setJugadorPrueba] = useState([{ nombre:"", posicion:"", quesitos:[], turno:"", ficha:"", tablero:"", activo:"" }])
   
   //Mensaje a rellenar para el backend
@@ -156,8 +147,6 @@ const Tablero = () => {
 
   //Monedas del jugador
   let [monedasFin, setMonedasFin] = useState(0)
-
-  //const newChat = [...chat]
 
   //Vector donde se encuentran las casillas que deben parpadear
   let [vparp, setVprap] = useState (
@@ -287,10 +276,8 @@ const Tablero = () => {
     });
   };
 
-
   /* --- SOCKET --- */
   const chatSocketRef = useRef(null);
-  
   useEffect(() => {
     chatSocketRef.current = new WebSocket("ws://51.142.118.71:8000" + websocket + "?username=" + usuario + "&password=" + contraseña);
     chatSocketRef.current.onmessage = function(event) {

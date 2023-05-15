@@ -5,7 +5,6 @@ import { useSession, setSession } from 'react-session';
 import Atras from "./Imagenes/Atras.png";
 import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 let URL = "";
 
   const Estadisticas = () => {
@@ -36,7 +35,7 @@ let URL = "";
           headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
         })
           .then((response) => response.json())
-          .then((data) => {console.log(data)
+          .then((data) => {
           if (data.OK == "True") {
             setGeo({
               total: data.geografia.total,
@@ -93,7 +92,6 @@ let URL = "";
           console.error("Error fetching data:", error);
         });
       }
-
       else {
         URL = "http://51.142.118.71:8000/api/usuarios/estadisticas-usuario/";
         fetch(URL, {
@@ -102,7 +100,7 @@ let URL = "";
           body: JSON.stringify({"username": usuario_est}),
         })
           .then((response) => response.json())
-          .then((data) => {console.log(data)
+          .then((data) => {
           if (data.OK == "True") {
             setGeo({
               total: data.geografia.total,
@@ -160,7 +158,6 @@ let URL = "";
           console.error("Error fetching data:", error);
         });
       }
-      
     },[]);
 
     function Tema(props) {
@@ -181,19 +178,13 @@ let URL = "";
     return (
       <div className="App">
         <div className="App-CuadradoNegro" style={{ width: "850px", height: "600px", position: "absolute", top: "25%", left: "5%", border: "2px solid white"}}>
-
-
           <Tema top="5%" left="2%" tema="Geografia" color="blue" aciertos={geo.bien} fallos={geo.mal} porcentaje={geo.porcentaje}/>
           <Tema top="5%" left="52%" tema="Ciencia y naturaleza" color="green" aciertos={cie.bien} fallos={cie.mal} porcentaje={cie.porcentaje}/>
           <Tema top="35%" left="2%" tema="Historia" color="#a0a856" aciertos={his.bien} fallos={his.mal} porcentaje={his.porcentaje}/>
           <Tema top="35%" left="52%" tema="Entrtenimiento" color="rgb(226, 4, 255)" aciertos={ent.bien} fallos={ent.mal} porcentaje={ent.porcentaje}/>
           <Tema top="65%" left="2%" tema="Deporte" color="rgb(236, 134, 1)" aciertos={dep.bien} fallos={dep.mal} porcentaje={dep.porcentaje}/>
           <Tema top="65%" left="52%" tema="Arte y Literatura" color="Red" aciertos={ayl.bien} fallos={ayl.mal} porcentaje={ayl.porcentaje}/>
-          
-        
-
         </div>
-
 
         <div className="App-CuadradoNegro" style={{ width: "840px", height: "600px", position: "absolute", top: "25%", left: "51%", background: "none"}}>
 

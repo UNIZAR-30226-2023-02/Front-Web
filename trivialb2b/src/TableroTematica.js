@@ -112,7 +112,7 @@ const ModoTematica = () => {
   //Tiempos de los usaurios
   let [tiempoPregunta, setTiempoPregunta] = useState(0);
   let [tiempoElegirCasilla, setTiempoElegirCasilla] = useState(0);
-  let [tiempoPausa, setTiempoPausa] = useState(10);
+  let [tiempoPausa, setTiempoPausa] = useState(30);
   let [tiempoCerrarPregunta, setTiempoCerrarPregunta] = useState(3);
   let [tiempoLanzarDado, setTiempoLanzarDado] = useState(0);
 

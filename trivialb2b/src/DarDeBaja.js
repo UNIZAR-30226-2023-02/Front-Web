@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
-import { useSession, setSession } from 'react-session';
 import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/usuarios/dar-baja/";
-
 
 const DarDeBaja = () => {
 
@@ -23,11 +20,10 @@ const DarDeBaja = () => {
       headers: { "Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
       if (data == "Deleted") {
         navigate(process.env.PUBLIC_URL+ '/');
-      }
-        
+      } 
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
@@ -48,8 +44,6 @@ const DarDeBaja = () => {
           </div>
         </div>
     </div>
-
-    
   </div>
   );
 };

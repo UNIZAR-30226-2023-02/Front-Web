@@ -3,8 +3,6 @@ import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Atras from "./Imagenes/Atras.png";
 
-
-//const URL = "http://e4d3-146-158-156-138.eu.ngrok.io/api/usuarios/register/";
 const URL = "http://51.142.118.71:8000/api/usuarios/register/";
 
 function CuadroTexto(props) {
@@ -22,12 +20,9 @@ function CuadroTexto(props) {
   )
 }
 
-
 const Registrarse = () => {
   const [body, setBody] = useState({ username: "", password: "", confirm_password: "", fecha_nac: "aaaa-mm-dd", correo: "", telefono:""});
   const [errores, setErorres] = useState("");
-  const [usuario, setUsuario] = useState();
-
   const navigate = useNavigate();
   
   const handleChange = (e) => {
@@ -41,7 +36,6 @@ const Registrarse = () => {
     navigate(process.env.PUBLIC_URL+ '/');
   };
 
-
   const Registrarse = () => {
     
     fetch(URL, {
@@ -50,8 +44,7 @@ const Registrarse = () => {
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
-
+      .then((data) => {
         if ((body.username="")&&(body.password="") && (body.confirm_password="") && (body.fecha_nac="") && (body.correo="") && (body.telefono="")) {
           setErorres("Algún campo esta vacío");
         }
@@ -90,7 +83,6 @@ const Registrarse = () => {
           <div className="App-Quesitos"> </div> 
           </div>
           <div className="App-iconoRegistro"> </div>
-
           <form className="App-Input" style={{left: "10%", top:"45%", height:"30%", width: "83%", position: "absolute"}}>
             <div className="App-CuadrosTextoIzq" > 
               <div style={{marginLeft:"6.9%"}}>

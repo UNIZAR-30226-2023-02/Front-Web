@@ -3,7 +3,6 @@ import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 
-//const URL = "https://6e01-146-158-156-138.eu.ngrok.io/api/usuarios/login/";
 const URL = "http://51.142.118.71:8000/api/salas/crear/";
 
 function CuadroTexto(props) {
@@ -29,7 +28,6 @@ const ModoClasico = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
   const usuario = cookies.get('tokenUsuario');
-  console.log(usuario)
 
   const handleChange = (e) => {
     setBody({
@@ -43,7 +41,6 @@ const ModoClasico = () => {
   };
 
   const onSubmit = () => {
-    console.log(body);
     fetch(URL, {
       method: "POST",
       headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
@@ -52,7 +49,6 @@ const ModoClasico = () => {
       .then((response) => response.json())
 
       .then((data) => { 
-        console.log(data)
         if (data.OK == "True"){
           setErorres("")
           cookies.set('nombre_sala', body.nombre_sala, {path: '/'})
@@ -91,7 +87,6 @@ const ModoClasico = () => {
         <div className="App-titulo"  style= {{top: "7%"}}> Modo Clasico
           <div className="App-Quesitos" style= {{left: "36%"}}/> 
         </div>
-
         <div className="App-CuadradoAmarillo" style={{ width: "1730px", height: "620px", position: "absolute", zIndex: "1", top: "24%", left: "5%"}}>
           <div style={{marginTop:"10px"}}>
             <a  style= {{ color: "#174a67", fontSize: "60px", fontStyle: "italic" }}>
@@ -101,9 +96,7 @@ const ModoClasico = () => {
               <a> ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯</a>
             </div>
           </div>
-
           <form className="App-Input" style={{marginTop:"3%"}}>
-
             <div className="App-CuadrosTextoIzq" > 
               <div style={{marginLeft: "3%"}}>
               <CuadroTexto texto="Nombre de la sala" label="nombre_sala" nombre="nombre_sala" valor={body.nombre_sala} funcion={handleChange} />
@@ -123,7 +116,6 @@ const ModoClasico = () => {
                 </select> 
                 </div>
             </div>
-{/*onClick={setBody(value)}*/}
             <div className="App-CuadrosTextoDer" style={{marginRight: "1%"}} > 
               <label for="numeroJugadores" style={{color: "#174a67"}}> Nº de jugadores: </label>
               <select name="numeroJugadores" id="numeroJugadores" className="App-textoNegro" style={{width:"530px", height:"70px" }}onChange={(event) => setBody({
@@ -140,7 +132,6 @@ const ModoClasico = () => {
             </div>
 
           </form>
-
           <div style={{fontSize:"23px", color:"red", position:"absolute", left:"45%", top:"65%"}}>
             <a  > {errores}</a>
           </div>
@@ -148,7 +139,6 @@ const ModoClasico = () => {
           <div style={{fontSize:"23px", color:"black", position:"absolute", left:"36%", top:"73%"}}> 
             <a >Los elementos con asterisco (*) son opcionales</a>
           </div>
-
           <div>
               <button className="App-botonCancelar" style= {{top: "83%", left: "33%", position:"absolute"}} onClick={() => cancelar()} >
                 Cancelar

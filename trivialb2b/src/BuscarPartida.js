@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import './Estilos/App.css';
 import { useNavigate } from 'react-router-dom';
 import Buscar from'./Imagenes/BuscarPartida.png';
@@ -49,7 +49,6 @@ const ModoClasico = () => {
   const cookies= new Cookies();
   const token = cookies.get('token');
   const usuario = cookies.get('tokenUsuario');
-  console.log(usuario)
   
   useEffect(() => {
     fetch(URL, {
@@ -57,7 +56,7 @@ const ModoClasico = () => {
       headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         data.forEach(element => {
           salas.push(element)
         })
@@ -75,7 +74,7 @@ const ModoClasico = () => {
       headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK == "True") {
           setWeb(data.ws_partida)
           setTipo(data.Tipo)
@@ -123,17 +122,14 @@ const ModoClasico = () => {
       headers: {"Authorization": "Token " + token, "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.OK = "true"){
-          console.log(peticiones)
           peticiones.length = 0
-          console.log(peticiones)
           data.peticiones.forEach(element => {
             peticiones.push(element)
           })
           setPeticiones(peticiones)
           setShow2(false)
-          console.log(peticiones)
         }
  
     })
@@ -154,7 +150,7 @@ const ModoClasico = () => {
     })
 
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
       if (data.OK == "True") {
         cookies.set('n_jugadores', sala.numJugadores, {path: '/'})
         cookies.set('noCreador', 1, {path: '/'})
@@ -173,7 +169,7 @@ const ModoClasico = () => {
   }
 
   function funcionEntrar2() {
-    cookies.set('n_jugadores', pet.n_jugadores, {path: '/'})  ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+    cookies.set('n_jugadores', pet.n_jugadores, {path: '/'})
     cookies.set('noCreador', 1, {path: '/'})
     cookies.set('WebSocketEsperando', pet.ws, {path: '/'})
     cookies.set('tipo_partida', pet.tipo_partida, {path: '/'})
