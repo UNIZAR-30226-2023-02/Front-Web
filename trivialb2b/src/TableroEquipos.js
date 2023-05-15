@@ -305,14 +305,11 @@ const Tablero = () => {
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
-        console.log("Mensaje del Backend:")
-        console.log(data)
         if (String(data.type) == ""){
           console.log("Mensaje vacio que no tratamos")
         }
         else {
           if (msgIni==0) {
-            console.log("Mensaje inicial")
             setIsRunningJugada(true)
             indiceJugadorTurno = 0
             vectorJugadorTurno = "vector1"
@@ -327,11 +324,7 @@ const Tablero = () => {
             setNumJugadoresEquipo()
             let jugadores = data.jugadores
             setNumJugadoresEquipo(jugadores.length)
-            console.log(numJugadoresEquipo)
-            console.log("Carga de jugadores")
-            console.log(jugadores)
             jugadores.forEach(element => {
-              console.log(indice)
               //Actualizamos el vector de jugadores 1
               if (indice < (jugadores.length/2)) {
                 if (indice == 0){

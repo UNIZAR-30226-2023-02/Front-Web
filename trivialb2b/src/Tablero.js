@@ -296,7 +296,6 @@ const Tablero = () => {
     chatSocketRef.current.onmessage = function(event) {
       const data = JSON.parse(event.data);
       try {
-        console.log(data)
         if (String(data.type) == ""){
           console.log("Mensaje vacio que no tratamos")
         }
@@ -314,8 +313,6 @@ const Tablero = () => {
             errorPartida = data.error;
             msgIni=1
             jugadores = data.jugadores
-            console.log(jugadores)
-            console.log("El indice es: " + indice)
             jugadores.forEach(element => {
               if (indice < (jugadores.length/2)) {
                 if (indice == 0){
@@ -325,7 +322,6 @@ const Tablero = () => {
                   vector1[indice].turno = element.turno
                   vector1[indice].posicion = element.posicion  
                   element.quesitos.forEach(ele => {
-                    console.log(ele)
                     switch(ele) {
                       case "Ciencia":
                         vector1[indice].quesitos.push(QuesoVerde)
@@ -396,7 +392,6 @@ const Tablero = () => {
                   }
                   setV1(vector1)
                   setV2(vector2)
-                  console.log("Vector1: " + vector1)
               }
               else {
                 indiceAux = indice - (jugadores.length/2)
